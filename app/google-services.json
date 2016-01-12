@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_id": "medical-centers",
+    "project_number": "28322052526",
+    "name": "Medical Centers"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28322052526:android:6cd9a69f35dddd9d",
+        "client_id": "android:ntv.upgrade.medicalcenters",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "ntv.upgrade.medicalcenters"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "28322052526-feuelleo69cd3v99ia6pk2abh0p5d73i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ntv.upgrade.medicalcenters",
+            "certificate_hash": "6BCDDE5E8C367D1EF9F44CE2094FE1CD874981A3"
+          }
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

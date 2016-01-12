@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_item_cardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/poi_image"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"
+            android:scaleType="centerCrop"
+            android:src="@drawable/local_hospital_white_96x96"
+            android:tint="@color/colorAccent"
+            android:transitionName="image" />
+
+        <TextView
+            android:id="@+id/poi_overlay_text"
+            style="?android:textAppearanceSmallInverse"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/poi_image"
+            android:background="@color/text_background"
+            android:gravity="center"
+            android:padding="@dimen/tiny_margin"
+            tools:text="Overlay" />
+
+        <TextView
+            android:id="@+id/poi_tittle"
+            style="?android:textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/poi_image"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingLeft="@dimen/small_margin"
+            android:paddingRight="@dimen/small_margin"
+            android:paddingTop="@dimen/small_margin"
+            tools:text="POI Tittle" />
+
+        <TextView
+            android:id="@+id/poi_description"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/poi_tittle"
+            android:layout_toEndOf="@id/poi_image"
+            android:ellipsize="end"
+            android:maxLines="4"
+            android:padding="@dimen/small_margin"
+            tools:text="Description goes here" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
