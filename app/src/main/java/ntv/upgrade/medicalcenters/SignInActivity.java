@@ -19,6 +19,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.plus.Plus;
 
 /**
  * A SignIn screen that lets the user use his/her google account
@@ -72,11 +73,14 @@ public class SignInActivity extends AppCompatActivity
         mMedicalCentersApplication.setGoogleApiClient(new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(Plus.API)
                 //.addApi(Places.GEO_DATA_API)
                 //.addApi(Places.PLACE_DETECTION_API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build());
+
+
 
         // [START customize_button]
         // Customize sign-in button. The sign-in button can be displayed in
@@ -143,6 +147,7 @@ public class SignInActivity extends AppCompatActivity
             // Signed in successfully, show authenticated UI.
             mMedicalCentersApplication.setUserAccount(result.getSignInAccount());
             mStatusTextView.setText(getString(R.string.signed_in_fmt, mMedicalCentersApplication.getUserAccount().getDisplayName()));
+
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);

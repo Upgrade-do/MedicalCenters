@@ -14,81 +14,70 @@ import java.util.List;
  */
 public class MedicalCenter {
 
-    private int id;
-    private String name, email, phone;
-    private LatLng geo;
-    private Image image;
-    private List<Integer> arsIDs = new ArrayList<>();
-    private List<Integer> specialitieIDs = new ArrayList<>();
+    // Basic Medical Center Info
+    private int MCID;
+    private String NAME;
+    private String EMAIL;
+    private String PHONE;
+    private LatLng GEO_LOCATION;
+    private Image IMAGE;
 
-    public MedicalCenter(String name, LatLng geo) {
-        this.name = name;
-        this.geo = geo;
+    // List of accepted ARSs
+    private List<Integer> ACCEPTED_ARS = new ArrayList<>();
+    // List of specialities
+    private List<Integer> SPECIALITIES = new ArrayList<>();
+
+    public MedicalCenter(int MCID, String NAME, String EMAIL,
+                         String PHONE, LatLng GEO_LOCATION, Image IMAGE) {
+        this.MCID = MCID;
+        this.NAME = NAME;
+        this.EMAIL = EMAIL;
+        this.PHONE = PHONE;
+        this.GEO_LOCATION = GEO_LOCATION;
+        this.IMAGE = IMAGE;
     }
 
     // GETTERS
-    public int getId() {
-        return id;
+
+    public int getMCID() {
+        return MCID;
     }
+
+    public String getNAME() {
+        return NAME;
+    }
+
+    public String getEMAIL() {
+        return EMAIL;
+    }
+
+    public String getPHONE() {
+        return PHONE;
+    }
+
+    public LatLng getGEO_LOCATION() {
+        return GEO_LOCATION;
+    }
+
+    public Image getIMAGE() {
+        return IMAGE;
+    }
+
+    public List<Integer> getACCEPTED_ARS() {
+        return ACCEPTED_ARS;
+    }
+
+    public List<Integer> getSPECIALITIES() {
+        return SPECIALITIES;
+    }
+
 
     // SETTERS
-    public void setId(int id) {
-        this.id = id;
+    public void setACCEPTED_ARS(List<Integer> ACCEPTED_ARS) {
+        this.ACCEPTED_ARS = ACCEPTED_ARS;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
-    public LatLng getGeo() {
-        return geo;
-    }
-
-    public void setGeo(LatLng geolocation) {
-        this.geo = geolocation;
-    }
-
-    public List<Integer> getArsIDs() {
-        return arsIDs;
-    }
-
-    public void setArsIDs(List<Integer> arsIDs) {
-        this.arsIDs = arsIDs;
-    }
-
-    public List<Integer> getSpecialitieIDs() {
-        return specialitieIDs;
-    }
-
-    public void setSpecialitieIDs(List<Integer> specialitieIDs) {
-        this.specialitieIDs = specialitieIDs;
+    public void setSPECIALITIES(List<Integer> SPECIALITIES) {
+        this.SPECIALITIES = SPECIALITIES;
     }
 }

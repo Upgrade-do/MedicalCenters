@@ -208,8 +208,8 @@ public class ListFragment extends Fragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
             MedicalCenter attraction = mAttractionList.get(position);
 
-            holder.mTitleTextView.setText(attraction.getName());
-            holder.mDescriptionTextView.setText(attraction.getName());
+            holder.mTitleTextView.setText(attraction.getNAME());
+            holder.mDescriptionTextView.setText(attraction.getNAME());
             /*Glide.with(mContext)
                     .load(attraction.getImageUrl())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
