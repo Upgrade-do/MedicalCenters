@@ -1,5 +1,6 @@
 package ntv.upgrade.medicalcenters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,19 +19,27 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import ntv.upgrade.medicalcenters.entities.MedicalCenter;
+import ntv.upgrade.medicalcenters.json.JSONReader;
+import ntv.upgrade.medicalcenters.json.JSONWriter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    protected static List<MedicalCenter> mMedicalCentersList = new ArrayList<>();
     private MedicalCentersApplication mMedicalCentersApplication;
+
+
+
+    // name of the file to preserve medical centers
+    private final String MEDICAL_CENTERS_DATA_FILE_NAME = "medical_centers_data";
 
     /**
      * Dispatch onStart() to all fragments.  Ensure any created loaders are
@@ -44,10 +53,33 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        try {
+            InputStream in = openFileInput(MEDICAL_CENTERS_DATA_FILE_NAME);
+            JSONReader reader = new JSONReader();
+            mMedicalCentersApplication.mMedicalCenters = reader.readJsonStream(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
     protected void onStop() {
+
         if (mMedicalCentersApplication.getGoogleApiClient() != null &&
                 mMedicalCentersApplication.getGoogleApiClient().isConnected()) {
             mMedicalCentersApplication.getGoogleApiClient().disconnect();
+        }
+
+        try {
+            OutputStream out = openFileOutput(MEDICAL_CENTERS_DATA_FILE_NAME, Context.MODE_PRIVATE);
+            JSONWriter writer = new JSONWriter();
+            writer.writeJsonStream(out, mMedicalCentersApplication.mMedicalCenters);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         super.onStop();
     }
@@ -71,12 +103,10 @@ public class MainActivity extends AppCompatActivity
         setHeaderContent(navigationView.getHeaderView(0));
         navigationView.setNavigationItemSelectedListener(this);
 
-       /* mMedicalCentersList.add(new Hospital("Plaza de la Salud", new LatLng(18.488780, 69.921893)));
-        mMedicalCentersList.add(new Hospital("Hospital Dr. Luis E. Aybar, (Antiguo Morgan)", new LatLng(18.494225, -69.890826)));
-        mMedicalCentersList.add(new Hospital("Hospital Central de las Fuerzas Armadas", new LatLng(18.480899, -69.921265)));
-        mMedicalCentersList.add(new Hospital("Hospital Docente Universitario Doctor Darío Contreras", new LatLng(18.485642, -69.863374)));
-        mMedicalCentersList.add(new Hospital("Hospital Luis Eduardo Aybar", new LatLng(18.494195, -69.890858)));
-*/
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Plaza de la Salud", "stuff","219818", new LatLng(18.488780, 69.921893),"dasdasdsa"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Dr. Luis E. Aybar, (Antiguo Morgan)", "stuff","219818", new LatLng(18.494225, -69.890826),"dasdasdsa"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Central de las Fuerzas Armadas", "stuff","219818", new LatLng(18.480899, -69.921265),"dasdasdsa"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Docente Universitario Doctor Darío Contreras", "stuff","219818", new LatLng(18.485642, -69.863374),"dasdasdsa"));
     }
 
     private void setHeaderContent(View header) {

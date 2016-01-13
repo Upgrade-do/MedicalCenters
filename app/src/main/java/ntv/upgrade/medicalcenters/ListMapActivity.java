@@ -20,6 +20,9 @@ import android.view.View;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+
+import ntv.upgrade.medicalcenters.entities.MedicalCenter;
 
 public class ListMapActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -28,6 +31,8 @@ public class ListMapActivity extends AppCompatActivity implements
     // for log porpuses
     private final String TAG = ListMapActivity.class.getSimpleName();
     // Client used to interact with Google APIs.
+
+    public static MedicalCentersApplication mMedicalCentersApplication;
     private GoogleApiClient mGoogleApiClient;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -64,6 +69,15 @@ public class ListMapActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
+
+
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Plaza de la Salud", "stuff","219818", new LatLng(18.488780, 69.921893),"dasdasdsa"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Dr. Luis E. Aybar, (Antiguo Morgan)", "stuff","219818", new LatLng(18.494225, -69.890826),"dasdasdsa"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Central de las Fuerzas Armadas", "stuff","219818", new LatLng(18.480899, -69.921265),"dasdasdsa"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Docente Universitario Doctor Darío Contreras", "stuff","219818", new LatLng(18.485642, -69.863374),"dasdasdsa"));
+
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -75,6 +89,8 @@ public class ListMapActivity extends AppCompatActivity implements
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+
 
         if (Tools.checkPlayServices(this)) {
             if (mGoogleApiClient == null) {

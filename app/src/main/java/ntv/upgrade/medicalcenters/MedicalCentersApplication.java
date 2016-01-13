@@ -6,6 +6,11 @@ import android.util.Log;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ntv.upgrade.medicalcenters.entities.MedicalCenter;
+
 /**
  * Created by Paulino Gomez on 1/9/2016.
  */
@@ -15,6 +20,9 @@ public class MedicalCentersApplication extends Application {
 
     private static GoogleApiClient mGoogleApiClient = null;
     private GoogleSignInAccount mCurrentUserAccount;
+
+    // List of sites
+    public static List<MedicalCenter> mMedicalCenters = new ArrayList<>();
 
     @Override
     public void onCreate() {

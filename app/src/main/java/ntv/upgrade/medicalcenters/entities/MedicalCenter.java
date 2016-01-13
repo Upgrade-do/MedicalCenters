@@ -1,7 +1,5 @@
 package ntv.upgrade.medicalcenters.entities;
 
-import android.media.Image;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ public class MedicalCenter {
     private String EMAIL;
     private String PHONE;
     private LatLng GEO_LOCATION;
-    private Image IMAGE;
+    private String IMAGE_URL;
 
     // List of accepted ARSs
     private List<Integer> ACCEPTED_ARS = new ArrayList<>();
@@ -28,13 +26,13 @@ public class MedicalCenter {
     private List<Integer> SPECIALITIES = new ArrayList<>();
 
     public MedicalCenter(int MCID, String NAME, String EMAIL,
-                         String PHONE, LatLng GEO_LOCATION, Image IMAGE) {
+                         String PHONE, LatLng GEO_LOCATION, String IMAGE_URL) {
         this.MCID = MCID;
         this.NAME = NAME;
         this.EMAIL = EMAIL;
         this.PHONE = PHONE;
         this.GEO_LOCATION = GEO_LOCATION;
-        this.IMAGE = IMAGE;
+        this.IMAGE_URL = IMAGE_URL;
     }
 
     // GETTERS
@@ -55,15 +53,15 @@ public class MedicalCenter {
         return PHONE;
     }
 
-    public LatLng getGEO_LOCATION() {
+    public LatLng getGEOLOCATION() {
         return GEO_LOCATION;
     }
 
-    public Image getIMAGE() {
-        return IMAGE;
+    public String getIMAGEURL() {
+        return IMAGE_URL;
     }
 
-    public List<Integer> getACCEPTED_ARS() {
+    public List<Integer> getACCEPTEDARS() {
         return ACCEPTED_ARS;
     }
 

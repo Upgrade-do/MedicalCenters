@@ -16,7 +16,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.SphericalUtil;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ntv.upgrade.medicalcenters.entities.MedicalCenter;
@@ -28,6 +31,7 @@ public class ListFragment extends Fragment {
 
 
     private OnFragmentInteractionListener mListener;
+
 
     private AttractionAdapter mAdapter;
 
@@ -60,29 +64,28 @@ public class ListFragment extends Fragment {
         return new ListFragment();
     }
 
-    /* private static List<Attraction> loadAttractionsFromLocation(final LatLng curLatLng) {
-         String closestCity = TouristAttractions.getClosestCity(curLatLng);
-         if (closestCity != null) {
-             List<Attraction> attractions = TouristAttractions.ATTRACTIONS.get(closestCity);
+     private static List<MedicalCenter> loadMedicalCentersFromLocation(final LatLng curLatLng) {
+         if (ListMapActivity.mMedicalCentersApplication.mMedicalCenters != null) {
+             List<MedicalCenter> medicalCenters = ListMapActivity.mMedicalCentersApplication.mMedicalCenters;
              if (curLatLng != null) {
-                 Collections.sort(attractions,
-                         new Comparator<Attraction>() {
+                 Collections.sort(medicalCenters,
+                         new Comparator<MedicalCenter>() {
                              @Override
-                             public int compare(Attraction lhs, Attraction rhs) {
+                             public int compare(MedicalCenter lhs, MedicalCenter rhs) {
                                  double lhsDistance = SphericalUtil.computeDistanceBetween(
-                                         lhs.getGeo(), curLatLng);
+                                         lhs.getGEOLOCATION(), curLatLng);
                                  double rhsDistance = SphericalUtil.computeDistanceBetween(
-                                         rhs.getGeo(), curLatLng);
+                                         rhs.getGEOLOCATION(), curLatLng);
                                  return (int) (lhsDistance - rhsDistance);
                              }
                          }
                  );
              }
-             return attractions;
+             return medicalCenters;
          }
          return null;
      }
- */
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,9 +113,9 @@ public class ListFragment extends Fragment {
         mImageSize = getResources().getDimensionPixelSize(R.dimen.image_size)
                 * Constants.IMAGE_ANIM_MULTIPLIER;
 
-        // mLatestLocation = Utils.getLocation(getActivity());
-        // List<MedicalCenter> attractions = loadAttractionsFromLocation(mLatestLocation);
-        // mAdapter = new AttractionAdapter(getActivity(), attractions);
+        mLatestLocation = Utils.getLocation(getActivity());
+        List<MedicalCenter> medicalCenters = loadMedicalCentersFromLocation(mLatestLocation);
+         mAdapter = new AttractionAdapter(getActivity(), medicalCenters);
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
