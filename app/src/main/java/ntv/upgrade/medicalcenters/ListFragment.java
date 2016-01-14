@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
@@ -209,19 +211,19 @@ public class ListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            MedicalCenter attraction = mAttractionList.get(position);
+            MedicalCenter medicalCenter = mAttractionList.get(position);
 
-            holder.mTitleTextView.setText(attraction.getNAME());
-            holder.mDescriptionTextView.setText(attraction.getNAME());
-            /*Glide.with(mContext)
-                    .load(attraction.getImageUrl())
+            holder.mTitleTextView.setText(medicalCenter.getNAME());
+            holder.mDescriptionTextView.setText(medicalCenter.getNAME());
+            Glide.with(mContext)
+                    .load(medicalCenter.getIMAGEURL())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .placeholder(R.drawable.empty_photo)
+                    .placeholder(R.drawable.local_hospital_white_96x96)
                     .override(mImageSize, mImageSize)
                     .into(holder.mImageView);
-*/
-           /* String distance =
-                    Utils.formatDistanceBetween(mLatestLocation, attraction.getGeo());*/
+
+            String distance =
+                    Utils.formatDistanceBetween(mLatestLocation, medicalCenter.getGEOLOCATION());
            /* if (TextUtils.isEmpty(distance)) {
                 holder.mOverlayTextView.setVisibility(View.GONE);
             } else {

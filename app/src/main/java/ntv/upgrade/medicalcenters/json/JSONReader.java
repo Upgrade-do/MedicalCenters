@@ -13,6 +13,8 @@ import java.util.List;
 import ntv.upgrade.medicalcenters.entities.MedicalCenter;
 
 /**
+ * This class Reads MedicalCenter objects from JSON string
+ *
  * Created by Paulino Gomez on 1/12/2016.
  */
 public class JSONReader {
@@ -43,7 +45,7 @@ public class JSONReader {
         String NAME = null;
         String EMAIL = null;
         String PHONE = null;
-        List GEO_LOCATION = null;
+        List<Double> GEO_LOCATION = null;
         String IMAGE_URL = null;
 
         reader.beginObject();
@@ -67,6 +69,7 @@ public class JSONReader {
         }
         reader.endObject();
 
+        assert GEO_LOCATION != null;
         LatLng latLng = new LatLng(
                 Double.parseDouble(GEO_LOCATION.get(0).toString()),
                 Double.parseDouble(GEO_LOCATION.get(1).toString()));
@@ -74,8 +77,8 @@ public class JSONReader {
         return new MedicalCenter(MCID, NAME, EMAIL, PHONE, latLng, IMAGE_URL);
     }
 
-    private List readGeoLocation(android.util.JsonReader reader) throws IOException {
-        List geo = new ArrayList();
+    private List<Double> readGeoLocation(android.util.JsonReader reader) throws IOException {
+        List<Double> geo = new ArrayList<>();
 
         reader.beginArray();
         while (reader.hasNext()) {

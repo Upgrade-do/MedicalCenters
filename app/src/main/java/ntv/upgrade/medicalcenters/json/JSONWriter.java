@@ -10,6 +10,8 @@ import java.util.List;
 import ntv.upgrade.medicalcenters.entities.MedicalCenter;
 
 /**
+ * This class Writes MedicalCenter objects to JSON string
+ *
  * Created by Paulino Gomez on 1/12/2016.
  */
 public class JSONWriter {
