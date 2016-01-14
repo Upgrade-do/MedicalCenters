@@ -3,6 +3,7 @@ package ntv.upgrade.medicalcenters;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -205,8 +206,8 @@ public class SignInActivity extends AppCompatActivity
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Snackbar.make(this.getCurrentFocus(), "Doh, could not connect to Google Api Client", Snackbar.LENGTH_LONG)
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        /*Snackbar.make(this.getCurrentFocus(), "Doh, could not connect to Google Api Client", Snackbar.LENGTH_LONG)
                 .setAction("RETRY", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -214,7 +215,7 @@ public class SignInActivity extends AppCompatActivity
                     }
                 })
                 .setActionTextColor(getResources().getColor(R.color.colorAccent))
-                .show();
+                .show();*/
     }
 }
 
