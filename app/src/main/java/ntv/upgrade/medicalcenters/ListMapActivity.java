@@ -28,11 +28,12 @@ public class ListMapActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         ListFragment.OnFragmentInteractionListener, MapFragment.OnMapFragmentInteractionListener {
 
-    // for log porpuses
+    // for log purposes
     private final String TAG = ListMapActivity.class.getSimpleName();
-    // Client used to interact with Google APIs.
 
+    // Client used to interact with Google APIs.
     public static MedicalCentersApplication mMedicalCentersApplication;
+
     private GoogleApiClient mGoogleApiClient;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -72,10 +73,14 @@ public class ListMapActivity extends AppCompatActivity implements
         mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
 
 
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Plaza de la Salud", "stuff","219818", new LatLng(18.488780, 69.921893),"dasdasdsa"));
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Dr. Luis E. Aybar, (Antiguo Morgan)", "stuff","219818", new LatLng(18.494225, -69.890826),"dasdasdsa"));
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Central de las Fuerzas Armadas", "stuff","219818", new LatLng(18.480899, -69.921265),"dasdasdsa"));
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Docente Universitario Doctor Darío Contreras", "stuff","219818", new LatLng(18.485642, -69.863374),"dasdasdsa"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Plaza de la Salud", "stuff","219818",
+                new LatLng(18.488780, 69.921893),"http://diariode3.com/wp-content/uploads/2012/10/628.jpg"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Dr. Luis E. Aybar, (Antiguo Morgan)", "stuff","219818",
+                new LatLng(18.494225, -69.890826),"dasdasdsa"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Central de las Fuerzas Armadas", "stuff","219818",
+                new LatLng(18.480899, -69.921265),"dasdasdsa"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Docente Universitario Doctor Darío Contreras", "stuff","219818",
+                new LatLng(18.485642, -69.863374),"dasdasdsa"));
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -246,7 +251,7 @@ public class ListMapActivity extends AppCompatActivity implements
         public CharSequence getPageTitle(int position) {
 
             if (position == 0) {
-                return "Attractions";
+                return "Medical Centers";
             } else {
                 return "Map View";
             }

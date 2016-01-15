@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,15 +28,20 @@ import java.util.List;
 import ntv.upgrade.medicalcenters.entities.MedicalCenter;
 
 /**
+ * This fragment holds a list of the basic details of medical centers around
+ * the device location sorted by distance.
+ * <p/>
  * Created by Paulino Gomez on 1/10/2016.
  */
 public class ListFragment extends Fragment {
 
+    // For log purposes
+    private final String TAG = ListFragment.class.getSimpleName();
 
+    // to communicate with the base activity
     private OnFragmentInteractionListener mListener;
 
-
-    private AttractionAdapter mAdapter;
+    private ListAdapter mAdapter;
 
     private LatLng mLatestLocation;
 
@@ -66,27 +72,27 @@ public class ListFragment extends Fragment {
         return new ListFragment();
     }
 
-     private static List<MedicalCenter> loadMedicalCentersFromLocation(final LatLng curLatLng) {
-         if (ListMapActivity.mMedicalCentersApplication.mMedicalCenters != null) {
-             List<MedicalCenter> medicalCenters = ListMapActivity.mMedicalCentersApplication.mMedicalCenters;
-             if (curLatLng != null) {
-                 Collections.sort(medicalCenters,
-                         new Comparator<MedicalCenter>() {
-                             @Override
-                             public int compare(MedicalCenter lhs, MedicalCenter rhs) {
-                                 double lhsDistance = SphericalUtil.computeDistanceBetween(
-                                         lhs.getGEOLOCATION(), curLatLng);
-                                 double rhsDistance = SphericalUtil.computeDistanceBetween(
-                                         rhs.getGEOLOCATION(), curLatLng);
-                                 return (int) (lhsDistance - rhsDistance);
-                             }
-                         }
-                 );
-             }
-             return medicalCenters;
-         }
-         return null;
-     }
+    private static List<MedicalCenter> loadMedicalCentersFromLocation(final LatLng curLatLng) {
+        if (ListMapActivity.mMedicalCentersApplication.mMedicalCenters != null) {
+            List<MedicalCenter> medicalCenters = ListMapActivity.mMedicalCentersApplication.mMedicalCenters;
+            if (curLatLng != null) {
+                Collections.sort(medicalCenters,
+                        new Comparator<MedicalCenter>() {
+                            @Override
+                            public int compare(MedicalCenter lhs, MedicalCenter rhs) {
+                                double lhsDistance = SphericalUtil.computeDistanceBetween(
+                                        lhs.getGEOLOCATION(), curLatLng);
+                                double rhsDistance = SphericalUtil.computeDistanceBetween(
+                                        rhs.getGEOLOCATION(), curLatLng);
+                                return (int) (lhsDistance - rhsDistance);
+                            }
+                        }
+                );
+            }
+            return medicalCenters;
+        }
+        return null;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,7 +123,7 @@ public class ListFragment extends Fragment {
 
         mLatestLocation = Utils.getLocation(getActivity());
         List<MedicalCenter> medicalCenters = loadMedicalCentersFromLocation(mLatestLocation);
-         mAdapter = new AttractionAdapter(getActivity(), medicalCenters);
+        mAdapter = new ListAdapter(getActivity(), medicalCenters);
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
@@ -165,41 +171,23 @@ public class ListFragment extends Fragment {
         void onFragmentInteraction(String id);
     }
 
-    private static class ViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
-
-        TextView mTitleTextView;
-        TextView mDescriptionTextView;
-        TextView mOverlayTextView;
-        ImageView mImageView;
-        ItemClickListener mItemClickListener;
-
-        public ViewHolder(View view, ItemClickListener itemClickListener) {
-            super(view);
-            mTitleTextView = (TextView) view.findViewById(R.id.poi_tittle);
-            mDescriptionTextView = (TextView) view.findViewById(R.id.poi_description);
-            mOverlayTextView = (TextView) view.findViewById(R.id.poi_overlay_text);
-            mImageView = (ImageView) view.findViewById(R.id.poi_image);
-            mItemClickListener = itemClickListener;
-            view.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            mItemClickListener.onItemClick(v, getAdapterPosition());
-        }
-    }
-
-    private class AttractionAdapter extends RecyclerView.Adapter<ViewHolder>
+    /**
+     * Recycler View
+     */
+    private class ListAdapter extends RecyclerView.Adapter<ViewHolder>
             implements ItemClickListener {
 
-        public List<MedicalCenter> mAttractionList;
+        // This list will be loaded on the fragment
+        public List<MedicalCenter> mMedicalCenters;
+
+        // For binding purposes
         private Context mContext;
 
-        public AttractionAdapter(Context context, List<MedicalCenter> attractions) {
+        // Constructor
+        public ListAdapter(Context context, List<MedicalCenter> medicalCenters) {
             super();
             mContext = context;
-            mAttractionList = attractions;
+            mMedicalCenters = medicalCenters;
         }
 
         @Override
@@ -211,7 +199,9 @@ public class ListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            MedicalCenter medicalCenter = mAttractionList.get(position);
+
+            // holds the item to bind
+            MedicalCenter medicalCenter = mMedicalCenters.get(position);
 
             holder.mTitleTextView.setText(medicalCenter.getNAME());
             holder.mDescriptionTextView.setText(medicalCenter.getNAME());
@@ -224,12 +214,12 @@ public class ListFragment extends Fragment {
 
             String distance =
                     Utils.formatDistanceBetween(mLatestLocation, medicalCenter.getGEOLOCATION());
-           /* if (TextUtils.isEmpty(distance)) {
+            if (TextUtils.isEmpty(distance)) {
                 holder.mOverlayTextView.setVisibility(View.GONE);
             } else {
                 holder.mOverlayTextView.setVisibility(View.VISIBLE);
                 holder.mOverlayTextView.setText(distance);
-            }*/
+            }
         }
 
         @Override
@@ -239,7 +229,7 @@ public class ListFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mAttractionList == null ? 0 : mAttractionList.size();
+            return mMedicalCenters == null ? 0 : mMedicalCenters.size();
         }
 
         @Override
@@ -250,6 +240,37 @@ public class ListFragment extends Fragment {
                 /*ActivityAttractionDetail.launch(
                         getActivity(), mAdapter.mAttractionList.get(position).getName(), heroView);*/
             }
+        }
+    }
+
+    /**
+     * View Holder of each item on the list
+     */
+    private static class ViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        // Member attributes
+        TextView mTitleTextView;
+        TextView mDescriptionTextView;
+        TextView mOverlayTextView;
+        ImageView mImageView;
+        ItemClickListener mItemClickListener;
+
+        // Constructor
+        public ViewHolder(View view, ItemClickListener itemClickListener) {
+            super(view);
+            mTitleTextView = (TextView) view.findViewById(R.id.poi_tittle);
+            mDescriptionTextView = (TextView) view.findViewById(R.id.poi_description);
+            mOverlayTextView = (TextView) view.findViewById(R.id.poi_overlay_text);
+            mImageView = (ImageView) view.findViewById(R.id.poi_image);
+            mItemClickListener = itemClickListener;
+            view.setOnClickListener(this);
+        }
+
+        // OnClick Listener
+        @Override
+        public void onClick(View v) {
+            mItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
 
