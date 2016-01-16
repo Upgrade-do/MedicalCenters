@@ -167,13 +167,17 @@ public class MainActivity extends AppCompatActivity
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 break;
+            case R.id.nav_profile:
+                intent = new Intent(this, ProfileActivity.class);
+                startActivity(intent);
+                break;
             case R.id.nav_medical_centers:
                 intent = new Intent(this, ListMapActivity.class);
                 startActivity(intent);
                 break;
             case R.id.nav_settings:
-               // intent = new Intent(this, SettingsActivity.class);
-               // startActivity(intent);
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_about:
                 int PLACE_PICKER_REQUEST = 1;
