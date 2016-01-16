@@ -172,8 +172,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.nav_settings:
-               // intent = new Intent(this, SettingsActivity.class);
-               // startActivity(intent);
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_about:
                 int PLACE_PICKER_REQUEST = 1;
