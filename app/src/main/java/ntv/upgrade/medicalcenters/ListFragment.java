@@ -62,8 +62,7 @@ public class ListFragment extends Fragment {
     };
 
     /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
+     * Mandatory empty constructor
      */
     public ListFragment() {
     }
@@ -117,12 +116,14 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        mLatestLocation = Utils.getLocation(getActivity());
+
         // Load a larger size image to make the activity transition to the detail screen smooth
         mImageSize = getResources().getDimensionPixelSize(R.dimen.image_size)
                 * Constants.IMAGE_ANIM_MULTIPLIER;
 
-        mLatestLocation = Utils.getLocation(getActivity());
         List<MedicalCenter> medicalCenters = loadMedicalCentersFromLocation(mLatestLocation);
+
         mAdapter = new ListAdapter(getActivity(), medicalCenters);
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
@@ -150,25 +151,6 @@ public class ListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(String id);
     }
 
     /**
@@ -237,8 +219,8 @@ public class ListFragment extends Fragment {
             if (!mItemClicked) {
                 mItemClicked = true;
                 View heroView = view.findViewById(android.R.id.icon);
-                /*ActivityAttractionDetail.launch(
-                        getActivity(), mAdapter.mAttractionList.get(position).getName(), heroView);*/
+                ListItemDetailsActivity.launch(
+                        getActivity(), mAdapter.mMedicalCenters.get(position).getNAME(), heroView);
             }
         }
     }
@@ -274,4 +256,18 @@ public class ListFragment extends Fragment {
         }
     }
 
+    /**
+     * On list item click listener
+     */
+    interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    /**
+     * This interface allows an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that activity.
+     */
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(String id);
+    }
 }
