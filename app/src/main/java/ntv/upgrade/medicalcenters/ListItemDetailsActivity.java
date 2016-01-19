@@ -41,12 +41,12 @@ public class ListItemDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_item_details);
+        setContentView(R.layout.activity_item_details);
 
         String attraction = getIntent().getStringExtra(EXTRA_MEDICAL_CENTER);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container_list_item_details, ListItemDetailsFragment.createInstance(attraction))
+                    .add(R.id.container_item_details, ListItemDetailsFragment.createInstance(attraction))
                     .commit();
         }
     }

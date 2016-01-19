@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="40dp"
+    android:paddingTop="48dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="ntv.upgrade.medicalcenters.ProfileActivity"
+    tools:context=".ProfileActivity"
     tools:showIn="@layout/activity_profile">
 
     <LinearLayout
@@ -44,11 +44,36 @@
             android:layout_marginTop="16dp"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:padding="16dp"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="ARS stuff\n\nmore and more stuff"/>
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/arsName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dummy_ars_name"/>
+                <TextView
+                    android:id="@+id/arsMemberID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dummy_ars_member_id"/>
+                <TextView
+                    android:id="@+id/arsClient"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dummy_ars_client"/>
+                <TextView
+                    android:id="@+id/arsAccountType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dummy_ars_account_type"/>
+
+            </LinearLayout>
+
+
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -56,23 +81,32 @@
             android:layout_marginTop="16dp"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:padding="16dp"
-                android:layout_height="wrap_content"
-                android:text="ARS stuff\n\nmore and more stuff\n\nmore and more stuff"/>
-        </android.support.v7.widget.CardView>
+                <LinearLayout
+                    android:id="@+id/sign_out_and_disconnect"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_marginTop="16dp"
-            android:layout_height="wrap_content">
+                    <Button
+                        android:id="@+id/sign_out_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/sign_out"
+                        android:theme="@style/ThemeOverlay.MyDarkButton" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:padding="16dp"
-                android:layout_height="wrap_content"
-                android:text="ARS stuff\n\nmore and more stuff"/>
+                    <Button
+                        android:id="@+id/disconnect_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/disconnect"
+                        android:theme="@style/ThemeOverlay.MyDarkButton" />
+                </LinearLayout>
         </android.support.v7.widget.CardView>
 
     </LinearLayout>

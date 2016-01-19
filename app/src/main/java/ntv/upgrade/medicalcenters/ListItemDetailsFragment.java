@@ -20,17 +20,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ntv.upgrade.medicalcenters.entities.MedicalCenter;
 
 /**
  *
  * The tourist attraction detail fragment which contains the details of a
- * a single attraction (contained inside
- * {@link ntv.upgrade.beaconplayground.FragmentAttractionDetail}).
+ * a single attraction
  *
  * Created by Paulino Gomez on 1/15/2016.
  */
@@ -53,7 +50,7 @@ public class ListItemDetailsFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View view = inflater.inflate(R.layout.content_list_item_details, container, false);
+        View view = inflater.inflate(R.layout.content_item_details, container, false);
         String itemName = getArguments().getString(EXTRA_MEDICAL_CENTER);
         mMedicalCenter = findMedicalCenterByName(itemName);
 
@@ -62,7 +59,7 @@ public class ListItemDetailsFragment extends Fragment{
             return null;
         }
 
-        TextView nameTextView = (TextView) view.findViewById(R.id.nameTextView);
+        TextView nameTextView = (TextView) view.findViewById(R.id.tittleTextView);
         TextView descTextView = (TextView) view.findViewById(R.id.descriptionTextView);
         TextView distanceTextView = (TextView) view.findViewById(R.id.distanceTextView);
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView);

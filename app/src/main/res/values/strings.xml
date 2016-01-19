@@ -17,6 +17,12 @@
     <!-- Dummy Strings -->
     <string name="dummy_user">Android Studio</string>
     <string name="dummy_email">android.studio@android.com</string>
+    <string name="dummy_poi_tittle">Medical Center name</string>
+    <string name="dummy_poi_distance">185 meters away</string>
+    <string name="dummy_ars_name">ARS Humano</string>
+    <string name="dummy_ars_member_id">54893574168514</string>
+    <string name="dummy_ars_client">Position Logic SRL</string>
+    <string name="dummy_ars_account_type">MAX</string>
 
     <!-- Content Description for images -->
     <string name="desc_app_icon">Application Logo</string>
@@ -155,7 +161,7 @@
     <string name="pref_title_system_sync_settings">System sync settings</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="large_text">
-        "This is some basic user information we have to work with\n\n"
+        "This is some basic user information we have to work with"
     </string>
 
 </resources>
