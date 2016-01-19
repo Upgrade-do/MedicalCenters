@@ -21,7 +21,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlHighlight">?colorAccent</item>
-        <item name="android:activatedBackgroundIndicator">@drawable/activated_background</item>
     </style>
 
     <style name="AppTheme" parent="AppTheme.Base" />
