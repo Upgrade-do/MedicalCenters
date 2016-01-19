@@ -8,8 +8,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
@@ -20,32 +18,25 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.plus.Plus;
 
 /**
  * A SignIn screen that lets the user use his/her google account
  * to be identified throughout the app.
- *
+ * <p/>
  * To use this class is necessary to create the proper google-services.json file.
  */
 public class SignInActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks,
-        View.OnClickListener {
+        GoogleApiClient.ConnectionCallbacks, View.OnClickListener {
 
     private static final String TAG = SignInActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 9001;
 
     private MedicalCentersApplication mMedicalCentersApplication;
 
-    private TextView mStatusTextView;
+    private TextView mSignInStatus;
     private ProgressDialog mProgressDialog;
 
-    // UI references.
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,53 +46,42 @@ public class SignInActivity extends AppCompatActivity
         mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
 
         // Views
-        mStatusTextView = (TextView) findViewById(R.id.status);
+        mSignInStatus = (TextView) findViewById(R.id.sign_in_status);
 
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
 
-        // [START configure_signin]
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        /**
+         * Configure sign-in to request the user's ID, email address, and basic profile.
+         * ID and basic profile are included in DEFAULT_SIGN_IN.
+         */
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestProfile()
                 .build();
 
-        // [START build_client]
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
+        /**
+         * Build a GoogleApiClient with access to the Google Sign-In API and the
+         * options specified by gso.
+         */
         mMedicalCentersApplication.setGoogleApiClient(new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .addApi(Plus.API)
-                //.addApi(Places.GEO_DATA_API)
-                //.addApi(Places.PLACE_DETECTION_API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build());
 
-
-
-        // [START customize_button]
-        // Customize sign-in button. The sign-in button can be displayed in
-        // multiple sizes and color schemes. It can also be contextually
-        // rendered based on the requested scopes. For example. a red button may
-        // be displayed when Google+ scopes are requested, but a white button
-        // may be displayed when only basic profile is requested. Try adding the
-        // Scopes.PLUS_LOGIN scope to the GoogleSignInOptions to see the
-        // difference.
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_WIDE);
         signInButton.setScopes(gso.getScopeArray());
-        // [END customize_button]
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mMedicalCentersApplication.getGoogleApiClient());
+        OptionalPendingResult<GoogleSignInResult> opr =
+                Auth.GoogleSignInApi.silentSignIn(mMedicalCentersApplication.getGoogleApiClient());
+
         if (opr.isDone()) {
             // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
             // and the GoogleSignInResult will be available instantly.
@@ -115,7 +95,7 @@ public class SignInActivity extends AppCompatActivity
             showProgressDialog();
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
+                public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
                     hideProgressDialog();
                     handleSignInResult(googleSignInResult);
                 }
@@ -123,7 +103,6 @@ public class SignInActivity extends AppCompatActivity
         }
     }
 
-    // [START onActivityResult]
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -135,27 +114,24 @@ public class SignInActivity extends AppCompatActivity
         }
     }
 
-    // [START signIn]
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mMedicalCentersApplication.getGoogleApiClient());
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    // [START handleSignInResult]
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             mMedicalCentersApplication.setUserAccount(result.getSignInAccount());
-            mStatusTextView.setText(getString(R.string.signed_in_fmt, mMedicalCentersApplication.getUserAccount().getDisplayName()));
+
+            mSignInStatus.setText(getString(R.string.signed_in_format,
+                    mMedicalCentersApplication.getUserAccount().getDisplayName()));
 
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
-        } else {
-            // Signed out, show unauthenticated UI.
-            updateUI(false);
         }
     }
 
@@ -172,18 +148,6 @@ public class SignInActivity extends AppCompatActivity
     private void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.hide();
-        }
-    }
-
-    private void updateUI(boolean signedIn) {
-        if (signedIn) {
-            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
-        } else {
-            mStatusTextView.setText(R.string.signed_out);
-
-            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
 
@@ -207,15 +171,15 @@ public class SignInActivity extends AppCompatActivity
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        /*Snackbar.make(this.getCurrentFocus(), "Doh, could not connect to Google Api Client", Snackbar.LENGTH_LONG)
+        Snackbar.make(this.getCurrentFocus(), "Doh, could not connect to Google Api Client", Snackbar.LENGTH_LONG)
                 .setAction("RETRY", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mMedicalCentersApplication.getGoogleApiClient().connect();
+                        signIn();
                     }
                 })
                 .setActionTextColor(getResources().getColor(R.color.colorAccent))
-                .show();*/
+                .show();
     }
 }
 

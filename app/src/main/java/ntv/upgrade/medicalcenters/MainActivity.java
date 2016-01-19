@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -161,12 +161,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         Intent intent;
         switch (id) {
-
-            case R.id.nav_home:
-                intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
-                break;
             case R.id.nav_profile:
                 intent = new Intent(this, ProfileActivity.class);
                 startActivity(intent);
@@ -182,9 +176,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_about:
                 int PLACE_PICKER_REQUEST = 1;
               //  displayPlacePicker();
-                break;
-            case R.id.nav_sign_out:
-                signOut();
                 break;
             default:
                 break;
