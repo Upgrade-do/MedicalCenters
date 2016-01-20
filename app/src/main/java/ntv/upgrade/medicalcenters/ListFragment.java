@@ -119,8 +119,7 @@ public class ListFragment extends Fragment {
         mLatestLocation = Utils.getLocation(getActivity());
 
         // Load a larger size image to make the activity transition to the detail screen smooth
-        mImageSize = getResources().getDimensionPixelSize(R.dimen.image_size)
-                * Constants.IMAGE_ANIM_MULTIPLIER;
+        mImageSize = getResources().getDimensionPixelSize(R.dimen.image_size) * Constants.IMAGE_ANIM_MULTIPLIER;
 
         List<MedicalCenter> medicalCenters = loadMedicalCentersFromLocation(mLatestLocation);
 
@@ -187,10 +186,11 @@ public class ListFragment extends Fragment {
 
             holder.mTitleTextView.setText(medicalCenter.getNAME());
             holder.mDescriptionTextView.setText(medicalCenter.getNAME());
+
             Glide.with(mContext)
                     .load(medicalCenter.getIMAGEURL())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .placeholder(R.drawable.local_hospital_white_96x96)
+                    .placeholder(R.color.lighter_gray)
                     .override(mImageSize, mImageSize)
                     .into(holder.mImageView);
 

@@ -103,10 +103,10 @@ public class MainActivity extends AppCompatActivity
         setHeaderContent(navigationView.getHeaderView(0));
         navigationView.setNavigationItemSelectedListener(this);
 
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Plaza de la Salud", "stuff","219818", new LatLng(18.488780, 69.921893),"dasdasdsa"));
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Dr. Luis E. Aybar, (Antiguo Morgan)", "stuff","219818", new LatLng(18.494225, -69.890826),"dasdasdsa"));
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Central de las Fuerzas Armadas", "stuff","219818", new LatLng(18.480899, -69.921265),"dasdasdsa"));
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Docente Universitario Doctor Darío Contreras", "stuff","219818", new LatLng(18.485642, -69.863374),"dasdasdsa"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Plaza de la Salud", "stuff","219818", new LatLng(18.488780, 69.921893),"http://media.cleveland.com/health_impact/photo/ahuja-medical-centerjpg-6769ad690225262a.jpg"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(2,"Hospital Dr. Luis E. Aybar, (Antiguo Morgan)", "stuff","219818", new LatLng(18.494225, -69.890826),"http://mediguide.com/wp-content/uploads/2011/01/world-medical-center.jpg"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(3,"Hospital Central de las Fuerzas Armadas", "stuff","219818", new LatLng(18.480899, -69.921265),"http://www.clker.com/cliparts/v/7/J/7/5/u/entrance-to-the-administration-building-at-the-national-naval-medical-center-in-bethesda-md-md.png"));
+        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(4,"Hospital Docente Universitario Doctor Darío Contreras", "stuff","219818", new LatLng(18.485642, -69.863374),"http://classroomclipart.com/images/gallery/Clipart/Architecture/convention-center-clipart-124.jpg"));
     }
 
     private void setHeaderContent(View header) {

@@ -75,8 +75,7 @@ public class ListItemDetailsFragment extends Fragment{
         distanceTextView.setText(distance);
         descTextView.setText(mMedicalCenter.getIMAGEURL());
 
-        int imageSize = getResources().getDimensionPixelSize(R.dimen.image_size)
-                * Constants.IMAGE_ANIM_MULTIPLIER;
+        int imageSize = getResources().getDimensionPixelSize(R.dimen.image_size) * Constants.IMAGE_ANIM_MULTIPLIER;
         Glide.with(getActivity())
                 .load(mMedicalCenter.getIMAGEURL())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
