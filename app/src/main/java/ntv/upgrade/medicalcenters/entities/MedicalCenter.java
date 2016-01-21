@@ -61,7 +61,7 @@ public class MedicalCenter {
         return IMAGE_URL;
     }
 
-    public List<Integer> getACCEPTEDARS() {
+    public List<Integer> getACCEPTED_ARS() {
         return ACCEPTED_ARS;
     }
 

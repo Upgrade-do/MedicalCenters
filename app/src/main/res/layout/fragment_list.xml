@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_grey_100"
+    android:background="@color/transparent_actionbar_background"
     tools:context=".ListMapActivity">
 
     <ntv.upgrade.medicalcenters.ListRecyclerView

@@ -21,8 +21,8 @@ public class ListItemDetailsActivity extends AppCompatActivity {
     private static final String EXTRA_MEDICAL_CENTER = "medical_center";
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static void launch(Activity activity, String attraction, View heroView) {
-        Intent intent = getLaunchIntent(activity, attraction);
+    public static void launch(Activity activity, String medicalCenter, View heroView) {
+        Intent intent = getLaunchIntent(activity, medicalCenter);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     activity, heroView, heroView.getTransitionName());
@@ -32,9 +32,9 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         }
     }
 
-    public static Intent getLaunchIntent(Context context, String attraction) {
+    public static Intent getLaunchIntent(Context context, String medicalCenter) {
         Intent intent = new Intent(context, ListItemDetailsActivity.class);
-        intent.putExtra(EXTRA_MEDICAL_CENTER, attraction);
+        intent.putExtra(EXTRA_MEDICAL_CENTER, medicalCenter);
         return intent;
     }
 
@@ -43,10 +43,10 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_details);
 
-        String attraction = getIntent().getStringExtra(EXTRA_MEDICAL_CENTER);
+        String medicalCenter = getIntent().getStringExtra(EXTRA_MEDICAL_CENTER);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container_item_details, ListItemDetailsFragment.createInstance(attraction))
+                    .add(R.id.container_item_details, ListItemDetailsFragment.createInstance(medicalCenter))
                     .commit();
         }
     }

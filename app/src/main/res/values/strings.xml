@@ -15,10 +15,14 @@
     <string name="nav_drawer_option_about">About</string>
 
     <!-- Dummy Strings -->
-    <string name="dummy_user">Android Studio</string>
-    <string name="dummy_email">android.studio@android.com</string>
+    <string name="dummy_user_name">Android Studio</string>
+    <string name="dummy_user_email">android.studio@android.com</string>
+    <string name="dummy_user_age">Age: 46</string>
+    <string name="dummy_user_blood_type">Bloodtype: A+</string>
+    <string name="dummy_user_address">Address: somewhere Ln. @ Invisible Palace (pálte atrá)</string>
     <string name="dummy_poi_tittle">Medical Center name</string>
-    <string name="dummy_poi_distance">185 meters away</string>
+    <string name="dummy_poi_distance">185 mts.</string>
+    <string name="dummy_poi_description">Address: somewhere Ln. @ Invisible Palace (pálte atrá)</string>
     <string name="dummy_ars_name">ARS Humano</string>
     <string name="dummy_ars_member_id">54893574168514</string>
     <string name="dummy_ars_client">Position Logic SRL</string>
@@ -41,6 +45,18 @@
     <string name="auth_code_fmt">Auth Code: %s</string>
     <string name="id_token_fmt">ID Token: %s</string>
 -->
+
+    <!-- Button labels -->
+    <string name="button_sign_out">Sign Out</string>
+    <string name="button_disconnect">Disconnect</string>
+
+
+
+
+
+
+
+
 
 
 
@@ -93,9 +109,7 @@
     <!-- Google Play Services error for Toast -->
     <string name="play_services_error_fmt">Google Play Services Error: %i</string>
 
-    <!-- Button labels -->
-    <string name="sign_out">Sign Out</string>
-    <string name="disconnect">Disconnect</string>
+
 
     <!-- Rationale for asking for Contacts -->
     <string name="contacts_permission_rationale">Contacts access is needed in order to retrieve your email address.</string>

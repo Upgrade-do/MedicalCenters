@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="@string/dummy_user"
+        android:text="@string/dummy_user_name"
         android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -29,6 +29,6 @@
         android:id="@+id/profile_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dummy_email" />
+        android:text="@string/dummy_user_email" />
 
 </LinearLayout>
