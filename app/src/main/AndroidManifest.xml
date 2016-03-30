@@ -3,10 +3,11 @@
     package="ntv.upgrade.medicalcenters">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -22,7 +23,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_api_key" />
 
         <activity
             android:name=".SignInActivity"
@@ -40,7 +41,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ntv.upgrade.medicalcenters.SignInActivity" />
+                android:value=".SignInActivity" />
         </activity>
         <activity
             android:name=".ListMapActivity"
@@ -49,7 +50,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ntv.upgrade.medicalcenters.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".ListItemDetailsActivity"
@@ -58,7 +59,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ntv.upgrade.medicalcenters.ListMapActivity" />
+                android:value=".ListMapActivity" />
         </activity>
         <activity
             android:name=".SettingsActivity"
@@ -66,7 +67,7 @@
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ntv.upgrade.medicalcenters.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".ProfileActivity"
@@ -75,8 +76,12 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ntv.upgrade.medicalcenters.MainActivity" />
-        </activity>
+                android:value=".MainActivity" />
+        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>
