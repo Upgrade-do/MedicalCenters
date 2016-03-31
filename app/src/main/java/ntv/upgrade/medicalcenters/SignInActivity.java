@@ -32,10 +32,7 @@ public class SignInActivity extends AppCompatActivity
         View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = SignInActivity.class.getSimpleName();
-    private static final int REQ_CHOOSE_ACCOUNT = 55333;
     private static final int REQ_SIGN_IN = 9001;
-    private static final String SAVED_USER = "user";
-    private static final String SAVED_DEEPLINK = "deeplink";
     private MedicalCentersApplication mMedicalCentersApplication;
     private GoogleApiClient mGoogleApiClient;
     private TextView mSignInStatus;
@@ -43,21 +40,20 @@ public class SignInActivity extends AppCompatActivity
     private User mUser;
     private boolean mIsResolving = false;
     private boolean mSignInClicked = false;
-    private ProgressDialog mDialog;
     private Runnable mRunAfterSignIn;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "Start onCreate Method");
         setContentView(R.layout.activity_sign_in);
 
-        //mDialog = new ProgressDialog(this);
-
-        // Views
+        // Link Views
         mSignInStatus = (TextView) findViewById(R.id.sign_in_status);
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
 
+        // Link to base application
         mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
 
         // Configure sign-in to request the user's ID, email address, and basic
@@ -75,19 +71,20 @@ public class SignInActivity extends AppCompatActivity
                 .addOnConnectionFailedListener(this)
                 .build();
 
+        // Sets mGoogleApiClient to base application
         mMedicalCentersApplication.setGoogleApiClient(mGoogleApiClient);
 
+        // Setup singInButton
         assert signInButton != null;
         signInButton.setSize(SignInButton.SIZE_WIDE);
         signInButton.setScopes(gso.getScopeArray());
-
         signInButton.setOnClickListener(this);
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        Log.i(TAG, "Start onStart Method");
 
         OptionalPendingResult<GoogleSignInResult> opr =
                 Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
@@ -95,22 +92,21 @@ public class SignInActivity extends AppCompatActivity
         if (opr.isDone()) {
             // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
             // and the GoogleSignInResult will be available instantly.
-            Log.d(TAG, "Got cached sign-in");
+            Log.i(TAG, "Got cached sign-in");
             GoogleSignInResult result = opr.get();
             handleSignInResult(result);
         } else {
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
             // single sign-on will occur in this branch.
-            //showProgressDialog();
+            showProgressDialog();
 
-            setProgressBarIndeterminateVisibility(true);
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
 
                     setProgressBarIndeterminateVisibility(false);
-                    // hideProgressDialog();
+                    hideProgressDialog();
                     handleSignInResult(googleSignInResult);
                 }
             });
@@ -119,6 +115,7 @@ public class SignInActivity extends AppCompatActivity
 
     @Override
     protected void onStop() {
+        Log.i(TAG, "Start onStop Method");
         super.onStop();
     }
 
@@ -126,6 +123,7 @@ public class SignInActivity extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        Log.i(TAG, "Start onSaveInstanceState Method");
         //outState.putParcelable(SAVED_USER, mUser);
         //outState.putParcelable(SAVED_DEEPLINK, mDeepLink);
     }
@@ -133,6 +131,7 @@ public class SignInActivity extends AppCompatActivity
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        Log.i(TAG, "Start onRestoreInstanceState Method");
         //onUserRetrieved((User) savedInstanceState.getParcelable(SAVED_USER));
         // mDeepLink = savedInstanceState.getParcelable(SAVED_DEEPLINK);
     }
@@ -183,26 +182,28 @@ public class SignInActivity extends AppCompatActivity
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.d(TAG, "onConnected");
+        Log.i(TAG, "Start onConnected Method");
     }
 
     @Override
     public void onConnectionSuspended(int i) {
+        Log.i(TAG, "Start onConnectionSuspended Method");
         // Attempt to reconnect.
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d(TAG, "Connection failed");
+        Log.i(TAG, "Start onConnectionFailed Method");
 
         if (mIsResolving) {
-            Log.d(TAG, "Already resolving.");
+            Log.i(TAG, "Already resolving.");
             return;
         }
 
         // Attempt to resolve the ConnectionResult
         if (connectionResult.hasResolution() && mSignInClicked) {
+            Log.i(TAG, "Start resolving connection failed");
             mIsResolving = true;
             mSignInClicked = false;
 
@@ -218,6 +219,7 @@ public class SignInActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view) {
+        Log.i(TAG, "Start onClick Method");
         beginSignInFlow();
     }
 
@@ -225,29 +227,20 @@ public class SignInActivity extends AppCompatActivity
      * Begin the non-immediate sign in flow
      */
     private void beginSignInFlow() {
+        Log.i(TAG, "Start beginSignInFlow Method");
 
-        setProgressBarIndeterminateVisibility(true);
+        showProgressDialog();
+
+        mSignInClicked = true;
 
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, REQ_SIGN_IN);
-
-        boolean state = true;   //HaikuSession.State state = mHaikuPlusSession.checkSessionState(true);
-        mSignInClicked = true;
-/*
-        if (state*//* == HaikuSession.State.UNAUTHENTICATED*//*) {
-            Intent intent = AccountPicker.newChooseAccountIntent(
-                    null, null, new String[]{"com.google"},
-                    false, null, null, null, null);
-            startActivityForResult(intent, REQ_CHOOSE_ACCOUNT);
-        } else {
-            mGoogleApiClient.connect();
-        }
-        */
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, "Start onActivityResult Method");
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == REQ_SIGN_IN) {
@@ -256,18 +249,9 @@ public class SignInActivity extends AppCompatActivity
         }
     }
 
-    private void showDialog(String msg) {
-        mDialog.setMessage(msg);
-        mDialog.show();
-    }
-
-    private void dismissDialog() {
-        if (mDialog.isShowing()) {
-            mDialog.dismiss();
-        }
-    }
-
     private void handleSignInResult(GoogleSignInResult result) {
+        Log.i(TAG, "Start handleSignInResult Method");
+
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
@@ -278,25 +262,25 @@ public class SignInActivity extends AppCompatActivity
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+
+            hideProgressDialog();
             finish();
         }
     }
 
-    private void showProgressasDialog() {
+    private void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.signing_in));
             mProgressDialog.setIndeterminate(true);
         }
-
         mProgressDialog.show();
     }
 
-    private void hidePfdrogressDialog() {
+    private void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.hide();
         }
     }
-
 }
 
