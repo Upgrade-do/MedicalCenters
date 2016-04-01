@@ -11,10 +11,19 @@
         "client_id": "android:ntv.upgrade.medicalcenters",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "ntv.upgrade.medicalcenters"
+          "package_name": "ntv.upgrade.medicalcenters",
+          "certificate_hash": []
         }
       },
       "oauth_client": [
+        {
+          "client_id": "28322052526-1jm76tf068iinjsk7gd52gu75o8qnmb6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ntv.upgrade.medicalcenters",
+            "certificate_hash": "4C524BDC76E9C0BCEDB468060156C3D17127C79D"
+          }
+        },
         {
           "client_id": "28322052526-uud1309e8ru3mecvmvfa0b4slunqae0b.apps.googleusercontent.com",
           "client_type": 1,

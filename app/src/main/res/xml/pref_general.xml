@@ -1,33 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_category_title_reporting">
+        <ListPreference
+            android:defaultValue="@string/pref_default_accuracy"
+            android:entries="@array/pref_accuracy_titles"
+            android:entryValues="@array/pref_accuracy_values"
+            android:key="@string/pref_key_accuracy"
+            android:summary="@string/pref_summary_accuracy"
+            android:title="@string/pref_tittle_accuracy" />
+        <ListPreference
+            android:defaultValue="@string/pref_default_frequency"
+            android:entries="@array/pref_frequency_titles"
+            android:entryValues="@array/pref_frequency_values"
+            android:key="@string/pref_key_frequency"
+            android:summary="@string/pref_summary_frequency"
+            android:title="@string/pref_tittle_frequency" />
+        <ListPreference
+            android:defaultValue="@string/pref_default_panic_frequency"
+            android:entries="@array/pref_panic_frequency_titles"
+            android:entryValues="@array/pref_panic_frequency_values"
+            android:key="@string/pref_key_panic_frequency"
+            android:summary="@string/pref_summary_panic_frequency"
+            android:title="@string/pref_tittle_panic_frequency" />
+    </PreferenceCategory>
 
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="example_switch"
-        android:summary="@string/pref_description_social_recommendations"
-        android:title="@string/pref_title_social_recommendations" />
+    <PreferenceCategory android:title="@string/pref_category_title_advanced">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/pref_key_start_on_boot"
+            android:summaryOff="@string/pref_summary_start_on_boot_off"
+            android:summaryOn="@string/pref_summary_start_on_boot_on"
+            android:title="@string/pref_tittle_start_on_boot" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/pref_key_debug_mode"
+            android:summaryOff="@string/pref_summary_debug_mode_off"
+            android:summaryOn="@string/pref_summary_debug_mode_on"
+            android:title="@string/pref_tittle_debug_mode" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/pref_key_gps_only"
+            android:summaryOff="@string/pref_summary_gps_only_off"
+            android:summaryOn="@string/pref_summary_gps_only_on"
+            android:title="@string/pref_tittle_gps_only" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/pref_key_crash_reports"
+            android:summaryOff="@string/pref_summary_crash_reports_off"
+            android:summaryOn="@string/pref_summary_crash_reports_on"
+            android:title="@string/pref_tittle_crash_reports" />
+    </PreferenceCategory>
 
-    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
-    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
-    <EditTextPreference
-        android:capitalize="words"
-        android:defaultValue="@string/pref_default_display_name"
-        android:inputType="textCapWords"
-        android:key="example_text"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="@string/pref_title_display_name" />
+    <PreferenceCategory android:title="@string/pref_category_title_about">
+        <EditTextPreference
+            android:inputType="textCapWords"
+            android:key="@string/pref_key_account_id"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_tittle_account_id" />
+        <EditTextPreference
+            android:inputType="textCapWords"
+            android:key="@string/pref_key_licence_id"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_tittle_license_id" />
+        <Preference
+            android:key="@string/pref_key_device_id"
+            android:title="@string/pref_tittle_device_id" />
+        <Preference
+            android:key="@string/pref_key_version_id"
+            android:title="@string/pref_tittle_version_id" />
+        <Preference
+            android:key="@string/pref_key_build_id"
+            android:title="@string/pref_tittle_build_id" />
+    </PreferenceCategory>
 
-    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
-         dismiss it. -->
-    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
-    <ListPreference
-        android:defaultValue="-1"
-        android:entries="@array/pref_example_list_titles"
-        android:entryValues="@array/pref_example_list_values"
-        android:key="example_list"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_add_friends_to_messages" />
 
 </PreferenceScreen>
