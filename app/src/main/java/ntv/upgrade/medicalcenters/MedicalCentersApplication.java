@@ -17,12 +17,10 @@ import ntv.upgrade.medicalcenters.entities.MedicalCenter;
 public class MedicalCentersApplication extends Application {
 
     private static final String TAG = MedicalCentersApplication.class.getSimpleName();
-
-    private static GoogleApiClient mGoogleApiClient = null;
-    private GoogleSignInAccount mCurrentUserAccount;
-
     // List of sites
     public static List<MedicalCenter> mMedicalCenters = new ArrayList<>();
+    private static GoogleApiClient mGoogleApiClient = null;
+    private GoogleSignInAccount mCurrentUserAccount;
 
     @Override
     public void onCreate() {
@@ -32,43 +30,25 @@ public class MedicalCentersApplication extends Application {
         initSingletons();
     }
 
-    /**
-     * Custom method to initialize Singleton Classes
-     */
     protected void initSingletons() {
         Log.i(TAG, "Initializing Singleton Classes");
     }
 
-    /**
-     * @return Current user of the application
-     */
-    public GoogleSignInAccount getUserAccount() {
-        return mCurrentUserAccount;
-    }
-
-    /**
-     * Sets the current user who is currently using the application
-     *
-     * @param userAccount is the user to be set.
-     */
-    public void setUserAccount(GoogleSignInAccount userAccount) {
-        mCurrentUserAccount = userAccount;
-    }
-
-    /**
-     * @return Google Api Client used throughout the application
-     */
     public GoogleApiClient getGoogleApiClient() {
         return mGoogleApiClient;
     }
 
-    /**
-     * Creates the Google Api Client.
-     * @param aGoogleApiClient to be used.
-     */
     public void setGoogleApiClient(GoogleApiClient aGoogleApiClient) {
         if (mGoogleApiClient == null) {
             mGoogleApiClient = aGoogleApiClient;
         }
+    }
+
+    public GoogleSignInAccount getUserAccount() {
+        return mCurrentUserAccount;
+    }
+
+    public void setUserAccount(GoogleSignInAccount userAccount) {
+        mCurrentUserAccount = userAccount;
     }
 }

@@ -16,9 +16,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
@@ -34,12 +31,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private MedicalCentersApplication mMedicalCentersApplication;
-
-
-
     // name of the file to preserve medical centers
     private final String MEDICAL_CENTERS_DATA_FILE_NAME = "medical_centers_data";
+    private MedicalCentersApplication mMedicalCentersApplication;
 
     /**
      * Dispatch onStart() to all fragments.  Ensure any created loaders are
@@ -186,6 +180,68 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+/*
+
+    @Override
+    public void onPromoteCall(Haiku haiku) {
+        Intent share = new PlusShare.Builder(this)
+                .setType("text/plain")
+                .setContentUrl(Uri.parse(haiku.contentUrl))
+                .setContentDeepLinkId(haiku.contentDeepLinkId)
+                .addCallToAction(
+                        getString(R.string.vote_cta),
+                        Uri.parse(haiku.callToActionUrl),
+                        haiku.callToActionDeepLinkId
+                )
+                .getIntent();
+        startActivityForResult(share, REQ_SHARE);
+    }
+*/
+
+
+/*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQ_CREATE_HAIKU && resultCode == RESULT_OK) {
+            // Result from creating a Haiku in another activity.
+            Haiku haiku = data.getParcelableExtra(CreateHaikuActivity.EXTRA_HAIKU);
+            if (haiku != null) {
+                if (mUser != null) {
+                    haiku.author = mUser;
+                    mHaikuApi.writeHaiku(haiku, this);
+                } else {
+                    Toast.makeText(this, getString(R.string.haiku_not_signedin), Toast.LENGTH_SHORT)
+                            .show();
+                    Log.e(TAG, "Created a haiku while not bound!");
+                }
+            }
+        } else if (requestCode == REQ_CHOOSE_ACCOUNT) {
+            // Result from the account chooser,
+            if (resultCode == RESULT_OK) {
+                String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                mHaikuPlusSession.storeAccountName(accountName);
+
+                mSignInClicked = true;
+                mGoogleApiClient.connect();
+            }
+        } else if (requestCode == REQ_SHARE && resultCode == RESULT_OK) {
+            // Sharing triggers its own toast so we don't need to feed back to the user.
+            Log.d(TAG, "Post shared.");
+        } else if (requestCode == REQ_SIGN_IN) {
+            mIsResolving = false;
+
+            if (!mGoogleApiClient.isConnecting()) {
+                mGoogleApiClient.connect();
+            }
+        }
+    }
+
+
+    */
+
+
+
+
 /*    private void displayPlacePicker() {
 
         int PLACE_PICKER_REQUEST = 1;
@@ -203,40 +259,7 @@ public class MainActivity extends AppCompatActivity
         }
     }*/
 
-    // [START signOut]
-    private void signOut() {
-        if (mMedicalCentersApplication.getGoogleApiClient().isConnected()) {
-            Auth.GoogleSignInApi.signOut(mMedicalCentersApplication.getGoogleApiClient()).setResultCallback(
-                    new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(Status status) {
-                            // [START_EXCLUDE]
-                            handleSignOutResult(status);
-                        }
-                    });
-        }
-    }
 
-    // [START handleSignOutResult]
-    private void handleSignOutResult(Status status) {
-        Intent intent = new Intent(this, SignInActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    // [START revokeAccess]
-    private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(mMedicalCentersApplication.getGoogleApiClient()).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // [START_EXCLUDE]
-                        // updateUI(false);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
-    // [END revokeAccess]
 
     /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
