@@ -1,6 +1,5 @@
 package ntv.upgrade.medicalcenters;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
@@ -18,8 +18,6 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-
-import ntv.upgrade.medicalcenters.models.User;
 
 /**
  * A SignIn screen that lets the user use his/her google account
@@ -32,16 +30,12 @@ public class SignInActivity extends AppCompatActivity
         View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = SignInActivity.class.getSimpleName();
-    private static final int REQ_SIGN_IN = 9001;
+
     private MedicalCentersApplication mMedicalCentersApplication;
     private GoogleApiClient mGoogleApiClient;
     private TextView mSignInStatus;
-    private ProgressDialog mProgressDialog;
-    private User mUser;
-    private boolean mIsResolving = false;
-    private boolean mSignInClicked = false;
-    private Runnable mRunAfterSignIn;
-
+    private boolean mIsResolving;
+    private boolean mSignInClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,86 +93,15 @@ public class SignInActivity extends AppCompatActivity
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
             // single sign-on will occur in this branch.
-            showProgressDialog();
-
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
 
-                    setProgressBarIndeterminateVisibility(false);
-                    hideProgressDialog();
                     handleSignInResult(googleSignInResult);
                 }
             });
         }
     }
-
-    @Override
-    protected void onStop() {
-        Log.i(TAG, "Start onStop Method");
-        super.onStop();
-    }
-
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.i(TAG, "Start onSaveInstanceState Method");
-        //outState.putParcelable(SAVED_USER, mUser);
-        //outState.putParcelable(SAVED_DEEPLINK, mDeepLink);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.i(TAG, "Start onRestoreInstanceState Method");
-        //onUserRetrieved((User) savedInstanceState.getParcelable(SAVED_USER));
-        // mDeepLink = savedInstanceState.getParcelable(SAVED_DEEPLINK);
-    }
-/*
-
-    @Override
-    public void onUserRetrieved(final User user) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                StreamFragment frag =
-                        (StreamFragment) getFragmentManager().findFragmentByTag(STREAM_FRAG_TAG);
-                if (user != null) {
-                    mUser = user;
-                    ((TextView) findViewById(R.id.user_name)).setText(mUser.googleDisplayName);
-                    NetworkImageView profile = ((NetworkImageView) findViewById(R.id.user_profile_pic));
-                    profile.setImageUrl(mUser.googlePhotoUrl, mVolley.getImageLoader());
-                    findViewById(R.id.signed_in_container).setVisibility(View.VISIBLE);
-                    findViewById(R.id.signed_out_container).setVisibility(View.GONE);
-                    if (frag != null) {
-                        frag.setUser(mUser, MainActivity.this);
-                    }
-                } else {
-                    mUser = null;
-                    findViewById(R.id.signed_in_container).setVisibility(View.GONE);
-                    findViewById(R.id.signed_out_container).setVisibility(View.VISIBLE);
-                    if (frag != null) {
-                        frag.setUser(null, MainActivity.this);
-                    }
-                }
-                setProgressBarIndeterminateVisibility(false);
-
-                // Run a queued action
-                // NOTE: In some situations, mRunAfterSignIn may be garbage collected while the SignIn
-                // process takes place.  Therefore, it is not recommended to use this pattern for
-                // critical tasks.
-                if (mRunAfterSignIn != null) {
-                    mRunAfterSignIn.run();
-                    mRunAfterSignIn = null;
-                }
-            }
-        });
-
-    }
-
-*/
-
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -208,7 +131,7 @@ public class SignInActivity extends AppCompatActivity
             mSignInClicked = false;
 
             try {
-                connectionResult.startResolutionForResult(this, REQ_SIGN_IN);
+                connectionResult.startResolutionForResult(this, Constants.REQ_SIGN_IN);
             } catch (IntentSender.SendIntentException e) {
                 Log.e(TAG, "Could not resolve.", e);
                 mIsResolving = false;
@@ -229,12 +152,10 @@ public class SignInActivity extends AppCompatActivity
     private void beginSignInFlow() {
         Log.i(TAG, "Start beginSignInFlow Method");
 
-        showProgressDialog();
-
         mSignInClicked = true;
 
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, REQ_SIGN_IN);
+        startActivityForResult(signInIntent, Constants.REQ_SIGN_IN);
     }
 
     @Override
@@ -243,7 +164,7 @@ public class SignInActivity extends AppCompatActivity
         Log.i(TAG, "Start onActivityResult Method");
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == REQ_SIGN_IN) {
+        if (requestCode == Constants.REQ_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
@@ -255,31 +176,15 @@ public class SignInActivity extends AppCompatActivity
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
-            mMedicalCentersApplication.setUserAccount(result.getSignInAccount());
+            GoogleSignInAccount mCurrentUserAccount = result.getSignInAccount();
+            mMedicalCentersApplication.setUserAccount(mCurrentUserAccount);
 
             mSignInStatus.setText(getString(R.string.signed_in_format,
-                    mMedicalCentersApplication.getUserAccount().getDisplayName()));
+                    mCurrentUserAccount.getDisplayName()));
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-
-            hideProgressDialog();
             finish();
-        }
-    }
-
-    private void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.signing_in));
-            mProgressDialog.setIndeterminate(true);
-        }
-        mProgressDialog.show();
-    }
-
-    private void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.hide();
         }
     }
 }

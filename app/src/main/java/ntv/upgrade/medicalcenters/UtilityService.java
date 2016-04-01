@@ -82,7 +82,7 @@ public class UtilityService extends IntentService {
         // It's OK to use blockingConnect() here as we are running in an
         // IntentService that executes work on a separate (background) thread.
         ConnectionResult connectionResult = googleApiClient.blockingConnect(
-                Constants.GOOGLE_API_CLIENT_TIMEOUT_S, TimeUnit.SECONDS);
+                Constants.GOOGLE_API_CLIENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 
         if (connectionResult.isSuccess() && googleApiClient.isConnected()) {
 
