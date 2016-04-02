@@ -65,9 +65,6 @@ public class SignInActivity extends AppCompatActivity
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        // Sets mGoogleApiClient to base application
-        mMedicalCentersApplication.setGoogleApiClient(mGoogleApiClient);
-
         // Setup singInButton
         assert signInButton != null;
         signInButton.setSize(SignInButton.SIZE_WIDE);
