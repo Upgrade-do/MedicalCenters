@@ -42,8 +42,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        if (!mMedicalCentersApplication.getGoogleApiClient().isConnected())
-            mMedicalCentersApplication.getGoogleApiClient().connect();
     }
 
     @Override
@@ -62,12 +60,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onStop() {
-
-        if (mMedicalCentersApplication.getGoogleApiClient() != null &&
-                mMedicalCentersApplication.getGoogleApiClient().isConnected()) {
-            mMedicalCentersApplication.getGoogleApiClient().disconnect();
-        }
-
         try {
             OutputStream out = openFileOutput(MEDICAL_CENTERS_DATA_FILE_NAME, Context.MODE_PRIVATE);
             JSONWriter writer = new JSONWriter();
@@ -179,68 +171,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-/*
-
-    @Override
-    public void onPromoteCall(Haiku haiku) {
-        Intent share = new PlusShare.Builder(this)
-                .setType("text/plain")
-                .setContentUrl(Uri.parse(haiku.contentUrl))
-                .setContentDeepLinkId(haiku.contentDeepLinkId)
-                .addCallToAction(
-                        getString(R.string.vote_cta),
-                        Uri.parse(haiku.callToActionUrl),
-                        haiku.callToActionDeepLinkId
-                )
-                .getIntent();
-        startActivityForResult(share, REQ_SHARE);
-    }
-*/
-
-
-/*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQ_CREATE_HAIKU && resultCode == RESULT_OK) {
-            // Result from creating a Haiku in another activity.
-            Haiku haiku = data.getParcelableExtra(CreateHaikuActivity.EXTRA_HAIKU);
-            if (haiku != null) {
-                if (mUser != null) {
-                    haiku.author = mUser;
-                    mHaikuApi.writeHaiku(haiku, this);
-                } else {
-                    Toast.makeText(this, getString(R.string.haiku_not_signedin), Toast.LENGTH_SHORT)
-                            .show();
-                    Log.e(TAG, "Created a haiku while not bound!");
-                }
-            }
-        } else if (requestCode == REQ_CHOOSE_ACCOUNT) {
-            // Result from the account chooser,
-            if (resultCode == RESULT_OK) {
-                String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                mHaikuPlusSession.storeAccountName(accountName);
-
-                mSignInClicked = true;
-                mGoogleApiClient.connect();
-            }
-        } else if (requestCode == REQ_SHARE && resultCode == RESULT_OK) {
-            // Sharing triggers its own toast so we don't need to feed back to the user.
-            Log.d(TAG, "Post shared.");
-        } else if (requestCode == REQ_SIGN_IN) {
-            mIsResolving = false;
-
-            if (!mGoogleApiClient.isConnecting()) {
-                mGoogleApiClient.connect();
-            }
-        }
-    }
-
-
-    */
-
-
-
 
 /*    private void displayPlacePicker() {
 

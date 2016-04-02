@@ -1,8 +1,13 @@
 package ntv.upgrade.medicalcenters;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,7 +27,8 @@ import com.google.android.gms.common.api.Status;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity
-        implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     // TAG
     private static final String TAG = ProfileActivity.class.getSimpleName();
@@ -33,6 +39,44 @@ public class ProfileActivity extends AppCompatActivity
     private boolean mIsResolving;
     private boolean mSignInClicked;
 
+    private static void doRestart(Context c) {
+        try {
+            //check if the context is given
+            if (c != null) {
+                //fetch the packagemanager so we can get the default launch activity
+                // (you can replace this intent with any other activity if you want
+                PackageManager pm = c.getPackageManager();
+                //check if we got the PackageManager
+                if (pm != null) {
+                    //create the intent with the default start activity for your application
+                    Intent mStartActivity = pm.getLaunchIntentForPackage(
+                            c.getPackageName()
+                    );
+                    if (mStartActivity != null) {
+                        mStartActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        //create a pending intent so the application is restarted after System.exit(0) was called.
+                        // We use an AlarmManager to call this intent in 100ms
+                        int mPendingIntentId = 223344;
+                        PendingIntent mPendingIntent = PendingIntent
+                                .getActivity(c, mPendingIntentId, mStartActivity,
+                                        PendingIntent.FLAG_CANCEL_CURRENT);
+                        AlarmManager mgr = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                        //kill the application
+                        System.exit(0);
+                    } else {
+                        Log.e(TAG, "Was not able to restart application, mStartActivity null");
+                    }
+                } else {
+                    Log.e(TAG, "Was not able to restart application, PM null");
+                }
+            } else {
+                Log.e(TAG, "Was not able to restart application, Context null");
+            }
+        } catch (Exception ex) {
+            Log.e(TAG, "Was not able to restart application");
+        }
+    }
 
     @Override
     protected void onStart() {
@@ -66,8 +110,6 @@ public class ProfileActivity extends AppCompatActivity
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-
-        mMedicalCentersApplication.setGoogleApiClient(mGoogleApiClient);
 
         Button signOut = (Button) findViewById(R.id.sign_out_button);
         Button disconnect = (Button) findViewById(R.id.disconnect_button);
@@ -104,7 +146,6 @@ public class ProfileActivity extends AppCompatActivity
             }
         }
     }
-
 
     private void updateUI() throws NullPointerException {
         GoogleSignInAccount user = mMedicalCentersApplication.getUserAccount();
@@ -143,7 +184,6 @@ public class ProfileActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     public void onConnected(Bundle bundle) {
         Log.i(TAG, "Start onConnected Method");
@@ -160,18 +200,12 @@ public class ProfileActivity extends AppCompatActivity
     private void handleSignOutResult(Status status) {
         if (status.isSuccess()) {
             mGoogleApiClient.disconnect();
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            NavUtils.navigateUpFromSameTask(this);
             finish();
         }
     }
 
     private void handleRevokeAccessResult(Status status) {
-        if (status.isSuccess()) {
-            mGoogleApiClient.disconnect();
-            Intent intent = new Intent(this, SignInActivity.class);
-            startActivity(intent);
-            finish();
-        }
+        doRestart(this);
     }
 }
