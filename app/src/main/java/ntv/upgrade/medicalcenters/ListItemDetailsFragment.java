@@ -22,7 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-import ntv.upgrade.medicalcenters.entities.MedicalCenter;
+import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
 /**
  *
@@ -66,18 +66,18 @@ public class ListItemDetailsFragment extends Fragment{
         FloatingActionButton mapFab = (FloatingActionButton) view.findViewById(R.id.mapFab);
 
         LatLng location = Utils.getLocation(getActivity());
-        String distance = Utils.formatDistanceBetween(location, mMedicalCenter.getGEOLOCATION());
+        String distance = Utils.formatDistanceBetween(location, mMedicalCenter.getGeo());
         if (TextUtils.isEmpty(distance)) {
             distanceTextView.setVisibility(View.GONE);
         }
 
         nameTextView.setText(itemName);
         distanceTextView.setText(distance);
-        descTextView.setText(mMedicalCenter.getIMAGEURL());
+        descTextView.setText(mMedicalCenter.getImageURL());
 
         int imageSize = getResources().getDimensionPixelSize(R.dimen.image_size) * Constants.IMAGE_ANIM_MULTIPLIER;
         Glide.with(getActivity())
-                .load(mMedicalCenter.getIMAGEURL())
+                .load(mMedicalCenter.getImageURL())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .placeholder(R.color.lighter_gray)
                 .override(imageSize, imageSize)
@@ -88,7 +88,7 @@ public class ListItemDetailsFragment extends Fragment{
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(Constants.MAPS_INTENT_URI +
-                        Uri.encode(mMedicalCenter.getNAME() + ", " + mMedicalCenter.getMCID())));
+                        Uri.encode(mMedicalCenter.getName() + ", " + mMedicalCenter.getMCID())));
                 startActivity(intent);
             }
         });
@@ -136,7 +136,7 @@ public class ListItemDetailsFragment extends Fragment{
 
             List<MedicalCenter> medicalCenters = ListMapActivity.mMedicalCentersApplication.mMedicalCenters;
             for (MedicalCenter medicalCenter : medicalCenters) {
-                if (itemName.equals(medicalCenter.getNAME())) {
+                if (itemName.equals(medicalCenter.getName())) {
                     return medicalCenter;
                 }
             }

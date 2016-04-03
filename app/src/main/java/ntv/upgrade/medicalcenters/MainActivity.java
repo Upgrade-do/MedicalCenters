@@ -1,6 +1,5 @@
 package ntv.upgrade.medicalcenters;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -16,16 +15,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.gms.maps.model.LatLng;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import ntv.upgrade.medicalcenters.entities.MedicalCenter;
-import ntv.upgrade.medicalcenters.json.JSONReader;
-import ntv.upgrade.medicalcenters.json.JSONWriter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,7 +37,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        super.onResume();
+        super.onResume();/*
 
         try {
             InputStream in = openFileInput(MEDICAL_CENTERS_DATA_FILE_NAME);
@@ -54,19 +45,19 @@ public class MainActivity extends AppCompatActivity
             mMedicalCentersApplication.mMedicalCenters = reader.readJsonStream(in);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 
     @Override
     protected void onStop() {
-        try {
+   /*     try {
             OutputStream out = openFileOutput(MEDICAL_CENTERS_DATA_FILE_NAME, Context.MODE_PRIVATE);
             JSONWriter writer = new JSONWriter();
             writer.writeJsonStream(out, mMedicalCentersApplication.mMedicalCenters);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         super.onStop();
     }
 
@@ -88,11 +79,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         setHeaderContent(navigationView.getHeaderView(0));
         navigationView.setNavigationItemSelectedListener(this);
-
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Plaza de la Salud", "stuff","219818", new LatLng(18.488780, 69.921893),"http://media.cleveland.com/health_impact/photo/ahuja-medical-centerjpg-6769ad690225262a.jpg"));
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(2,"Hospital Dr. Luis E. Aybar, (Antiguo Morgan)", "stuff","219818", new LatLng(18.494225, -69.890826),"http://mediguide.com/wp-content/uploads/2011/01/world-medical-center.jpg"));
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(3,"Hospital Central de las Fuerzas Armadas", "stuff","219818", new LatLng(18.480899, -69.921265),"http://www.clker.com/cliparts/v/7/J/7/5/u/entrance-to-the-administration-building-at-the-national-naval-medical-center-in-bethesda-md-md.png"));
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(4,"Hospital Docente Universitario Doctor Darío Contreras", "stuff","219818", new LatLng(18.485642, -69.863374),"http://classroomclipart.com/images/gallery/Clipart/Architecture/convention-center-clipart-124.jpg"));
     }
 
     private void setHeaderContent(View header) {
