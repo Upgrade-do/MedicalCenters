@@ -1,3 +1,4 @@
+/*
 package ntv.upgrade.medicalcenters.json;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -7,13 +8,15 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
 
-import ntv.upgrade.medicalcenters.entities.MedicalCenter;
+import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
+*/
 /**
  * This class Writes MedicalCenter objects to JSON string
  *
  * Created by Paulino Gomez on 1/12/2016.
- */
+ *//*
+
 public class JSONWriter {
 
     public void writeJsonStream(OutputStream out, List<MedicalCenter> medicalCenters) throws IOException {
@@ -55,3 +58,4 @@ public class JSONWriter {
     }
 
 }
+*/

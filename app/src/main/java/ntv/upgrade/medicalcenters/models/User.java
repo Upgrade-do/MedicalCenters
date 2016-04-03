@@ -11,16 +11,16 @@ public class User implements Parcelable {
 
     // parcel keys
     private static final String KEY_GOOGLE_ID = "google_id";
-    private static final String KEY_CITY_ID = "city_id";
     private static final String KEY_NAME = "name";
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_PHOTO_URL = "photo_url";
+    private static final String KEY_CITY_ID = "city_id";
     private static final String KEY_BIRTH_DATE = "birth_date";
     private static final String KEY_SSN = "social_security";
     private static final String KEY_BLOOD = "blood";
     private static final String KEY_ADDRESS = "address";
     private static final String KEY_ARS = "ars";
     private static final String KEY_ARS_ID = "ars_id";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_PHOTO = "photo";
     /**
      * Creator required for class implementing the parcelable interface.
      */
@@ -34,7 +34,7 @@ public class User implements Parcelable {
                     bundle.getDouble(KEY_GOOGLE_ID),
                     bundle.getString(KEY_NAME),
                     bundle.getString(KEY_EMAIL),
-                    bundle.getString(KEY_PHOTO),
+                    bundle.getString(KEY_PHOTO_URL),
                     bundle.getDouble(KEY_CITY_ID),
                     bundle.getString(KEY_BIRTH_DATE),
                     bundle.getDouble(KEY_SSN),
@@ -55,16 +55,16 @@ public class User implements Parcelable {
 
     };
     private double googleId;
-    private double cityId;
     private String name;
+    private String email;
+    private String photoURL;
+    private double cityId;
     private String birthDate;
     private double ssn;
     private String blood;
     private String address;
     private String ars;
     private double arsId;
-    private String email;
-    private String photo;
 
     /**
      * Empty constructor for array creation
@@ -72,12 +72,12 @@ public class User implements Parcelable {
     public User() {
     }
 
-    public User(double googleId, String name, String email, String photo, double cityId,
+    public User(double googleId, String name, String email, String photoURL, double cityId,
                 String birthDate, double ssn, String blood, String address, String ars, double arsId) {
         this.googleId = googleId;
         this.name = name;
         this.email = email;
-        this.photo = photo;
+        this.photoURL = photoURL;
 
         this.cityId = cityId;
         this.birthDate = birthDate;
@@ -88,18 +88,8 @@ public class User implements Parcelable {
         this.arsId = arsId;
     }
 
-    /**
-     * @return the name
-     */
     public String getName() {
         return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getGoogleId() {
@@ -166,16 +156,8 @@ public class User implements Parcelable {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
+        return photoURL;
     }
 
     @Override
@@ -190,16 +172,16 @@ public class User implements Parcelable {
 
         // insert the key value pairs to the bundle
         bundle.putDouble(KEY_GOOGLE_ID, googleId);
-        bundle.putDouble(KEY_CITY_ID, cityId);
         bundle.putString(KEY_NAME, name);
+        bundle.putString(KEY_EMAIL, email);
+        bundle.putString(KEY_PHOTO_URL, photoURL);
+        bundle.putDouble(KEY_CITY_ID, cityId);
         bundle.putString(KEY_BIRTH_DATE, birthDate);
         bundle.putDouble(KEY_SSN, ssn);
         bundle.putString(KEY_BLOOD, blood);
         bundle.putString(KEY_ADDRESS, address);
         bundle.putString(KEY_ARS, ars);
         bundle.putDouble(KEY_ARS_ID, arsId);
-        bundle.putString(KEY_EMAIL, email);
-        bundle.putString(KEY_PHOTO, photo);
 
         // write the key value pairs to the parcel
         dest.writeBundle(bundle);

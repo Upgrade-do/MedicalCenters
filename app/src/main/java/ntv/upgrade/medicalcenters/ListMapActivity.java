@@ -20,20 +20,15 @@ import android.view.View;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-
-import ntv.upgrade.medicalcenters.entities.MedicalCenter;
 
 public class ListMapActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         ListFragment.OnFragmentInteractionListener, MapFragment.OnMapFragmentInteractionListener {
 
-    // for log purposes
-    private final String TAG = ListMapActivity.class.getSimpleName();
-
     // Client used to interact with Google APIs.
     public static MedicalCentersApplication mMedicalCentersApplication;
-
+    // for log purposes
+    private final String TAG = ListMapActivity.class.getSimpleName();
     private GoogleApiClient mGoogleApiClient;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -71,17 +66,6 @@ public class ListMapActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
         mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
-
-
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Plaza de la Salud", "stuff","219818",
-                new LatLng(18.488780, 69.921893),"http://diariode3.com/wp-content/uploads/2012/10/628.jpg"));
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Dr. Luis E. Aybar, (Antiguo Morgan)", "stuff","219818",
-                new LatLng(18.494225, -69.890826),"dasdasdsa"));
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Central de las Fuerzas Armadas", "stuff","219818",
-                new LatLng(18.480899, -69.921265),"dasdasdsa"));
-        mMedicalCentersApplication.mMedicalCenters.add(new MedicalCenter(1,"Hospital Docente Universitario Doctor Darío Contreras", "stuff","219818",
-                new LatLng(18.485642, -69.863374),"dasdasdsa"));
-
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the three

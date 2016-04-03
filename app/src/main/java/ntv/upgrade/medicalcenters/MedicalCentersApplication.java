@@ -9,7 +9,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.ArrayList;
 import java.util.List;
 
-import ntv.upgrade.medicalcenters.entities.MedicalCenter;
+import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
 /**
  * Created by Paulino Gomez on 1/9/2016.
