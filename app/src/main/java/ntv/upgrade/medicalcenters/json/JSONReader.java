@@ -1,3 +1,4 @@
+/*
 package ntv.upgrade.medicalcenters.json;
 
 import android.util.JsonToken;
@@ -10,13 +11,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import ntv.upgrade.medicalcenters.entities.MedicalCenter;
+import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
+*/
 /**
  * This class Reads MedicalCenter objects from JSON string
  *
  * Created by Paulino Gomez on 1/12/2016.
- */
+ *//*
+
 public class JSONReader {
 
     public ArrayList<MedicalCenter> readJsonStream(InputStream in) throws IOException {
@@ -87,4 +90,4 @@ public class JSONReader {
         reader.endArray();
         return geo;
     }
-}
+}*/

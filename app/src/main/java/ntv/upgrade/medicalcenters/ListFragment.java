@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ntv.upgrade.medicalcenters.entities.MedicalCenter;
+import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
 /**
  * This fragment holds a list of the basic details of medical centers around
@@ -80,9 +80,9 @@ public class ListFragment extends Fragment {
                             @Override
                             public int compare(MedicalCenter lhs, MedicalCenter rhs) {
                                 double lhsDistance = SphericalUtil.computeDistanceBetween(
-                                        lhs.getGEOLOCATION(), curLatLng);
+                                        lhs.getGeo(), curLatLng);
                                 double rhsDistance = SphericalUtil.computeDistanceBetween(
-                                        rhs.getGEOLOCATION(), curLatLng);
+                                        rhs.getGeo(), curLatLng);
                                 return (int) (lhsDistance - rhsDistance);
                             }
                         }
@@ -184,18 +184,18 @@ public class ListFragment extends Fragment {
             // holds the item to bind
             MedicalCenter medicalCenter = mMedicalCenters.get(position);
 
-            holder.mTitleTextView.setText(medicalCenter.getNAME());
-            holder.mDescriptionTextView.setText(medicalCenter.getNAME());
+            holder.mTitleTextView.setText(medicalCenter.getName());
+            holder.mDescriptionTextView.setText(medicalCenter.getName());
 
             Glide.with(mContext)
-                    .load(medicalCenter.getIMAGEURL())
+                    .load(medicalCenter.getImageURL())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .placeholder(R.color.lighter_gray)
                     .override(mImageSize, mImageSize)
                     .into(holder.mImageView);
 
             String distance =
-                    Utils.formatDistanceBetween(mLatestLocation, medicalCenter.getGEOLOCATION());
+                    Utils.formatDistanceBetween(mLatestLocation, medicalCenter.getGeo());
             if (TextUtils.isEmpty(distance)) {
                 holder.mOverlayTextView.setVisibility(View.GONE);
             } else {
@@ -220,7 +220,7 @@ public class ListFragment extends Fragment {
                 mItemClicked = true;
                 View heroView = view.findViewById(android.R.id.icon);
                 ListItemDetailsActivity.launch(
-                        getActivity(), mAdapter.mMedicalCenters.get(position).getNAME(), heroView);
+                        getActivity(), mAdapter.mMedicalCenters.get(position).getName(), heroView);
             }
         }
     }
@@ -261,6 +261,79 @@ public class ListFragment extends Fragment {
      */
     interface ItemClickListener {
         void onItemClick(View view, int position);
+    }
+
+    /**
+     * Recycler View
+     */
+    private class ListAdapter extends RecyclerView.Adapter<ViewHolder>
+            implements ItemClickListener {
+
+        // This list will be loaded on the fragment
+        public List<MedicalCenter> mMedicalCenters;
+
+        // For binding purposes
+        private Context mContext;
+
+        // Constructor
+        public ListAdapter(Context context, List<MedicalCenter> medicalCenters) {
+            super();
+            mContext = context;
+            mMedicalCenters = medicalCenters;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            View view = inflater.inflate(R.layout.list_item, parent, false);
+            return new ViewHolder(view, this);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+
+            // holds the item to bind
+            MedicalCenter medicalCenter = mMedicalCenters.get(position);
+
+            holder.mTitleTextView.setText(medicalCenter.getName());
+            holder.mDescriptionTextView.setText(medicalCenter.getName());
+
+            Glide.with(mContext)
+                    .load(medicalCenter.getImageURL())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .placeholder(R.color.lighter_gray)
+                    .override(mImageSize, mImageSize)
+                    .into(holder.mImageView);
+
+            String distance =
+                    Utils.formatDistanceBetween(mLatestLocation, medicalCenter.getGeo());
+            if (TextUtils.isEmpty(distance)) {
+                holder.mOverlayTextView.setVisibility(View.GONE);
+            } else {
+                holder.mOverlayTextView.setVisibility(View.VISIBLE);
+                holder.mOverlayTextView.setText(distance);
+            }
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public int getItemCount() {
+            return mMedicalCenters == null ? 0 : mMedicalCenters.size();
+        }
+
+        @Override
+        public void onItemClick(View view, int position) {
+            if (!mItemClicked) {
+                mItemClicked = true;
+                View heroView = view.findViewById(android.R.id.icon);
+                ListItemDetailsActivity.launch(
+                        getActivity(), mAdapter.mMedicalCenters.get(position).getName(), heroView);
+            }
+        }
     }
 
     /**
