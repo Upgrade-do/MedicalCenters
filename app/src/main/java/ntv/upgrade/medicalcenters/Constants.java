@@ -21,4 +21,12 @@ public class Constants {
     // Maps values
     public static final String MAPS_INTENT_URI = "geo:0,0?q=";
 
+    /**
+     * Template Name & extension
+     */
+    private static final String DATASOURCE_FILE_NAME = "medicalcenters.csv";
+
+    public static String getDatasourceFileName() {
+        return DATASOURCE_FILE_NAME;
+    }
 }

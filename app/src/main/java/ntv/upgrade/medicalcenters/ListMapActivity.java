@@ -21,16 +21,20 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.List;
+
+import ntv.upgrade.medicalcenters.models.MedicalCenter;
+
 public class ListMapActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         ListFragment.OnFragmentInteractionListener, MapFragment.OnMapFragmentInteractionListener {
 
+    public static List<MedicalCenter> mMedicalCenters;
     // Client used to interact with Google APIs.
-    public static MedicalCentersApplication mMedicalCentersApplication;
+    protected static MedicalCentersApplication mMedicalCentersApplication;
     // for log purposes
     private final String TAG = ListMapActivity.class.getSimpleName();
     private GoogleApiClient mGoogleApiClient;
-
     private SectionsPagerAdapter mSectionsPagerAdapter;
     // The {@link ViewPager} that will host the section contents.
     private ViewPager mViewPager;
@@ -66,6 +70,7 @@ public class ListMapActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
         mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
+        mMedicalCenters.addAll(mMedicalCentersApplication.getMedicalCenters());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the three

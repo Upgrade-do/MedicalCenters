@@ -1,14 +1,15 @@
 package ntv.upgrade.medicalcenters;
 
 import android.app.Application;
+import android.content.res.AssetManager;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
+import ntv.upgrade.medicalcenters.csvtools.Reader;
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
 /**
@@ -18,8 +19,7 @@ public class MedicalCentersApplication extends Application {
 
     private static final String TAG = MedicalCentersApplication.class.getSimpleName();
     // List of sites
-    public static List<MedicalCenter> mMedicalCenters = new ArrayList<>();
-    private static GoogleApiClient mGoogleApiClient = null;
+    private List<MedicalCenter> mMedicalCenters;
     private GoogleSignInAccount mCurrentUserAccount;
 
     @Override
@@ -28,20 +28,18 @@ public class MedicalCentersApplication extends Application {
         // Initialize the singletons so their instances
         // are bound to the application process.
         initSingletons();
+
+        AssetManager assetManager = getAssets();
+
+        try {
+            mMedicalCenters = Reader.readAndInsert(assetManager);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void initSingletons() {
         Log.i(TAG, "Initializing Singleton Classes");
-    }
-
-    public GoogleApiClient getGoogleApiClient() {
-        return mGoogleApiClient;
-    }
-
-    public void setGoogleApiClient(GoogleApiClient aGoogleApiClient) {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = aGoogleApiClient;
-        }
     }
 
     public GoogleSignInAccount getUserAccount() {
@@ -50,5 +48,9 @@ public class MedicalCentersApplication extends Application {
 
     public void setUserAccount(GoogleSignInAccount userAccount) {
         mCurrentUserAccount = userAccount;
+    }
+
+    public List<MedicalCenter> getMedicalCenters() {
+        return mMedicalCenters;
     }
 }
