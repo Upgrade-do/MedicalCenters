@@ -36,6 +36,7 @@ public class ListMapActivity extends AppCompatActivity implements
     private final String TAG = ListMapActivity.class.getSimpleName();
     private GoogleApiClient mGoogleApiClient;
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
     // The {@link ViewPager} that will host the section contents.
     private ViewPager mViewPager;
 
