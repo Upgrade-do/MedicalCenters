@@ -134,7 +134,7 @@ public class ListItemDetailsFragment extends Fragment{
      */
     private MedicalCenter findMedicalCenterByName(String itemName) {
 
-            List<MedicalCenter> medicalCenters = ListMapActivity.mMedicalCentersApplication.mMedicalCenters;
+        List<MedicalCenter> medicalCenters = ListMapActivity.mMedicalCenters;
             for (MedicalCenter medicalCenter : medicalCenters) {
                 if (itemName.equals(medicalCenter.getName())) {
                     return medicalCenter;

@@ -72,8 +72,7 @@ public class ListFragment extends Fragment {
     }
 
     private static List<MedicalCenter> loadMedicalCentersFromLocation(final LatLng curLatLng) {
-        if (ListMapActivity.mMedicalCentersApplication.mMedicalCenters != null) {
-            List<MedicalCenter> medicalCenters = ListMapActivity.mMedicalCentersApplication.mMedicalCenters;
+        List<MedicalCenter> medicalCenters = ListMapActivity.mMedicalCenters;
             if (curLatLng != null) {
                 Collections.sort(medicalCenters,
                         new Comparator<MedicalCenter>() {
@@ -89,8 +88,6 @@ public class ListFragment extends Fragment {
                 );
             }
             return medicalCenters;
-        }
-        return null;
     }
 
     @Override
@@ -153,76 +150,18 @@ public class ListFragment extends Fragment {
     }
 
     /**
-     * Recycler View
+     * On list item click listener
      */
-    private class ListAdapter extends RecyclerView.Adapter<ViewHolder>
-            implements ItemClickListener {
+    interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
 
-        // This list will be loaded on the fragment
-        public List<MedicalCenter> mMedicalCenters;
-
-        // For binding purposes
-        private Context mContext;
-
-        // Constructor
-        public ListAdapter(Context context, List<MedicalCenter> medicalCenters) {
-            super();
-            mContext = context;
-            mMedicalCenters = medicalCenters;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            View view = inflater.inflate(R.layout.list_item, parent, false);
-            return new ViewHolder(view, this);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-
-            // holds the item to bind
-            MedicalCenter medicalCenter = mMedicalCenters.get(position);
-
-            holder.mTitleTextView.setText(medicalCenter.getName());
-            holder.mDescriptionTextView.setText(medicalCenter.getName());
-
-            Glide.with(mContext)
-                    .load(medicalCenter.getImageURL())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .placeholder(R.color.lighter_gray)
-                    .override(mImageSize, mImageSize)
-                    .into(holder.mImageView);
-
-            String distance =
-                    Utils.formatDistanceBetween(mLatestLocation, medicalCenter.getGeo());
-            if (TextUtils.isEmpty(distance)) {
-                holder.mOverlayTextView.setVisibility(View.GONE);
-            } else {
-                holder.mOverlayTextView.setVisibility(View.VISIBLE);
-                holder.mOverlayTextView.setText(distance);
-            }
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public int getItemCount() {
-            return mMedicalCenters == null ? 0 : mMedicalCenters.size();
-        }
-
-        @Override
-        public void onItemClick(View view, int position) {
-            if (!mItemClicked) {
-                mItemClicked = true;
-                View heroView = view.findViewById(android.R.id.icon);
-                ListItemDetailsActivity.launch(
-                        getActivity(), mAdapter.mMedicalCenters.get(position).getName(), heroView);
-            }
-        }
+    /**
+     * This interface allows an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that activity.
+     */
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(String id);
     }
 
     /**
@@ -257,13 +196,6 @@ public class ListFragment extends Fragment {
     }
 
     /**
-     * On list item click listener
-     */
-    interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    /**
      * Recycler View
      */
     private class ListAdapter extends RecyclerView.Adapter<ViewHolder>
@@ -334,13 +266,5 @@ public class ListFragment extends Fragment {
                         getActivity(), mAdapter.mMedicalCenters.get(position).getName(), heroView);
             }
         }
-    }
-
-    /**
-     * This interface allows an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that activity.
-     */
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(String id);
     }
 }

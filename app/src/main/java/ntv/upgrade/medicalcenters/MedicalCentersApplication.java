@@ -4,9 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
@@ -17,9 +15,10 @@ import ntv.upgrade.medicalcenters.models.MedicalCenter;
 public class MedicalCentersApplication extends Application {
 
     private static final String TAG = MedicalCentersApplication.class.getSimpleName();
+
     // List of sites
-    public static List<MedicalCenter> mMedicalCenters = new ArrayList<>();
-    private static GoogleApiClient mGoogleApiClient = null;
+    private List<MedicalCenter> mMedicalCenters;
+    // TODO: 4/4/2016 switch to User model as soon as posible
     private GoogleSignInAccount mCurrentUserAccount;
 
     @Override
@@ -28,20 +27,11 @@ public class MedicalCentersApplication extends Application {
         // Initialize the singletons so their instances
         // are bound to the application process.
         initSingletons();
+
     }
 
     protected void initSingletons() {
         Log.i(TAG, "Initializing Singleton Classes");
-    }
-
-    public GoogleApiClient getGoogleApiClient() {
-        return mGoogleApiClient;
-    }
-
-    public void setGoogleApiClient(GoogleApiClient aGoogleApiClient) {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = aGoogleApiClient;
-        }
     }
 
     public GoogleSignInAccount getUserAccount() {
@@ -50,5 +40,13 @@ public class MedicalCentersApplication extends Application {
 
     public void setUserAccount(GoogleSignInAccount userAccount) {
         mCurrentUserAccount = userAccount;
+    }
+
+    public List<MedicalCenter> getMedicalCenters() {
+        return mMedicalCenters;
+    }
+
+    public void setMedicalCenters(List<MedicalCenter> mMedicalCenters) {
+        this.mMedicalCenters = mMedicalCenters;
     }
 }

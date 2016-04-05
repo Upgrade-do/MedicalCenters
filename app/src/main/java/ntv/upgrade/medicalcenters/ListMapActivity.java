@@ -21,24 +21,25 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.List;
+
+import ntv.upgrade.medicalcenters.models.MedicalCenter;
+
 public class ListMapActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         ListFragment.OnFragmentInteractionListener, MapFragment.OnMapFragmentInteractionListener {
 
+    public static List<MedicalCenter> mMedicalCenters;
     // Client used to interact with Google APIs.
-    public static MedicalCentersApplication mMedicalCentersApplication;
+    protected static MedicalCentersApplication mMedicalCentersApplication;
     // for log purposes
     private final String TAG = ListMapActivity.class.getSimpleName();
     private GoogleApiClient mGoogleApiClient;
-
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
     // The {@link ViewPager} that will host the section contents.
     private ViewPager mViewPager;
 
-    /**
-     * Dispatch onStart() to all fragments.  Ensure any created loaders are
-     * now started.
-     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -65,15 +66,15 @@ public class ListMapActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+
+        mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
+        mMedicalCenters = mMedicalCentersApplication.getMedicalCenters();
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.listmapcontainer);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
