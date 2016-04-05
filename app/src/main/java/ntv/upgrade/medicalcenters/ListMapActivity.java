@@ -40,10 +40,6 @@ public class ListMapActivity extends AppCompatActivity implements
     // The {@link ViewPager} that will host the section contents.
     private ViewPager mViewPager;
 
-    /**
-     * Dispatch onStart() to all fragments.  Ensure any created loaders are
-     * now started.
-     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -70,16 +66,15 @@ public class ListMapActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
-        mMedicalCenters.addAll(mMedicalCentersApplication.getMedicalCenters());
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+
+        mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
+        mMedicalCenters = mMedicalCentersApplication.getMedicalCenters();
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.listmapcontainer);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);

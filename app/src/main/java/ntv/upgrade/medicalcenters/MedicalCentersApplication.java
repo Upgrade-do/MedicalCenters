@@ -1,15 +1,12 @@
 package ntv.upgrade.medicalcenters;
 
 import android.app.Application;
-import android.content.res.AssetManager;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
-import java.io.IOException;
 import java.util.List;
 
-import ntv.upgrade.medicalcenters.csvtools.Reader;
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
 /**
@@ -18,8 +15,10 @@ import ntv.upgrade.medicalcenters.models.MedicalCenter;
 public class MedicalCentersApplication extends Application {
 
     private static final String TAG = MedicalCentersApplication.class.getSimpleName();
+
     // List of sites
     private List<MedicalCenter> mMedicalCenters;
+    // TODO: 4/4/2016 switch to User model as soon as posible
     private GoogleSignInAccount mCurrentUserAccount;
 
     @Override
@@ -29,13 +28,6 @@ public class MedicalCentersApplication extends Application {
         // are bound to the application process.
         initSingletons();
 
-        AssetManager assetManager = getAssets();
-
-        try {
-            mMedicalCenters = Reader.readAndInsert(assetManager);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     protected void initSingletons() {
@@ -52,5 +44,9 @@ public class MedicalCentersApplication extends Application {
 
     public List<MedicalCenter> getMedicalCenters() {
         return mMedicalCenters;
+    }
+
+    public void setMedicalCenters(List<MedicalCenter> mMedicalCenters) {
+        this.mMedicalCenters = mMedicalCenters;
     }
 }
