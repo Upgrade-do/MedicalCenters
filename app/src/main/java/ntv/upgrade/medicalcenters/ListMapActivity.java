@@ -3,6 +3,7 @@ package ntv.upgrade.medicalcenters;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -21,20 +22,21 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import ntv.upgrade.medicalcenters.csv.Reader;
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
 public class ListMapActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         ListFragment.OnFragmentInteractionListener, MapFragment.OnMapFragmentInteractionListener {
 
-    public static List<MedicalCenter> mMedicalCenters;
-    // Client used to interact with Google APIs.
-    protected static MedicalCentersApplication mMedicalCentersApplication;
     // for log purposes
     private final String TAG = ListMapActivity.class.getSimpleName();
+
     private GoogleApiClient mGoogleApiClient;
+    public static List<MedicalCenter> mMedicalCenters;
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     // The {@link ViewPager} that will host the section contents.
@@ -68,8 +70,12 @@ public class ListMapActivity extends AppCompatActivity implements
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
-        mMedicalCenters = mMedicalCentersApplication.getMedicalCenters();
+        AssetManager assetManager = getAssets();
+        try {
+            mMedicalCenters = Reader.readAndInsert(assetManager);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 

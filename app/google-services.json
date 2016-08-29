@@ -1,68 +1,55 @@
 {
   "project_info": {
-    "project_id": "medical-centers",
-    "project_number": "28322052526",
-    "name": "Medical Centers"
+    "project_number": "926477225603",
+    "firebase_url": "https://medical-centers-59356.firebaseio.com",
+    "project_id": "medical-centers-59356",
+    "storage_bucket": "medical-centers-59356.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:28322052526:android:6cd9a69f35dddd9d",
-        "client_id": "android:ntv.upgrade.medicalcenters",
-        "client_type": 1,
+        "mobilesdk_app_id": "1:926477225603:android:6cd9a69f35dddd9d",
         "android_client_info": {
-          "package_name": "ntv.upgrade.medicalcenters",
-          "certificate_hash": []
+          "package_name": "ntv.upgrade.medicalcenters"
         }
       },
       "oauth_client": [
         {
-          "client_id": "28322052526-1jm76tf068iinjsk7gd52gu75o8qnmb6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "ntv.upgrade.medicalcenters",
-            "certificate_hash": "4C524BDC76E9C0BCEDB468060156C3D17127C79D"
-          }
-        },
-        {
-          "client_id": "28322052526-uud1309e8ru3mecvmvfa0b4slunqae0b.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "ntv.upgrade.medicalcenters",
-            "certificate_hash": "B59BE7B4423F22C143E4E1C19EB92BEE1790A437"
-          }
-        },
-        {
-          "client_id": "28322052526-feuelleo69cd3v99ia6pk2abh0p5d73i.apps.googleusercontent.com",
+          "client_id": "926477225603-7mtco723gi4ga65qc0pp84cis8qpjqgf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "ntv.upgrade.medicalcenters",
             "certificate_hash": "6BCDDE5E8C367D1EF9F44CE2094FE1CD874981A3"
           }
+        },
+        {
+          "client_id": "926477225603-a4vf25hsms6qm6d8n19rs2al21kf1pd4.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
-      "api_key": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxqVBHe5GnKEjeSV8_l8YqapTCXIpt4Yk"
+        }
+      ],
       "services": {
         "analytics_service": {
           "status": 1
         },
-        "cloud_messaging_service": {
-          "status": 1,
-          "apns_config": []
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "google_signin_service": {
-          "status": 2
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "926477225603-a4vf25hsms6qm6d8n19rs2al21kf1pd4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }
   ],
-  "client_info": [],
-  "ARTIFACT_VERSION": "1"
+  "configuration_version": "1"
 }

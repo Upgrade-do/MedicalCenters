@@ -6,14 +6,15 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -27,12 +28,13 @@ import java.util.List;
  *
  * Created by Paulino Gomez on 1/10/2016.
  */
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     List<LatLng> hole = null;
     // Google map object.
-    private SupportMapFragment mMapView;
+    private MapView mMapView;
     private GoogleMap mMap;
+    private Bundle mBundle;
     private CameraPosition mCameraPosition;
     private OnMapFragmentInteractionListener mListener;
 
@@ -46,29 +48,24 @@ public class MapFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
+        mMapView.onResume();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        FragmentManager fm = getChildFragmentManager();
-        mMapView = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        if (mMapView == null) {
-            mMapView = SupportMapFragment.newInstance();
-            fm.beginTransaction().replace(R.id.map, mMapView).commit();
-        }
+        mBundle = savedInstanceState;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+
+        MapsInitializer.initialize(getActivity());
+        mMapView = (MapView) view.findViewById(R.id.map);
+        mMapView.onCreate(mBundle);
+        setUpMapIfNeeded(view);
 
         return view;
     }
@@ -103,15 +100,26 @@ public class MapFragment extends Fragment {
      * If it isn't installed will show a prompt for the user to
      * install/update the Google Play services APK on their device.
      */
-    private void setUpMapIfNeeded() {
-        // Do a null check to confirm that we have not already instantiated the map.
+    private void setUpMapIfNeeded(View inflatedView) {
+
         if (mMap == null) {
-            // Try to obtain the map from the SupportMapFragment.
-            mMap = mMapView.getMap();
+            mMapView.getMapAsync(MapFragment.this);
             if (mMap != null) {
                 setUpMap();
             }
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mMapView.onDestroy();
+        super.onDestroy();
     }
 
     /**
@@ -174,6 +182,8 @@ public class MapFragment extends Fragment {
         // drawAreasList();
         // drawAttractionsList();
         drawLaZonaPolygon();
+
+        MapsInitializer.initialize(getContext());
 
     }
 
@@ -303,6 +313,11 @@ public class MapFragment extends Fragment {
                 .fillColor(Color.argb(50, 255, 138, 101)));
 
 
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
     }
 
   /*  public void drawAttraction(Attraction attraction) {
