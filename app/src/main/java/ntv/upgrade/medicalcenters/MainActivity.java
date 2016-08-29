@@ -1,7 +1,6 @@
 package ntv.upgrade.medicalcenters;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,54 +15,41 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-
-import java.io.IOException;
-import java.util.List;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import ntv.upgrade.medicalcenters.csv.Reader;
-import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-
-    private MedicalCentersApplication mMedicalCentersApplication;
-    private GoogleSignInAccount mGoogleSignInAccount;
-    private List<MedicalCenter> mMedicalCenters;
-
-    /**
-     * Dispatch onStart() to all fragments.  Ensure any created loaders are
-     * now started.
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
+    // Firebase instance variables
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
-        mGoogleSignInAccount = mMedicalCentersApplication.getUserAccount();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        // Initialize Firebase Auth
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        if (mFirebaseUser == null) {
+            // Not signed in, launch the Sign In activity
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
+            return;
+        } else {
+            setHeaderContent(navigationView.getHeaderView(0));
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -73,11 +59,7 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        setHeaderContent(navigationView.getHeaderView(0));
         navigationView.setNavigationItemSelectedListener(this);
-
-        getMedicalCenters();
     }
 
     private void setHeaderContent(View header) {
@@ -87,12 +69,12 @@ public class MainActivity extends AppCompatActivity
         TextView profileEmail = (TextView) header.findViewById(R.id.profile_email);
 
         Glide.with(this)
-                .load(mGoogleSignInAccount.getPhotoUrl())
+                .load(mFirebaseUser.getPhotoUrl().toString())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(profileImage);
 
-        profileName.setText(mGoogleSignInAccount.getDisplayName());
-        profileEmail.setText(mGoogleSignInAccount.getEmail());
+        profileName.setText(mFirebaseUser.getDisplayName());
+        profileEmail.setText(mFirebaseUser.getEmail());
     }
 
     @Override
@@ -158,16 +140,5 @@ public class MainActivity extends AppCompatActivity
         assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void getMedicalCenters() {
-
-        AssetManager assetManager = getAssets();
-        try {
-            mMedicalCenters = Reader.readAndInsert(assetManager);
-            mMedicalCentersApplication.setMedicalCenters(mMedicalCenters);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
