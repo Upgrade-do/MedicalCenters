@@ -85,11 +85,9 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     private void updateUI() throws NullPointerException {
-        //GoogleSignInAccount user = mMedicalCentersApplication.getUserAccount();
 
         CircleImageView profileImage = (CircleImageView) findViewById(R.id.profile_image);
         getSupportActionBar().setTitle(mFirebaseUser.getDisplayName());
-
         Glide.with(this)
                 .load(mFirebaseUser.getPhotoUrl().toString())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
