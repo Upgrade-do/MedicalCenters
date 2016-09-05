@@ -60,20 +60,19 @@ public class ListItemDetailsFragment extends Fragment{
         }
 
         TextView nameTextView = (TextView) view.findViewById(R.id.tittleTextView);
-        TextView descTextView = (TextView) view.findViewById(R.id.descriptionTextView);
         TextView distanceTextView = (TextView) view.findViewById(R.id.distanceTextView);
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
         FloatingActionButton mapFab = (FloatingActionButton) view.findViewById(R.id.mapFab);
 
         LatLng location = Utils.getLocation(getActivity());
-        String distance = Utils.formatDistanceBetween(location, mMedicalCenter.getGeo());
+        String distance = Utils.formatDistanceBetween(location, new LatLng(Double.valueOf(mMedicalCenter.getLatitude()),Double.valueOf(mMedicalCenter.getLongitude())));
         if (TextUtils.isEmpty(distance)) {
             distanceTextView.setVisibility(View.GONE);
         }
 
         nameTextView.setText(itemName);
         distanceTextView.setText(distance);
-        descTextView.setText(mMedicalCenter.getImageURL());
+        //descTextView.setText(mMedicalCenter.getImageURL());
 
         int imageSize = getResources().getDimensionPixelSize(R.dimen.image_size) * Constants.IMAGE_ANIM_MULTIPLIER;
         Glide.with(getActivity())

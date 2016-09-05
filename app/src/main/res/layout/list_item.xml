@@ -1,59 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list_item_cardView"
+    android:id="@+id/list_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="5dp">
+    android:background="@android:color/holo_blue_light"
+    android:elevation="5dp"
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_hospital"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/poi_image"
-            android:layout_width="@dimen/image_size"
-            android:layout_height="@dimen/image_size"
-            android:scaleType="centerCrop"
-            android:tint="@color/colorAccent"
-            android:transitionName="image" />
+    <TextView
+        android:id="@+id/item_name"
+        style="?android:textAppearanceMedium"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/item_image"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ic_ars2"
+        tools:text="@string/dummy_poi_tittle"
+        android:layout_width="0dp" />
 
-        <TextView
-            android:id="@+id/poi_overlay_text"
-            style="?android:textAppearanceSmallInverse"
-            android:layout_width="@dimen/image_size"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/poi_image"
-            android:background="@color/text_background"
-            android:gravity="center"
-            android:padding="@dimen/tiny_margin"
-            tools:text="@string/dummy_poi_distance" />
+    <TextView
+        android:id="@+id/item_phone"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:maxLines="1"
+        app:layout_constraintLeft_toRightOf="@+id/item_image"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_name"
+        tools:text="@string/dummy_poi_tittle"
+        android:layout_width="0dp" />
 
-        <TextView
-            android:id="@+id/poi_tittle"
-            style="?android:textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/poi_image"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:gravity="center_horizontal"
-            android:layout_margin="@dimen/small_margin"
-            tools:text="@string/dummy_poi_tittle" />
+    <TextView
+        android:id="@+id/item_email"
+        style="?android:textAppearanceSmall"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:text="@string/dummy_poi_description"
+        app:layout_constraintLeft_toRightOf="@+id/item_image"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_phone"
+        tools:text="@string/dummy_poi_description"
+        android:layout_width="0dp" />
 
-        <TextView
-            android:id="@+id/poi_description"
-            style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/poi_tittle"
-            android:layout_toEndOf="@id/poi_image"
-            android:ellipsize="end"
-            android:maxLines="4"
-            android:layout_margin="@dimen/small_margin"
-            tools:text="@string/dummy_poi_description" />
 
-    </RelativeLayout>
-</android.support.v7.widget.CardView>
+    <ImageView
+        android:id="@+id/ic_ars1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_humano"
+        app:layout_constraintRight_toLeftOf="@+id/ic_ars3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ic_ars2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_humano"
+        app:layout_constraintRight_toLeftOf="@+id/ic_ars4"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ic_ars3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_humano"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ic_ars4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_humano"
+        app:layout_constraintRight_toLeftOf="@+id/ic_ars1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>

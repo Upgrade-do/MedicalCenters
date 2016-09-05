@@ -22,12 +22,30 @@
     <string name="dummy_user_address">Address: somewhere Ln. @ Invisible Palace (pálte atrá)</string>
     <string name="dummy_poi_tittle">Medical Center name</string>
     <string name="dummy_poi_distance">185 mts.</string>
-    <string name="dummy_poi_description">Address: somewhere Ln. @ Invisible Palace (pálte atrá)</string>
+    <string name="dummy_poi_description">Address: somewhere</string>
     <string name="dummy_ars_name">ARS Humano</string>
     <string name="dummy_ars_member_id">54893574168514</string>
     <string name="dummy_ars_client">Position Logic SRL</string>
     <string name="dummy_ars_account_type">MAX</string>
+    <string name="banner_ad_unit_id">ca-app-pub-9971649908419935~1848950407</string>
+    <string name="banner_ad_unit_id_developer">ca-app-pub-3940256099942544/6300978111</string>
 
+    <!--PERMISSIONS EXPLANATION-->
+    <string name="permission_explanation_READ_PHONE_STATE">
+        We need this permission to get the IMEI of the device to register it on the platform.
+        This permission is mandatory.
+    </string>
+    <string name="permission_explanation_READ_EXTERNAL_STORAGE">
+        We need this permission to get search for the reports saved on this device.
+        This permission is mandatory.
+    </string>
+    <string name="permission_explanation_WRITE_EXTERNAL_STORAGE">
+        We need this permission to write the Excel report to this device.
+        This permission is mandatory.
+    </string>
+    <string name="permission_really_declined">
+        Permission %1$s can only be granted from the App info screen on Settings->Apps->Auditorias ABT
+    </string>
     <!-- Content Description for images -->
     <string name="desc_app_icon">Application Logo</string>
 
@@ -35,16 +53,6 @@
     <string name="signing_in">Signing in…</string>
     <string name="signed_in_format">Signed in as: %s</string>
     <string name="signed_out">Signed out</string>
-<!--
-    <string name="signed_in_err">"Error: please check logs."</string>
-    <string name="error_null_person">
-        Error: Plus.PeopleApi.getCurrentPerson returned null. Ensure that the Google+ API is
-        enabled for your project, you have a properly configured google-services.json file
-        and that your device has an internet connection.
-    </string>
-    <string name="auth_code_fmt">Auth Code: %s</string>
-    <string name="id_token_fmt">ID Token: %s</string>
--->
 
     <!-- Button labels -->
     <string name="button_sign_out">Sign Out</string>
@@ -92,12 +100,8 @@
     <string name="title_activity_login">Sign in</string>
 
 
-
-
-
     <!-- Google Play Services error for Toast -->
     <string name="play_services_error_fmt">Google Play Services Error: %i</string>
-
 
 
     <!-- Rationale for asking for Contacts -->
@@ -178,11 +182,8 @@
     <string name="pref_tittle_frequency">Frequency</string>
     <string name="pref_tittle_panic_frequency">Panic Frequency</string>
     <string name="pref_tittle_start_on_boot">Start on Boot</string>
-    <string name="pref_tittle_debug_mode">Debug Mode</string>
     <string name="pref_tittle_gps_only">GPS Only</string>
-    <string name="pref_tittle_crash_reports">Crash Reports</string>
     <string name="pref_tittle_account_id">Account ID</string>
-    <string name="pref_tittle_license_id">License Key</string>
     <string name="pref_tittle_device_id">Device ID</string>
     <string name="pref_tittle_version_id">Version</string>
     <string name="pref_tittle_build_id">Build</string>
@@ -193,23 +194,16 @@
     <string name="pref_summary_panic_frequency">how often are panic reports sent</string>
     <string name="pref_summary_start_on_boot_on">Reporting will start automatically on boot</string>
     <string name="pref_summary_start_on_boot_off">Reporting will not start on boot</string>
-    <string name="pref_summary_debug_mode_on">Use diagnostic tools (for testers only)</string>
-    <string name="pref_summary_debug_mode_off">Use the standard application interface for users</string>
     <string name="pref_summary_gps_only_on">GPS based location only (may cause missed reports)</string>
     <string name="pref_summary_gps_only_off">Accepts location data from all location providers</string>
-    <string name="pref_summary_crash_reports_on">Send crash reports whenever the application crashes</string>
-    <string name="pref_summary_crash_reports_off">Ask permission before sending crash reports</string>
 
     <!--PREFERENCES KEYS-->
     <string name="pref_key_accuracy">reporting_accuracy</string>
     <string name="pref_key_frequency">reporting_frequency</string>
     <string name="pref_key_panic_frequency">panic_frequency</string>
     <string name="pref_key_start_on_boot">auto_start</string>
-    <string name="pref_key_debug_mode">debug_mode</string>
     <string name="pref_key_gps_only">gps_restricted</string>
-    <string name="pref_key_crash_reports">acra.alwaysaccept</string>
     <string name="pref_key_account_id">account_id</string>
-    <string name="pref_key_licence_id">licence_id</string>
     <string name="pref_key_device_id">device_id</string>
     <string name="pref_key_version_id">version_id</string>
     <string name="pref_key_build_id">build_id</string>

@@ -128,7 +128,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_frequency)));
         bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_panic_frequency)));
         bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_account_id)));
-        bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_licence_id)));
         bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_device_id)));
         bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_version_id)));
         bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_build_id)));

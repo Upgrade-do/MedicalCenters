@@ -36,7 +36,6 @@ public class SignInActivity extends AppCompatActivity
 
     public static final int REQ_SIGN_IN = 9001;
     public static final int REQ_SIGN_OUT = 9002;
-    public static final int REQ_REVOKE_ACCESS = 9003;
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
@@ -116,6 +115,7 @@ public class SignInActivity extends AppCompatActivity
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, REQ_SIGN_IN);
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
