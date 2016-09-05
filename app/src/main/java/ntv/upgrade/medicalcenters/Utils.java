@@ -4,11 +4,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.maps.android.SphericalUtil;
 
 import java.text.NumberFormat;
 
@@ -43,15 +43,16 @@ public class Utils {
             return null;
         }
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
-        double distance = Math.round(SphericalUtil.computeDistanceBetween(point1, point2));
+        float[] results = {};
+        Location.distanceBetween(point1.latitude,point1.longitude,point2.latitude,point2.longitude,results);
 
         // Adjust to KM if M goes over 1000 (see javadoc of method for note
         // on only supporting metric)
-        if (distance >= 1000) {
+        if (results[0] >= 1000) {
             numberFormat.setMaximumFractionDigits(1);
-            return numberFormat.format(distance / 1000) + DISTANCE_KM_POSTFIX;
+            return numberFormat.format(results[0] / 1000) + DISTANCE_KM_POSTFIX;
         }
-        return numberFormat.format(distance) + DISTANCE_M_POSTFIX;
+        return numberFormat.format(results[0]) + DISTANCE_M_POSTFIX;
     }
 
     /**

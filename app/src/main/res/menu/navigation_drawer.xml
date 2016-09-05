@@ -4,11 +4,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_face_black_96dp"
+            android:icon="@drawable/ic_user_anonymous"
             android:title="@string/nav_drawer_option_profile" />
         <item
             android:id="@+id/nav_medical_centers"
-            android:icon="@drawable/ic_local_hospital_black_96dp"
+            android:icon="@drawable/ic_hospital"
             android:title="@string/nav_drawer_option_medical_centers" />
     </group>
 
@@ -16,11 +16,11 @@
         <menu>
             <item
                 android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_tune_black_96dp"
+                android:icon="@drawable/ic_settings"
                 android:title="@string/nav_drawer_option_settings" />
             <item
                 android:id="@+id/nav_about"
-                android:icon="@drawable/ic_help_outline_black_96dp"
+                android:icon="@drawable/ic_help"
                 android:title="@string/nav_drawer_option_about" />
         </menu>
     </item>

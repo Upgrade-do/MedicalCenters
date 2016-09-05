@@ -33,37 +33,17 @@
             android:title="@string/pref_tittle_start_on_boot" />
         <SwitchPreference
             android:defaultValue="false"
-            android:key="@string/pref_key_debug_mode"
-            android:summaryOff="@string/pref_summary_debug_mode_off"
-            android:summaryOn="@string/pref_summary_debug_mode_on"
-            android:title="@string/pref_tittle_debug_mode" />
-        <SwitchPreference
-            android:defaultValue="false"
             android:key="@string/pref_key_gps_only"
             android:summaryOff="@string/pref_summary_gps_only_off"
             android:summaryOn="@string/pref_summary_gps_only_on"
             android:title="@string/pref_tittle_gps_only" />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="@string/pref_key_crash_reports"
-            android:summaryOff="@string/pref_summary_crash_reports_off"
-            android:summaryOn="@string/pref_summary_crash_reports_on"
-            android:title="@string/pref_tittle_crash_reports" />
     </PreferenceCategory>
 
+    <!--HOLDS BASIC INFO ABOUT THIS APP-->
     <PreferenceCategory android:title="@string/pref_category_title_about">
-        <EditTextPreference
-            android:inputType="textCapWords"
+        <Preference
             android:key="@string/pref_key_account_id"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
             android:title="@string/pref_tittle_account_id" />
-        <EditTextPreference
-            android:inputType="textCapWords"
-            android:key="@string/pref_key_licence_id"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="@string/pref_tittle_license_id" />
         <Preference
             android:key="@string/pref_key_device_id"
             android:title="@string/pref_tittle_device_id" />
@@ -74,6 +54,5 @@
             android:key="@string/pref_key_build_id"
             android:title="@string/pref_tittle_build_id" />
     </PreferenceCategory>
-
 
 </PreferenceScreen>

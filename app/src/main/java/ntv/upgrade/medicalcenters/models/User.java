@@ -1,59 +1,10 @@
 package ntv.upgrade.medicalcenters.models;
 
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * Created by xeros on 3/27/2016.
  */
-public class User implements Parcelable {
+public class User {
 
-    // parcel keys
-    private static final String KEY_GOOGLE_ID = "google_id";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_PHOTO_URL = "photo_url";
-    private static final String KEY_CITY_ID = "city_id";
-    private static final String KEY_BIRTH_DATE = "birth_date";
-    private static final String KEY_SSN = "social_security";
-    private static final String KEY_BLOOD = "blood";
-    private static final String KEY_ADDRESS = "address";
-    private static final String KEY_ARS = "ars";
-    private static final String KEY_ARS_ID = "ars_id";
-    /**
-     * Creator required for class implementing the parcelable interface.
-     */
-    public static final Parcelable.Creator<User> CREATOR = new Creator<User>() {
-
-        @Override
-        public User createFromParcel(Parcel source) {
-            // read the bundle containing key value pairs from the parcel
-            Bundle bundle = source.readBundle();
-            User user = new User(
-                    bundle.getDouble(KEY_GOOGLE_ID),
-                    bundle.getString(KEY_NAME),
-                    bundle.getString(KEY_EMAIL),
-                    bundle.getString(KEY_PHOTO_URL),
-                    bundle.getDouble(KEY_CITY_ID),
-                    bundle.getString(KEY_BIRTH_DATE),
-                    bundle.getDouble(KEY_SSN),
-                    bundle.getString(KEY_BLOOD),
-                    bundle.getString(KEY_ADDRESS),
-                    bundle.getString(KEY_ARS),
-                    bundle.getDouble(KEY_ARS_ID));
-
-            return user;
-            // instantiate a person using values from the bundle
-
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-
-    };
     private double googleId;
     private String name;
     private String email;
@@ -65,12 +16,6 @@ public class User implements Parcelable {
     private String address;
     private String ars;
     private double arsId;
-
-    /**
-     * Empty constructor for array creation
-     */
-    public User() {
-    }
 
     public User(double googleId, String name, String email, String photoURL, double cityId,
                 String birthDate, double ssn, String blood, String address, String ars, double arsId) {
@@ -158,32 +103,5 @@ public class User implements Parcelable {
 
     public String getPhoto() {
         return photoURL;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        // create a bundle for the key value pairs
-        Bundle bundle = new Bundle();
-
-        // insert the key value pairs to the bundle
-        bundle.putDouble(KEY_GOOGLE_ID, googleId);
-        bundle.putString(KEY_NAME, name);
-        bundle.putString(KEY_EMAIL, email);
-        bundle.putString(KEY_PHOTO_URL, photoURL);
-        bundle.putDouble(KEY_CITY_ID, cityId);
-        bundle.putString(KEY_BIRTH_DATE, birthDate);
-        bundle.putDouble(KEY_SSN, ssn);
-        bundle.putString(KEY_BLOOD, blood);
-        bundle.putString(KEY_ADDRESS, address);
-        bundle.putString(KEY_ARS, ars);
-        bundle.putDouble(KEY_ARS_ID, arsId);
-
-        // write the key value pairs to the parcel
-        dest.writeBundle(bundle);
     }
 }
