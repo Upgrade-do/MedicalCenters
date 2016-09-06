@@ -149,7 +149,7 @@ public class ListFragment extends Fragment {
     /**
      * View Holder of each item on the list
      */
-    private static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         View mView;
 
         // Load a larger size image to make the activity transition to the detail screen smooth
@@ -163,12 +163,12 @@ public class ListFragment extends Fragment {
         public void setImageURL(Context context, Bitmap imageURL){
             ImageView mImageView = (ImageView) mView.findViewById(R.id.item_image);
 
-            Glide.with(context)
+           /* Glide.with(context)
                     .load(imageURL)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .placeholder(R.color.lighter_gray)
                     .override(mImageSize, mImageSize)
-                    .into(mImageView);
+                    .into(mImageView);*/
         }
         public void setName(String name){
             TextView mOverlayTextView = (TextView) mView.findViewById(R.id.item_name);
