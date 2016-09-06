@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "926477225603-beqk8u8cfu9vco365812fdks5t7i0f5u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ntv.upgrade.medicalcenters",
+            "certificate_hash": "4C524BDC76E9C0BCEDB468060156C3D17127C79D"
+          }
+        },
+        {
+          "client_id": "926477225603-eoo6k38sbbo8u4p2rf2rk20rmeo26hps.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ntv.upgrade.medicalcenters",
+            "certificate_hash": "B59BE7B4423F22C143E4E1C19EB92BEE1790A437"
+          }
+        },
+        {
           "client_id": "926477225603-7mtco723gi4ga65qc0pp84cis8qpjqgf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
