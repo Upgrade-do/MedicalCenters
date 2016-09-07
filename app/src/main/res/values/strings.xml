@@ -28,7 +28,6 @@
     <string name="dummy_ars_client">Position Logic SRL</string>
     <string name="dummy_ars_account_type">MAX</string>
     <string name="banner_ad_unit_id">ca-app-pub-9971649908419935/1709349605</string>
-    <string name="banner_ad_unit_id_developer">ca-app-pub-3940256099942544/6300978111</string>
 
     <!--PERMISSIONS EXPLANATION-->
     <string name="permission_explanation_READ_PHONE_STATE">
