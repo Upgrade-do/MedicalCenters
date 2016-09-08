@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,9 @@ public class SignInActivity extends AppCompatActivity
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+    // Google Instance variables
+    private GoogleSignInOptions googleSignInOptions;
+
     private GoogleApiClient mGoogleApiClient;
     private TextView mSignInStatus;
 
@@ -55,11 +59,11 @@ public class SignInActivity extends AppCompatActivity
 
         // Link Views
         mSignInStatus = (TextView) findViewById(R.id.sign_in_status);
-        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
@@ -67,14 +71,11 @@ public class SignInActivity extends AppCompatActivity
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build();
 
-        // Setup singInButton
-        assert signInButton != null;
-        signInButton.setSize(SignInButton.SIZE_WIDE);
-        signInButton.setScopes(gso.getScopeArray());
-        signInButton.setOnClickListener(this);
+        // Setup SignIn Options
+        setupSignInButtons();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -105,17 +106,64 @@ public class SignInActivity extends AppCompatActivity
         }
     }
 
+    public void setupSignInButtons(){
+        // Setup Google singIn Button
+        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        assert signInButton != null;
+        signInButton.setSize(SignInButton.SIZE_WIDE);
+        signInButton.setScopes(googleSignInOptions.getScopeArray());
+        signInButton.setOnClickListener(this);
+
+        // Setup Anonymous SignIn Button
+        Button signInAnonymously = (Button) findViewById(R.id.sign_in_anonymous);
+        signInAnonymously.setOnClickListener(this);
+
+    }
+
     @Override
     public void onClick(View view) {
         Log.i(TAG, "Start onClick Method");
-        signIn();
+        int id = view.getId();
+        switch (id){
+            case R.id.sign_in_button:
+                signInWithGoogle();
+                break;
+            case  R.id.sign_in_anonymous:
+                signInAnonymously();
+                break;
+        }
     }
 
-    private void signIn() {
+    private void signInWithGoogle() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, REQ_SIGN_IN);
     }
 
+    private void signInAnonymously(){
+        Log.d(TAG, "starting firebaseAuthAnonymously:");
+
+        mFirebaseAuth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInAnonymously", task.getException());
+                            Toast.makeText(SignInActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            mSignInStatus.setText(getString(R.string.signed_in_format,
+                                    "Anonymous"));
+                            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                            finish();
+                        }
+                    }
+                });
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

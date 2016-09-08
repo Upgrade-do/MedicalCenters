@@ -18,7 +18,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -32,7 +31,6 @@ public class ListMapActivity extends AppCompatActivity implements
 
     public static List<MedicalCenter> mMedicalCenters;
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    public static DatabaseReference mDatabase;
 
     // The {@link ViewPager} that will host the section contents.
     private ViewPager mViewPager;
@@ -65,9 +63,6 @@ public class ListMapActivity extends AppCompatActivity implements
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-9971649908419935~1848950407");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Write a message to the database
-        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
