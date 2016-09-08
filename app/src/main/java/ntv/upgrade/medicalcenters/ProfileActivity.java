@@ -88,10 +88,13 @@ public class ProfileActivity extends AppCompatActivity
 
         CircleImageView profileImage = (CircleImageView) findViewById(R.id.profile_image);
         getSupportActionBar().setTitle(mFirebaseUser.getDisplayName());
-        Glide.with(this)
-                .load(mFirebaseUser.getPhotoUrl().toString())
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(profileImage);
+
+        if (!mFirebaseUser.isAnonymous()) {
+            Glide.with(this)
+                    .load(mFirebaseUser.getPhotoUrl().toString())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(profileImage);
+        }
     }
 
     @Override

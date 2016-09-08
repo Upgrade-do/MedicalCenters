@@ -15,11 +15,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
@@ -39,6 +39,7 @@ public class ListFragment extends Fragment {
 
     private FirebaseRecyclerAdapter mAdapter;
 
+    public static DatabaseReference mDatabase;
     private LatLng mLatestLocation;
 
     private boolean mItemClicked;
@@ -101,13 +102,17 @@ public class ListFragment extends Fragment {
 
        // List<MedicalCenter> medicalCenters = loadMedicalCentersFromLocation(mLatestLocation);
 
-        mAdapter = new FirebaseRecyclerAdapter<MedicalCenter, ViewHolder>(MedicalCenter.class, R.layout.list_item, ViewHolder.class, ListMapActivity.mDatabase) {
+        // Write a message to the database
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
+        mAdapter = new FirebaseRecyclerAdapter<MedicalCenter, ViewHolder>(MedicalCenter.class, R.layout.list_item, ViewHolder.class, mDatabase.child("MedicalCenters").getRef()) {
             @Override
             public void populateViewHolder(ViewHolder viewHolder, MedicalCenter medicalCenter, int position) {
-                viewHolder.setImageURL(getContext(), medicalCenter.getImageURL());
+              //  viewHolder.setImageURL(getContext(), medicalCenter.getImageURL());
                 viewHolder.setName(medicalCenter.getName());
-                viewHolder.setPhone(medicalCenter.getPhone());
-                viewHolder.setEmail(medicalCenter.getEmail());
+            //    viewHolder.setPhone(medicalCenter.getPhone());
+             //   viewHolder.setEmail(medicalCenter.getEmail());
             }
         };
         recyclerView.setAdapter(mAdapter);

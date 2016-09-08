@@ -104,10 +104,12 @@ public class MainActivity extends AppCompatActivity
         CircleImageView profileImage = (CircleImageView) header.findViewById(R.id.profile_image);
         TextView profileName = (TextView) header.findViewById(R.id.profile_name);
 
-        Glide.with(this)
-                .load(mFirebaseUser.getPhotoUrl().toString())
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(profileImage);
+        if (!mFirebaseUser.isAnonymous()) {
+            Glide.with(this)
+                    .load(mFirebaseUser.getPhotoUrl().toString())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(profileImage);
+        }
 
         profileName.setText(mFirebaseUser.getDisplayName());
     }

@@ -1,7 +1,5 @@
 package ntv.upgrade.medicalcenters.models;
 
-import android.graphics.Bitmap;
-
 /**
  * This entity holds the basic key attributes of a Medical Center.
  *
@@ -10,19 +8,19 @@ import android.graphics.Bitmap;
 public class MedicalCenter {
 
     // Basic Medical Center Info
-    private String MCID;
+    private double MCID;
     private String name;
     private String email;
     private String phone;
-    private String latitude;
-    private String longitude;
-    private Bitmap imageURL;
+    private double latitude;
+    private double longitude;
+    private String imageURL;
 
     public MedicalCenter() {
     }
 
-    public MedicalCenter(String MCID, String name, String email, String phone,
-                         String latitude, String longitude, Bitmap imageURL) {
+    public MedicalCenter(double MCID, String name, String email, String phone,
+                         double latitude, double longitude, String imageURL) {
         this.MCID = MCID;
         this.name = name;
         this.email = email;
@@ -32,11 +30,11 @@ public class MedicalCenter {
         this.imageURL = imageURL;
     }
 
-    public String getMCID() {
+    public double getMCID() {
         return MCID;
     }
 
-    public void setMCID(String MCID) {
+    public void setMCID(double MCID) {
         this.MCID = MCID;
     }
 
@@ -64,27 +62,27 @@ public class MedicalCenter {
         this.phone = phone;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public Bitmap getImageURL() {
+    public String getImageURL() {
         return imageURL;
     }
 
-    public void setImageURL(Bitmap imageURL) {
+    public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
 }
