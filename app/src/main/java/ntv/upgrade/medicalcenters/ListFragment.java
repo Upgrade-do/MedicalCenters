@@ -111,8 +111,8 @@ public class ListFragment extends Fragment {
             public void populateViewHolder(ViewHolder viewHolder, MedicalCenter medicalCenter, int position) {
               //  viewHolder.setImageURL(getContext(), medicalCenter.getImageURL());
                 viewHolder.setName(medicalCenter.getName());
-            //    viewHolder.setPhone(medicalCenter.getPhone());
-             //   viewHolder.setEmail(medicalCenter.getEmail());
+                viewHolder.setPhone(medicalCenter.getPhone());
+                viewHolder.setEmail(medicalCenter.getEmail());
             }
         };
         recyclerView.setAdapter(mAdapter);
@@ -177,11 +177,11 @@ public class ListFragment extends Fragment {
         }
         public void setName(String name){
             TextView mOverlayTextView = (TextView) mView.findViewById(R.id.item_name);
-           // mOverlayTextView.setText(name);
+            mOverlayTextView.setText(name);
         }
         public void setPhone(String phone){
             TextView mOverlayTextView = (TextView) mView.findViewById(R.id.item_phone);
-          //  mOverlayTextView.setText(phone);
+            mOverlayTextView.setText(phone);
         }
         public void setMCID(String MCID){
 
@@ -192,7 +192,7 @@ public class ListFragment extends Fragment {
         }
         public void setEmail(String email){
             TextView mOverlayTextView = (TextView) mView.findViewById(R.id.item_email);
-          //  mOverlayTextView.setText(email);
+            mOverlayTextView.setText(email);
         }
 
     }
