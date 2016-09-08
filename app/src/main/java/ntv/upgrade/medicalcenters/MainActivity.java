@@ -24,8 +24,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.fastaccess.permission.base.PermissionHelper;
-import com.fastaccess.permission.base.callback.OnPermissionCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -35,20 +33,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import ntv.upgrade.medicalcenters.notifications.NotificationRequest;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnPermissionCallback {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    // Required Permissions
-    private static final String READ_PHONE_STATE = android.Manifest.permission.READ_PHONE_STATE;
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
-
-
-    private PermissionHelper
-            mPermissionHelper;
 
     private SharedPreferences
             mPreferences;
@@ -67,7 +58,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         try {
             mPackageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            mPermissionHelper = PermissionHelper.getInstance(this);
             mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         } catch (PackageManager.NameNotFoundException e) {
@@ -84,7 +74,7 @@ public class MainActivity extends AppCompatActivity
             return;
         } else {
             setHeaderContent(navigationView.getHeaderView(0));
-            mPermissionHelper.request(READ_PHONE_STATE);
+            getInstallationInfo();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -178,90 +168,15 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    private String getUnitID() {
-        Log.d(TAG, "Getting device ID. . .");
-        return ((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
-    }
 
     private void getInstallationInfo(){
         SharedPreferences.Editor preferencesEditor = mPreferences.edit();
         preferencesEditor.putString(
                 getResources().getString(R.string.pref_key_account_id), mFirebaseUser.getEmail());
         preferencesEditor.putString(
-                getResources().getString(R.string.pref_key_device_id), getUnitID());
-        preferencesEditor.putString(
                 getResources().getString(R.string.pref_key_version_id), mPackageInfo.versionName);
         preferencesEditor.putString(
                 getResources().getString(R.string.pref_key_build_id), String.valueOf(mPackageInfo.versionCode));
         preferencesEditor.apply();
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d(TAG, "Handling permissions request result");
-        mPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
-    public void onPermissionGranted(@NonNull String[] permissionName) {
-        Log.d(TAG, "Permission(s) " + Arrays.toString(permissionName) + " Granted");
-        getInstallationInfo();
-    }
-
-    @Override
-    public void onPermissionDeclined(@NonNull String[] permissionName) {
-        Log.d(TAG, "Permission(s) " + Arrays.toString(permissionName) + " Declined");
-    }
-
-    @Override
-    public void onPermissionPreGranted(@NonNull String permissionsName) {
-        Log.d(TAG, "Permission( " + permissionsName + " ) preGranted");
-        getInstallationInfo();
-    }
-
-    @Override
-    public void onPermissionNeedExplanation(@NonNull String permissionName) {
-        Log.d(TAG, "Permission( " + permissionName + " ) needs Explanation");
-
-        RequestAfterExplanation request = new RequestAfterExplanation(permissionName);
-
-        new NotificationRequest.Builder()
-                .setContext(this)
-                .setId(NotificationRequest.NOTIFICATION_ID_ALERT)
-                .setTittle(permissionName.substring(permissionName.lastIndexOf(".") + 1))
-                .setMessage(getResources().getString(R.string.permission_explanation_READ_PHONE_STATE))
-                .isCancelable(true)
-                .setPositiveAction(request)
-                .setIcon(R.drawable.ic_warning)
-                .build()
-                .post();
-    }
-
-    @Override
-    public void onPermissionReallyDeclined(@NonNull String permissionName) {
-        Log.d(TAG, "Permission " + permissionName + " can only be granted from App info");
-
-        Toast.makeText(this,
-                String.format(
-                        getResources().getString(R.string.permission_really_declined),
-                        permissionName),
-                Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onNoPermissionNeeded() {
-        Log.d(TAG, "Permission(s) not needed");
-    }
-
-    private class RequestAfterExplanation implements Runnable {
-        private String permissionName;
-
-        private RequestAfterExplanation(String permissionName) {
-            this.permissionName = permissionName;
-        }
-
-        @Override
-        public void run() {
-            mPermissionHelper.requestAfterExplanation(permissionName);
-        }
     }
 }
