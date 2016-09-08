@@ -2,10 +2,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
-        android:key="@string/pref_key_build_id"
-        android:title="This preferences are set as template" />
+        android:title="Following preferences are set as template" />
     <Preference
-        android:key="@string/pref_key_build_id"
         android:title="Please disregard" />
 
     <PreferenceCategory android:title="@string/pref_category_title_reporting">
