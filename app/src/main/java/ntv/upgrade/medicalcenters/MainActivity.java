@@ -1,36 +1,30 @@
 package ntv.upgrade.medicalcenters;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Arrays;
-
 import de.hdodenhof.circleimageview.CircleImageView;
-import ntv.upgrade.medicalcenters.notifications.NotificationRequest;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,6 +40,14 @@ public class MainActivity extends AppCompatActivity
 
     private PackageInfo
             mPackageInfo;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "Initializing MobileAds for the aplication");
+
+        MobileAds.initialize(getApplicationContext(),
+                getResources().getString(R.string.mobile_ads_app_id));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,6 @@ public class MainActivity extends AppCompatActivity
             // Not signed in, launch the Sign In activity
             startActivity(new Intent(this, SignInActivity.class));
             finish();
-            return;
         } else {
             setHeaderContent(navigationView.getHeaderView(0));
             getInstallationInfo();
@@ -86,7 +87,6 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-
     }
 
     private void setHeaderContent(View header) {
