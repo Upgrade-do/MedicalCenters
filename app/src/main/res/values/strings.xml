@@ -18,17 +18,20 @@
     <string name="mobile_ads_app_id">ca-app-pub-9971649908419935~1848950407</string>
     <string name="banner_ad_unit_id">ca-app-pub-9971649908419935/1709349605</string>
 
-
-
-
-
-
-
-
-
+    <!-- Action Buttons -->
+    <string name="action_settings">Settings</string>
+    <string name="action_edit">Edit</string>
 
     <!-- Dummy Strings -->
-    <string name="dummy_user_name">Android Studio</string>
+    <string name="dummy_user_name">Anonymous</string>
+    <string name="dummy_title_personal">Personal</string>
+    <string name="dummy_title_assurance">Assurance</string>
+
+
+
+
+
+
     <string name="dummy_user_email">android.studio@android.com</string>
     <string name="dummy_user_age">Age: 46</string>
     <string name="dummy_user_blood_type">Bloodtype: A+</string>
@@ -41,19 +44,12 @@
     <string name="dummy_ars_client">Position Logic SRL</string>
     <string name="dummy_ars_account_type">MAX</string>
 
-
-
-
-
-
-
     <string name="desc_app_icon">Application Logo</string>
     <string name="signing_in">Signing in…</string>
     <string name="signed_in_format">Signed in as: %s</string>
     <string name="signed_out">Signed out</string>
     <string name="button_sign_out">Sign Out</string>
     <string name="button_disconnect">Disconnect</string>
-    <string name="action_settings">Settings</string>
     <string name="title_activity_medical_center_list">MedicalCenterListActivity</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="title_activity_settings">Settings</string>
