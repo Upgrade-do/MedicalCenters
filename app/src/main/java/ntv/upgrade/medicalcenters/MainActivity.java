@@ -1,14 +1,18 @@
 package ntv.upgrade.medicalcenters;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,54 +20,63 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-
-import java.io.IOException;
-import java.util.List;
+import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import ntv.upgrade.medicalcenters.csv.Reader;
-import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    // Firebase instance variables
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
 
-    private MedicalCentersApplication mMedicalCentersApplication;
-    private GoogleSignInAccount mGoogleSignInAccount;
-    private List<MedicalCenter> mMedicalCenters;
+    private SharedPreferences
+            mPreferences;
 
-    /**
-     * Dispatch onStart() to all fragments.  Ensure any created loaders are
-     * now started.
-     */
+    private PackageInfo
+            mPackageInfo;
     @Override
     protected void onStart() {
         super.onStart();
-    }
+        Log.i(TAG, "Initializing MobileAds for the aplication");
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
+        MobileAds.initialize(getApplicationContext(),
+                getResources().getString(R.string.mobile_ads_app_id));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mMedicalCentersApplication = (MedicalCentersApplication) getApplicationContext();
-        mGoogleSignInAccount = mMedicalCentersApplication.getUserAccount();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        try {
+            mPackageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Initialize Firebase Auth
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        if (mFirebaseUser == null) {
+            // Not signed in, launch the Sign In activity
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
+        } else {
+            setHeaderContent(navigationView.getHeaderView(0));
+            getInstallationInfo();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -73,26 +86,22 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        setHeaderContent(navigationView.getHeaderView(0));
         navigationView.setNavigationItemSelectedListener(this);
-
-        getMedicalCenters();
     }
 
     private void setHeaderContent(View header) {
 
         CircleImageView profileImage = (CircleImageView) header.findViewById(R.id.profile_image);
         TextView profileName = (TextView) header.findViewById(R.id.profile_name);
-        TextView profileEmail = (TextView) header.findViewById(R.id.profile_email);
 
-        Glide.with(this)
-                .load(mGoogleSignInAccount.getPhotoUrl())
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(profileImage);
+        if (!mFirebaseUser.isAnonymous()) {
+            Glide.with(this)
+                    .load(mFirebaseUser.getPhotoUrl().toString())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(profileImage);
+        }
 
-        profileName.setText(mGoogleSignInAccount.getDisplayName());
-        profileEmail.setText(mGoogleSignInAccount.getEmail());
+        profileName.setText(mFirebaseUser.getDisplayName());
     }
 
     @Override
@@ -160,14 +169,14 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void getMedicalCenters() {
-
-        AssetManager assetManager = getAssets();
-        try {
-            mMedicalCenters = Reader.readAndInsert(assetManager);
-            mMedicalCentersApplication.setMedicalCenters(mMedicalCenters);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void getInstallationInfo(){
+        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+        preferencesEditor.putString(
+                getResources().getString(R.string.pref_key_account_id), mFirebaseUser.getEmail());
+        preferencesEditor.putString(
+                getResources().getString(R.string.pref_key_version_id), mPackageInfo.versionName);
+        preferencesEditor.putString(
+                getResources().getString(R.string.pref_key_build_id), String.valueOf(mPackageInfo.versionCode));
+        preferencesEditor.apply();
     }
 }
