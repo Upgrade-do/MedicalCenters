@@ -22,6 +22,18 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="@dimen/image_size"
+                android:layout_height="@dimen/image_size"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:src="@drawable/ic_user_anonymous"
+                app:civ_border_color="@color/colorWhite"
+                android:layout_gravity="center_horizontal"
+                app:civ_border_width="1dp"
+                app:layout_anchor="@id/app_bar"
+                app:layout_anchorGravity="bottom|center" />
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -33,16 +45,6 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_profile" />
-
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image"
-        android:layout_width="@dimen/profile_image_size"
-        android:layout_height="@dimen/profile_image_size"
-        android:src="@drawable/ic_user_anonymous"
-        app:civ_border_color="@color/colorWhite"
-        app:civ_border_width="2dp"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|center" />
 
 
 </android.support.design.widget.CoordinatorLayout>

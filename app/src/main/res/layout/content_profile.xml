@@ -5,19 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:background="@color/transparent_actionbar_background"
-    android:paddingTop="@dimen/profile_padding_top"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ProfileActivity"
     tools:showIn="@layout/activity_profile">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v4.widget.Space
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_card_margin_top" />
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/dummy_title_personal" />
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -45,9 +47,12 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v4.widget.Space
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_card_margin_top" />
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/dummy_title_assurance" />
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -121,19 +126,9 @@
                     android:text="@string/button_sign_out"
                     android:theme="@style/ThemeOverlay.MyDarkButton" />
 
-                <Button
-                    android:id="@+id/disconnect_button"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/button_disconnect"
-                    android:theme="@style/ThemeOverlay.MyDarkButton" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v4.widget.Space
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_card_margin_top" />
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
