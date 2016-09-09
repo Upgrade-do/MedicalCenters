@@ -16,8 +16,6 @@ import android.view.MenuItem;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
 
@@ -37,19 +35,9 @@ public class ListMapActivity extends AppCompatActivity implements
     private AdView mAdView;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         UtilityService.requestLocation(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -59,8 +47,6 @@ public class ListMapActivity extends AppCompatActivity implements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-9971649908419935~1848950407");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -106,11 +92,17 @@ public class ListMapActivity extends AppCompatActivity implements
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
+        int id = item.getItemId();
+        Intent intent;
 
-           // case R.id.test_toggle_geofence:
-           //     return true;
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            intent = new Intent(this, SettingsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

@@ -3,9 +3,9 @@ package ntv.upgrade.medicalcenters;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,11 +15,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
@@ -31,15 +41,13 @@ import ntv.upgrade.medicalcenters.models.MedicalCenter;
  */
 public class ListFragment extends Fragment {
 
+    public static DatabaseReference mDatabaseRef;
+    public static StorageReference mStorageRef;
     // For log purposes
     private final String TAG = ListFragment.class.getSimpleName();
-
     // to communicate with the base activity
     private OnFragmentInteractionListener mListener;
-
     private FirebaseRecyclerAdapter mAdapter;
-
-    public static DatabaseReference mDatabase;
     private LatLng mLatestLocation;
 
     private boolean mItemClicked;
@@ -66,7 +74,6 @@ public class ListFragment extends Fragment {
     public static ListFragment newInstance() {
         return new ListFragment();
     }
-
 
 
     @Override
@@ -100,16 +107,18 @@ public class ListFragment extends Fragment {
         recyclerView.setEmptyView(rootView.findViewById(android.R.id.empty));
         recyclerView.setHasFixedSize(true);
 
-       // List<MedicalCenter> medicalCenters = loadMedicalCentersFromLocation(mLatestLocation);
+        // List<MedicalCenter> medicalCenters = loadMedicalCentersFromLocation(mLatestLocation);
 
         // Write a message to the database
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
 
-        mAdapter = new FirebaseRecyclerAdapter<MedicalCenter, ViewHolder>(MedicalCenter.class, R.layout.list_item, ViewHolder.class, mDatabase.child("MedicalCenters").getRef()) {
+        mAdapter = new FirebaseRecyclerAdapter<MedicalCenter, ViewHolder>(
+                MedicalCenter.class, R.layout.list_item, ViewHolder.class, mDatabaseRef.child("MedicalCenters").getRef()) {
             @Override
             public void populateViewHolder(ViewHolder viewHolder, MedicalCenter medicalCenter, int position) {
-              //  viewHolder.setImageURL(getContext(), medicalCenter.getImageURL());
+                viewHolder.setImageURL(getContext(), medicalCenter.getImageURL());
                 viewHolder.setName(medicalCenter.getName());
                 viewHolder.setPhone(medicalCenter.getPhone());
                 viewHolder.setEmail(medicalCenter.getEmail());
@@ -159,38 +168,62 @@ public class ListFragment extends Fragment {
 
         // Load a larger size image to make the activity transition to the detail screen smooth
         int mImageSize = 120 * Constants.IMAGE_ANIM_MULTIPLIER;
+
         // Constructor
         public ViewHolder(View view) {
             super(view);
             mView = view;
         }
 
-        public void setImageURL(Context context, Bitmap imageURL){
-            ImageView mImageView = (ImageView) mView.findViewById(R.id.item_image);
-
-           /* Glide.with(context)
-                    .load(imageURL)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .placeholder(R.color.lighter_gray)
-                    .override(mImageSize, mImageSize)
-                    .into(mImageView);*/
+        public void setImageURL(final Context context, final String imageURL) {
+            final ImageView mImageView = (ImageView) mView.findViewById(R.id.item_image);
+            File localFile = null;
+            try {
+                localFile = File.createTempFile("images", "jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mStorageRef.getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            Glide.with(context)
+                                    .load(imageURL)
+                                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                    .placeholder(R.color.lighter_gray)
+                                    .override(mImageSize, mImageSize)
+                                    .into(mImageView);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle failed download
+                    // ...
+                }
+            });
         }
-        public void setName(String name){
+
+        public void setName(String name) {
             TextView mOverlayTextView = (TextView) mView.findViewById(R.id.item_name);
             mOverlayTextView.setText(name);
         }
-        public void setPhone(String phone){
+
+        public void setPhone(String phone) {
             TextView mOverlayTextView = (TextView) mView.findViewById(R.id.item_phone);
             mOverlayTextView.setText(phone);
         }
-        public void setMCID(String MCID){
+
+        public void setMCID(String MCID) {
 
         }
-        public void setLatitude(String latitude){
+
+        public void setLatitude(String latitude) {
         }
-        public void setLongitude(String longitude){
+
+        public void setLongitude(String longitude) {
         }
-        public void setEmail(String email){
+
+        public void setEmail(String email) {
             TextView mOverlayTextView = (TextView) mView.findViewById(R.id.item_email);
             mOverlayTextView.setText(email);
         }

@@ -1,10 +1,12 @@
 package ntv.upgrade.medicalcenters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -130,8 +132,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      */
     private void setUpMap() {
 
-        mMap.setMapType(Integer.parseInt(
-                Preferences.getPreferredMapStyle(getActivity())));
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        int mapStyle =  Integer.parseInt(prefs.getString(
+                getContext().getString(R.string.pref_key_map_style),
+                getContext().getString(R.string.pref_default_map_style)));
+
+        mMap.setMapType(mapStyle);
 
         //  mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);

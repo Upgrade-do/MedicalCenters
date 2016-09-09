@@ -117,15 +117,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onCreate(savedInstanceState);
         setupActionBar();
         // Add 'general' preferences, defined in the XML file
-        addPreferencesFromResource(R.xml.pref_general);
+        addPreferencesFromResource(R.xml.preferences);
 
         /**
          * Bind the summaries of EditText/List/Dialog/Ringtone preferences to their values.
          * When their values change, their summaries are updated to reflect the new value,
          * per the Android Design guidelines.
          */
-        bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_accuracy)));
-        bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_frequency)));
+        bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_map_style)));
         bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_account_id)));
         bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_version_id)));
         bindPreferenceSummaryToValue(findPreference(getResources().getString(R.string.pref_key_build_id)));
