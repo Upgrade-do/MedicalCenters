@@ -128,6 +128,9 @@ public class ProfileActivity extends AppCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_out_button:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(ProfileActivity.this, SignInActivity.class));
+                finish();
                 break;
         }
     }

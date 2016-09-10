@@ -12,14 +12,39 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/dummy_title_personal" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_person"
+                tools:layout_editor_absoluteX="108dp"
+                tools:layout_editor_absoluteY="85dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/title_personal"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_edit"
+                tools:layout_editor_absoluteX="108dp"
+                tools:layout_editor_absoluteY="85dp" />
+
+        </LinearLayout>
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -28,79 +53,145 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/text_margin">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dummy_user_age" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dummy_user_blood_type" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dummy_user_address" />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/dummy_title_assurance" />
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/arsName"
+                    android:id="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
+                    android:layout_margin="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="40dp"
+                    android:text="@string/dummy_user_age" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/dummy_user_blood_type" />
+
+                <TextView
+                    android:layout_width="388dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/dummy_user_address"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_ars"
+                tools:layout_editor_absoluteX="108dp"
+                tools:layout_editor_absoluteY="85dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/title_assurance"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        </LinearLayout>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_edit"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/arsName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
                     android:gravity="center_horizontal"
                     android:text="@string/dummy_ars_name"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/key"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/ic_key"
+                    android:tint="@color/colorYellow"
+                    app:layout_constraintBottom_toBottomOf="@+id/arsMemberID"
+                    app:layout_constraintHorizontal_bias="0.33"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/arsMemberID"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/arsMemberID"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/text_margin"
-                    android:layout_marginRight="@dimen/text_margin"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
                     android:text="@string/dummy_ars_member_id"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/arsName" />
 
                 <TextView
                     android:id="@+id/arsClient"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/text_margin"
-                    android:layout_marginRight="@dimen/text_margin"
-                    android:text="@string/dummy_ars_client" />
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/dummy_ars_client"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/arsMemberID" />
 
                 <TextView
                     android:id="@+id/arsAccountType"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/text_margin"
-                    android:layout_marginLeft="@dimen/text_margin"
-                    android:layout_marginRight="@dimen/text_margin"
-                    android:text="@string/dummy_ars_account_type" />
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/dummy_ars_account_type"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/arsClient" />
 
-            </LinearLayout>
-
-
+            </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v4.widget.Space
@@ -111,24 +202,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/sign_out_and_disconnect"
+            <Button
+                android:id="@+id/sign_out_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="8dp">
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:text="@string/button_sign_out"
+                android:theme="@style/ThemeOverlay.MyDarkButton" />
 
-                <Button
-                    android:id="@+id/sign_out_button"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/button_sign_out"
-                    android:theme="@style/ThemeOverlay.MyDarkButton" />
-
-            </LinearLayout>
         </android.support.v7.widget.CardView>
-
-
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
