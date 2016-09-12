@@ -16,7 +16,7 @@
             android:title="@string/nav_drawer_option_ARS" />
     </group>
 
-    <item android:title="@string/nav_drawer_tittle_configurations">
+    <item android:title="@string/nav_drawer_tittle_advanced">
         <menu>
             <item
                 android:id="@+id/nav_settings"

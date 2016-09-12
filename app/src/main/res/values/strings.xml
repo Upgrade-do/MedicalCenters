@@ -10,7 +10,7 @@
     <string name="nav_drawer_option_profile">My Profile</string>
     <string name="nav_drawer_option_medical_centers">Medical Centers</string>
     <string name="nav_drawer_option_ARS">Specialists</string>
-    <string name="nav_drawer_tittle_configurations">Configurations</string>
+    <string name="nav_drawer_tittle_advanced">Advanced</string>
     <string name="nav_drawer_option_settings">Settings</string>
     <string name="nav_drawer_option_about">About Up°</string>
 
