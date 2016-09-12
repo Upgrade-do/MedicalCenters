@@ -11,8 +11,8 @@
             android:icon="@drawable/ic_hospital"
             android:title="@string/nav_drawer_option_medical_centers" />
         <item
-            android:id="@+id/nav_ARSs"
-            android:icon="@drawable/ic_ars"
+            android:id="@+id/nav_specialists"
+            android:icon="@drawable/ic_stethoscope"
             android:title="@string/nav_drawer_option_ARS" />
     </group>
 
@@ -24,7 +24,7 @@
                 android:title="@string/nav_drawer_option_settings" />
             <item
                 android:id="@+id/nav_about"
-                android:icon="@drawable/ic_help"
+                android:icon="@drawable/ic_upgrade"
                 android:title="@string/nav_drawer_option_about" />
         </menu>
     </item>

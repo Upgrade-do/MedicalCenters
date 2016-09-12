@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity
                 intent = new Intent(this, ListMapActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.nav_ARSs:
+            case R.id.nav_specialists:
                 intent = new Intent(this, ListMapActivity.class);
                 startActivity(intent);
                 break;
