@@ -50,6 +50,11 @@ public class ProfileActivity extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mARSName = (TextView) findViewById(R.id.ars_name);
+        mARSMemberID = (TextView) findViewById(R.id.ars_associate_id);
+        mARSClient = (TextView) findViewById(R.id.ars_client_name);
+        mARSAccountType = (TextView) findViewById(R.id.ars_plan);
+
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -172,11 +177,6 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public void onARSSave(String arsName, String associateID, String clientName, String plan) {
         Log.i(TAG, "Saving new client");
-
-        mARSName = (TextView) findViewById(R.id.ars_name);
-        mARSMemberID = (TextView) findViewById(R.id.ars_associate_id);
-        mARSClient = (TextView) findViewById(R.id.ars_client_name);
-        mARSAccountType = (TextView) findViewById(R.id.ars_plan);
 
         mARSName.setText(arsName);
         mARSMemberID.setText(associateID);
