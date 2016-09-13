@@ -9,8 +9,11 @@
     <color name="colorPrimaryLight">#E57373</color>
     <color name="colorPrimaryDark">#B71C1C</color>
     // Accent Colors
-    <color name="colorAccent">#00C853</color>
-    <color name="colorAccentLight">#00E676</color>
+    <color name="colorAccent">#D32F2F</color>
+    <color name="colorAccentLight">#B71C1C</color>
+
+    <color name="colorYellow">#FFC107</color>
+
 
 
     <color name="black_overlay">#66000000</color>

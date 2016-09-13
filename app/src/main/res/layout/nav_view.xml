@@ -7,4 +7,6 @@
     android:layout_gravity="start"
     android:fitsSystemWindows="true"
     app:headerLayout="@layout/nav_header"
+    app:itemIconTint="@color/colorBlack"
+    app:itemTextColor="@color/colorBlack"
     app:menu="@menu/navigation_drawer" />

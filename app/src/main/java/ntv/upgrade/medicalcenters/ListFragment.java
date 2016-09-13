@@ -1,13 +1,8 @@
 package ntv.upgrade.medicalcenters;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +13,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.location.FusedLocationProviderApi;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -48,22 +40,6 @@ public class ListFragment extends Fragment {
     // to communicate with the base activity
     private OnFragmentInteractionListener mListener;
     private FirebaseRecyclerAdapter mAdapter;
-    private LatLng mLatestLocation;
-
-    private boolean mItemClicked;
-
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Location location =
-                    intent.getParcelableExtra(FusedLocationProviderApi.KEY_LOCATION_CHANGED);
-            if (location != null) {
-                mLatestLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                // mAdapter.mAttractionList = loadAttractionsFromLocation(mLatestLocation);
-                mAdapter.notifyDataSetChanged();
-            }
-        }
-    };
 
     /**
      * Mandatory empty constructor
@@ -82,17 +58,8 @@ public class ListFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mItemClicked = false;
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
-                mBroadcastReceiver, UtilityService.getLocationUpdatedIntentFilter());
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -100,14 +67,10 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
 
-        mLatestLocation = Utils.getLocation(getActivity());
-
         ListRecyclerView recyclerView =
                 (ListRecyclerView) rootView.findViewById(R.id.list_recyclerView);
         recyclerView.setEmptyView(rootView.findViewById(android.R.id.empty));
         recyclerView.setHasFixedSize(true);
-
-        // List<MedicalCenter> medicalCenters = loadMedicalCentersFromLocation(mLatestLocation);
 
         // Write a message to the database
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
@@ -194,13 +157,7 @@ public class ListFragment extends Fragment {
                                     .override(mImageSize, mImageSize)
                                     .into(mImageView);
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle failed download
-                    // ...
-                }
-            });
+                    });
         }
 
         public void setName(String name) {

@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list_item"
+    android:background="@color/buttonTextColor"
     android:layout_width="match_parent"
-    android:elevation="5dp"
+    android:layout_marginBottom="1dp"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -27,6 +28,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:textStyle="bold"
+        android:maxLines="1"
         app:layout_constraintLeft_toRightOf="@+id/item_image"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ic_ars2"
@@ -63,11 +65,11 @@
 
     <ImageView
         android:id="@+id/ic_ars1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_universal"
         android:layout_marginTop="8dp"
-        android:src="@drawable/ic_humano"
         app:layout_constraintRight_toLeftOf="@+id/ic_ars3"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,23 +85,34 @@
 
     <ImageView
         android:id="@+id/ic_ars3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
-        android:src="@drawable/ic_humano"
+        android:src="@drawable/ic_senasa"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ic_ars4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:tint="@color/authui_colorAccent"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:src="@drawable/ic_humano"
+        android:src="@drawable/ic_palic"
         app:layout_constraintRight_toLeftOf="@+id/ic_ars1"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_map"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_email"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="8dp" />
 
 
 </android.support.constraint.ConstraintLayout>
