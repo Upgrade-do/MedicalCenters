@@ -12,7 +12,6 @@
     <dimen name="small_margin">8dp</dimen>
     <dimen name="tiny_margin">4dp</dimen>
     <dimen name="image_size">120dp</dimen>
-    <dimen name="fab_margin_hidden">-8dp</dimen>
     <integer name="list_columns">1</integer>
 
     <!-- Sign In Activity -->

@@ -37,6 +37,7 @@
     <!-- PROFILE ACTIVITY -->
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="button_sign_out">Sign Out</string>
+    <string name="error_required_field">Required field</string>
 
     <!-- LIST MAP ACTIVITY -->
     <string name="title_activity_list_map">ListMapActivity</string>
