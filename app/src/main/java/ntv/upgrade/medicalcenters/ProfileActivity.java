@@ -18,6 +18,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -182,5 +184,12 @@ public class ProfileActivity extends AppCompatActivity
         mARSMemberID.setText(associateID);
         mARSClient.setText(clientName);
         mARSAccountType.setText(plan);
+
+        // Write a message to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message2");
+
+        myRef.setValue("Hello, World2!");
+
     }
 }
