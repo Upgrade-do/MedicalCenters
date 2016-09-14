@@ -15,9 +15,10 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay"
-        tools:layout_editor_absoluteY="0dp"
         ads:layout_constraintRight_toRightOf="@+id/listmapcontainer"
-        ads:layout_constraintLeft_toLeftOf="@+id/listmapcontainer">
+        ads:layout_constraintLeft_toLeftOf="@+id/listmapcontainer"
+        ads:layout_constraintHorizontal_bias="1.0"
+        ads:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -52,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        ads:adSize="BANNER"
+        ads:adSize="FULL_BANNER"
         ads:adUnitId="@string/banner_ad_unit_id"
         ads:layout_constraintBottom_toBottomOf="parent"
         ads:layout_constraintLeft_toLeftOf="parent"
