@@ -1,4 +1,4 @@
-package ntv.upgrade.medicalcenters;
+package ntv.upgrade.medicalcenters.dialogs;
 
 import android.app.DialogFragment;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import ntv.upgrade.medicalcenters.R;
 
 /**
  * Created by Paulino on 9/12/2016.

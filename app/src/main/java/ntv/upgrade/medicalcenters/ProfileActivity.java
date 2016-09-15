@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import ntv.upgrade.medicalcenters.dialogs.EditARSDialogFragment;
 import ntv.upgrade.medicalcenters.models.User;
 
 public class ProfileActivity extends AppCompatActivity
