@@ -37,6 +37,7 @@ public class EditARSDialogFragment extends DialogFragment implements View.OnClic
         super.onResume();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,6 +47,11 @@ public class EditARSDialogFragment extends DialogFragment implements View.OnClic
         ASSOCIATE_ID = (EditText) view.findViewById(R.id.ars_associate_id);
         CLIENT_NAME = (EditText) view.findViewById(R.id.ars_client_name);
         PLAN = (EditText) view.findViewById(R.id.ars_plan);
+
+        ARS_NAME.setText(getArguments().getString("name"));
+        ASSOCIATE_ID.setText(getArguments().getString("member_id"));
+        CLIENT_NAME.setText(getArguments().getString("client"));
+        PLAN.setText(getArguments().getString("acc_type"));
 
         ImageButton save = (ImageButton) view.findViewById(R.id.button_save);
         ImageButton clear = (ImageButton) view.findViewById(R.id.button_clean);
@@ -64,6 +70,10 @@ public class EditARSDialogFragment extends DialogFragment implements View.OnClic
                 onSaveClick(view);
                 break;
             case R.id.button_clean:
+                ARS_NAME.setText("");
+                ASSOCIATE_ID.setText("");
+                CLIENT_NAME.setText("");
+                PLAN.setText("");
                 break;
         }
     }

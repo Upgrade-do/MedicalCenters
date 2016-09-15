@@ -8,7 +8,7 @@ android {
         applicationId "ntv.upgrade.medicalcenters"
         minSdkVersion 17
         targetSdkVersion 24
-        versionCode 18
+        versionCode 19
         versionName "1.0"
 
         // Enabling multidex support.

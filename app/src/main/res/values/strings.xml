@@ -86,9 +86,9 @@
 
     <!-- Dummy Strings -->
     <string name="dummy_user_name">Anonymous</string>
-    <string name="dummy_user_age">Age: 46</string>
-    <string name="dummy_user_blood_type">Blood: A+</string>
-    <string name="dummy_user_address">Address: somewhere Ln. @ Invisible Palace (pálte atrá)</string>
+    <string name="dummy_user_birth_date">Birth date:    12-31-1999</string>
+    <string name="dummy_user_blood_type">Blood type:    A+</string>
+    <string name="dummy_user_SSD">SSN:      598421536</string>
 
     <string name="dummy_poi_tittle">Medical Center name</string>
     <string name="dummy_poi_distance">185 mts.</string>
