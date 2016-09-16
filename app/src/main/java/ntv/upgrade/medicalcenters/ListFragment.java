@@ -39,6 +39,8 @@ public class ListFragment extends Fragment {
     private final String TAG = ListFragment.class.getSimpleName();
     // to communicate with the base activity
     private OnFragmentInteractionListener mListener;
+    // Used to size the images in the mobile app so they can animate cleanly from list to detail
+    public static final int IMAGE_ANIM_MULTIPLIER = 2;
     private FirebaseRecyclerAdapter mAdapter;
 
     /**
@@ -130,7 +132,7 @@ public class ListFragment extends Fragment {
         View mView;
 
         // Load a larger size image to make the activity transition to the detail screen smooth
-        int mImageSize = 120 * Constants.IMAGE_ANIM_MULTIPLIER;
+        int mImageSize = 120 * IMAGE_ANIM_MULTIPLIER;
 
         // Constructor
         public ViewHolder(View view) {

@@ -34,6 +34,10 @@ import ntv.upgrade.medicalcenters.models.MedicalCenter;
 public class ListItemDetailsFragment extends Fragment{
 
     private static final String EXTRA_MEDICAL_CENTER = "medical_center";
+    // Maps values
+    public static final String MAPS_INTENT_URI = "geo:0,0?q=";
+    // Used to size the images in the mobile app so they can animate cleanly from list to detail
+    public static final int IMAGE_ANIM_MULTIPLIER = 2;
     private MedicalCenter mMedicalCenter;
 
     public ListItemDetailsFragment() {
@@ -74,7 +78,7 @@ public class ListItemDetailsFragment extends Fragment{
         distanceTextView.setText(distance);
         //descTextView.setText(mMedicalCenter.getImageURL());
 
-        int imageSize = getResources().getDimensionPixelSize(R.dimen.image_size) * Constants.IMAGE_ANIM_MULTIPLIER;
+        int imageSize = getResources().getDimensionPixelSize(R.dimen.image_size) * IMAGE_ANIM_MULTIPLIER;
         Glide.with(getActivity())
                 .load(mMedicalCenter.getImageURL())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -86,7 +90,7 @@ public class ListItemDetailsFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(Constants.MAPS_INTENT_URI +
+                intent.setData(Uri.parse(MAPS_INTENT_URI +
                         Uri.encode(mMedicalCenter.getName() + ", " + mMedicalCenter.getMCID())));
                 startActivity(intent);
             }

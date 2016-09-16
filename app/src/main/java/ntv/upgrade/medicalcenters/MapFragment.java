@@ -32,31 +32,19 @@ import java.util.List;
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    List<LatLng> hole = null;
     // Google map object.
     private MapView mMapView;
     private GoogleMap mMap;
     private Bundle mBundle;
     private CameraPosition mCameraPosition;
     private OnMapFragmentInteractionListener mListener;
+    private SharedPreferences mPreferences;
 
     public MapFragment() {
     }
 
     public static MapFragment newInstance() {
         return new MapFragment();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mBundle = savedInstanceState;
     }
 
     @Override
@@ -67,16 +55,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(getActivity());
         mMapView = (MapView) view.findViewById(R.id.map);
         mMapView.onCreate(mBundle);
-        setUpMapIfNeeded(view);
+        setUpMapIfNeeded();
 
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void setUpMapIfNeeded() {
+
+        if (mMap == null) {
+            mMapView.getMapAsync(MapFragment.this);
+            if (mMap != null) {
+                setUpMap();
+            }
         }
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBundle = savedInstanceState;
+
+        // Binding preferences
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
     @Override
@@ -92,24 +91,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * Sets up the map if it not already instantiated.
-     * If it isn't installed will show a prompt for the user to
-     * install/update the Google Play services APK on their device.
-     */
-    private void setUpMapIfNeeded(View inflatedView) {
-
-        if (mMap == null) {
-            mMapView.getMapAsync(MapFragment.this);
-            if (mMap != null) {
-                setUpMap();
-            }
-        }
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
     }
 
     @Override
@@ -119,21 +103,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
     public void onDestroy() {
         mMapView.onDestroy();
         super.onDestroy();
     }
 
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
     private void setUpMap() {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        int mapStyle =  Integer.parseInt(prefs.getString(
+        int mapStyle =  Integer.parseInt(mPreferences.getString(
                 getContext().getString(R.string.pref_key_map_style),
                 getContext().getString(R.string.pref_default_map_style)));
 
@@ -350,19 +333,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }*/
 
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnMapFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
