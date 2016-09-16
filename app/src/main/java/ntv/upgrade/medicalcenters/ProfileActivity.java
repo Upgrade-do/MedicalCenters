@@ -26,16 +26,19 @@ import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import ntv.upgrade.medicalcenters.dialogs.EditARSDialogFragment;
+import ntv.upgrade.medicalcenters.dialogs.EditUserDialogFragment;
 import ntv.upgrade.medicalcenters.models.User;
 
 public class ProfileActivity extends AppCompatActivity
         implements View.OnClickListener,
-        EditARSDialogFragment.OnEditARSDialogListener {
+        EditARSDialogFragment.OnEditARSDialogListener,
+        EditUserDialogFragment.OnEditUserDialogListener{
 
     // TAG
     private static final String TAG = ProfileActivity.class.getSimpleName();
 
     private static final String FRAGMENT_EDIT_ARS = "fragment_edit_ars";
+    private static final String FRAGMENT_EDIT_USER = "fragment_edit_user";
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
@@ -74,7 +77,7 @@ public class ProfileActivity extends AppCompatActivity
             return;
         } else {
             if (mFirebaseUser.isAnonymous()) {
-                getSupportActionBar().setTitle("Anonymous");
+                getSupportActionBar().setTitle(getResources().getString(R.string.dummy_user_name));
             } else {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 mUsersRef = database.getReference("Users");
@@ -127,8 +130,7 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     private void onBindUI() {
-        findViewById(R.id.no_data_personal).setVisibility(View.GONE);
-        findViewById(R.id.no_data_ars).setVisibility(View.GONE);
+        findViewById(R.id.edit_ars).setVisibility(!mFirebaseUser.isAnonymous()? View.VISIBLE : View.GONE);
 
         mUserBirthDate = (TextView) findViewById(R.id.user_birth_date);
         mUserBloodType = (TextView) findViewById(R.id.user_blood_type);
@@ -173,7 +175,9 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        if (!mFirebaseUser.isAnonymous()) {
+            getMenuInflater().inflate(R.menu.menu_profile, menu);
+        }
         return true;
     }
 
@@ -183,22 +187,39 @@ public class ProfileActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        Intent intent;
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_edit) {
-            intent = new Intent(this, SettingsActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivity(intent);
+            onShowEditUserDialog(
+                    mUserBloodType.getText().toString(),
+                    mUserBirthDate.getText().toString(),
+                    mUserSSN.getText().toString());
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Displays the Create Client Dialog Fragment
-     */
+    private void onShowEditUserDialog(String mBloodType, String mBirthDate, String mSSN) {
+        Log.i(TAG, "Calling Create Client Dialog Fragment");
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        DialogFragment prev = (DialogFragment) getFragmentManager().findFragmentByTag(FRAGMENT_EDIT_USER);
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = new EditUserDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("blood_type", mBloodType);
+        args.putString("birth_date", mBirthDate);
+        args.putString("social_security", mSSN);
+        newFragment.setArguments(args);
+        newFragment.show(ft, FRAGMENT_EDIT_USER);
+    }
+
     private void onShowEditARSDialog(String mARSName, String mARSMemberID, String mARSClient, String mARSAccountType) {
         Log.i(TAG, "Calling Create Client Dialog Fragment");
 
@@ -229,11 +250,12 @@ public class ProfileActivity extends AppCompatActivity
                 break;
 
             case R.id.edit_ars:
+                if (!mFirebaseUser.isAnonymous()) {
                 onShowEditARSDialog(
                         mARSName.getText().toString(),
                         mARSMemberID.getText().toString(),
                         mARSClient.getText().toString(),
-                        mARSAccountType.getText().toString());
+                        mARSAccountType.getText().toString());}
                 break;
         }
     }
@@ -250,9 +272,25 @@ public class ProfileActivity extends AppCompatActivity
                     associateID,
                     clientName,
                     plan,
-                    5894256,
+                    Double.valueOf(mUserSSN.getText().toString()),
                     1001);
 
             mUsersRef.child(mFirebaseUser.getUid()).setValue(user);
+    }
+
+    @Override
+    public void onUserSave(String mBloodType, String mBirthDate, String mSSN) {
+        User user = new User(mFirebaseUser.getUid(),
+                mFirebaseUser.getDisplayName(),
+                mBirthDate,
+                mBloodType,
+                mARSName.getText().toString(),
+                mARSMemberID.getText().toString(),
+                mARSClient.getText().toString(),
+                mARSAccountType.getText().toString(),
+                Double.valueOf(mSSN),
+                1001);
+
+        mUsersRef.child(mFirebaseUser.getUid()).setValue(user);
     }
 }
