@@ -74,4 +74,5 @@ public class Doctor {
     public void setSPECIALITIES(List<Integer> SPECIALITIES) {
         this.SPECIALITIES = SPECIALITIES;
     }
+
 }

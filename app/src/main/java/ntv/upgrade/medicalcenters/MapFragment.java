@@ -15,15 +15,16 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import ntv.upgrade.medicalcenters.models.Place;
 
 /**
  *
@@ -38,6 +39,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Bundle mBundle;
     private CameraPosition mCameraPosition;
     private OnMapFragmentInteractionListener mListener;
+    private List<Place> mPlaces;
     private SharedPreferences mPreferences;
 
     public MapFragment() {
@@ -52,7 +54,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        MapsInitializer.initialize(getActivity());
         mMapView = (MapView) view.findViewById(R.id.map);
         mMapView.onCreate(mBundle);
 
@@ -125,42 +126,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         //  mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        final List<LatLng> home = new ArrayList<>();
-        home.add(new LatLng(18.438510740901954, -69.96936678973725));
-        home.add(new LatLng(18.44188982248279, -69.96106267062714));
-        home.add(new LatLng(18.43409340755349, -69.96095538226655));
-        home.add(new LatLng(18.433360567078857, -69.96241450397065));
-        home.add(new LatLng(18.43220022993798, -69.96638417331269));
-        home.add(new LatLng(18.43472446212536, -69.96653437701752));
-        home.add(new LatLng(18.434704105562403, -69.96724248019746));
-        home.add(new LatLng(18.437045094496142, -69.96741414157441));
-        home.add(new LatLng(18.436597255601296, -69.96840119449189));
-        home.add(new LatLng(18.4371426350097, -69.96964216406923));
-
         LatLng aki = MapUtils.getLocation(getActivity());
-        centerMapOnLocation(aki);
-
-        mMap.addPolygon(new PolygonOptions()
-                .addAll(home)
-                .strokeWidth(0)
-                .strokeColor(Color.rgb(255, 87, 34)));
+       // centerMapOnLocation(aki);
 
         setInfoWindows();
-        setOnMapClickListener();
-        // drawAreasList();
-        // drawAttractionsList();
-        drawLaZonaPolygon();
-
-        MapsInitializer.initialize(getContext());
-
+        drawArea();
+        //drawPlaces();
     }
 
     /**
      * Center map on a given LatLng @param geo
      */
     private void centerMapOnLocation(LatLng geo) {
-      /*  mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(geo.latitude, geo.longitude), 12));*/
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                new LatLng(geo.latitude, geo.longitude), 12));
     }
 
     /**
@@ -235,32 +214,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    private void setOnMapClickListener() {
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng geo) {
-            }
-        });
-    }
-
-/*    public void drawArea(Area area) {
-
-
-        mMap.addMarker(new MarkerOptions()
-                .position(area.getGeo())
-                .title(area.getName())
-                .snippet(String.valueOf(area.getType()))
-                .draggable(false)
-
-        );
-        mMap.addCircle(new CircleOptions()
-                .center(area.getGeo())
-                .radius(ActivityMain.TRIGGER_RADIUS)
-                .strokeColor(R.color.colorAccentLight)
-                .fillColor(R.color.colorAccent));
-    }*/
-
-    public void drawLaZonaPolygon() {
+    public void drawArea() {
         mMap.addPolygon(new PolygonOptions()
                 .add(
                         new LatLng(18.4730365696298, -69.89192656117666),
@@ -279,33 +233,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         new LatLng(18.47524583985043, -69.8903785434959))
                 .strokeColor(Color.rgb(255, 87, 34))
                 .fillColor(Color.argb(50, 255, 138, 101)));
-
-
     }
 
-  /*  public void drawAttraction(Attraction attraction) {
+    public void drawPlaces() {
+        for (Place place : mPlaces) {
+            drawPlace(place);
+        }
+    }
 
+    public void drawPlace(Place place) {
 
         mMap.addMarker(new MarkerOptions()
-                .position(attraction.getGeo())
-                .title(attraction.getName())
-                .snippet(String.valueOf(attraction.getType()))
-                .draggable(false)
-
-        );
+                .position(place.getGEO())
+                .title(place.getNAME())
+                .snippet(place.getADDRESS())
+                .draggable(false));
     }
-
-    public void drawAreasList() {
-        for (Area area : ActivityMain.mAreasArrayList) {
-            drawArea(area);
-        }
-    }
-
-    public void drawAttractionsList() {
-        for (Attraction attraction : ActivityMain.mAttractionsArrayList) {
-            drawAttraction(attraction);
-        }
-    }*/
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
