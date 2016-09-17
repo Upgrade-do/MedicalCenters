@@ -55,20 +55,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(getActivity());
         mMapView = (MapView) view.findViewById(R.id.map);
         mMapView.onCreate(mBundle);
-        setUpMapIfNeeded();
+
+        mMapView.getMapAsync(this);
 
         return view;
     }
 
-    private void setUpMapIfNeeded() {
-
-        if (mMap == null) {
-            mMapView.getMapAsync(MapFragment.this);
-            if (mMap != null) {
-                setUpMap();
-            }
-        }
-    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +106,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onDestroy();
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        if (mMap == null) {
+            mMap = googleMap;
+            setUpMap();
+        }
+    }
+
     private void setUpMap() {
 
         int mapStyle =  Integer.parseInt(mPreferences.getString(
@@ -137,28 +137,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         home.add(new LatLng(18.436597255601296, -69.96840119449189));
         home.add(new LatLng(18.4371426350097, -69.96964216406923));
 
-        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                mCameraPosition = cameraPosition;
-
-                // mMap.clear();
-                /*
-                hole = new ArrayList<>();
-                float p = 360/360;
-                float d =0;
-                for(int i=0; i < 360; ++i, d+=p){
-                    hole.add(SphericalUtil.computeOffset(aki, 50, d));
-                }
-
-                mMap.addPolygon(new PolygonOptions()
-                        .addAll(home)
-                        .addHole(hole)
-                        .strokeWidth(0)
-                        .fillColor(Color.argb(50, 255, 138, 101)));*/
-            }
-        });
-        LatLng aki = Utils.getLocation(getActivity());
+        LatLng aki = MapUtils.getLocation(getActivity());
         centerMapOnLocation(aki);
 
         mMap.addPolygon(new PolygonOptions()
@@ -264,7 +243,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-   /* public void drawArea(Area area) {
+/*    public void drawArea(Area area) {
 
 
         mMap.addMarker(new MarkerOptions()
@@ -302,11 +281,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 .fillColor(Color.argb(50, 255, 138, 101)));
 
 
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
     }
 
   /*  public void drawAttraction(Attraction attraction) {

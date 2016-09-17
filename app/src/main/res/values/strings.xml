@@ -89,7 +89,7 @@
     <!-- Dummy Strings -->
     <string name="dummy_user_name">Anonymous</string>
     <string name="dummy_user_birth_date">12-31-1999</string>
-    <string name="dummy_user_blood_type">H+</string>
+    <string name="dummy_user_blood_type">A+</string>
     <string name="dummy_user_SSD">598421536</string>
 
     <string name="dummy_poi_tittle">Medical Center name</string>

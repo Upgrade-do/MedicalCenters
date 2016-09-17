@@ -25,13 +25,11 @@ import static com.google.android.gms.location.LocationServices.FusedLocationApi;
  */
 public class UtilityService extends IntentService {
 
-    //FOR LOG PURPOSES
-    private static final String TAG = UtilityService.class.getSimpleName();
-
     public static final int GOOGLE_API_CLIENT_TIMEOUT_SECONDS = 10; // 10 seconds
     public static final String GOOGLE_API_CLIENT_ERROR_MSG =
             "Failed to connect to GoogleApiClient (error code = %d)";
-
+    //FOR LOG PURPOSES
+    private static final String TAG = UtilityService.class.getSimpleName();
     private static final String ACTION_LOCATION_UPDATED = "location_updated";
     private static final String ACTION_REQUEST_LOCATION = "request_location";
     private static final String ACTION_FAKE_UPDATE = "fake_update";
@@ -63,7 +61,7 @@ public class UtilityService extends IntentService {
                 locationUpdated(intent);
                 break;
             case ACTION_FAKE_UPDATE:
-                // LatLng currentLocation = Utils.getLocation(this);
+                // LatLng currentLocation = MapUtils.getLocation(this);
                 //TouristAttractions.getClosestCity(currentLocation);
                 break;
         }
@@ -75,7 +73,7 @@ public class UtilityService extends IntentService {
     private void requestDeviceLocation() {
         Log.v(TAG, ACTION_REQUEST_LOCATION);
 
-        if (!Utils.checkFineLocationPermission(this)) {
+        if (!MapUtils.checkFineLocationPermission(this)) {
             return;
         }
 
@@ -130,7 +128,7 @@ public class UtilityService extends IntentService {
             LatLng latLngLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
             // Store in a local preference as well
-            Utils.storeLocation(this, latLngLocation);
+            MapUtils.storeLocation(this, latLngLocation);
 
             // Send a local broadcast so if an Activity is open it can respond
             // to the updated location

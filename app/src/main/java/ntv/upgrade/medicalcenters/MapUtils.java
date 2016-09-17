@@ -15,9 +15,9 @@ import java.text.NumberFormat;
 /**
  * This class contains shared static utility methods that for this module.
  */
-public class Utils {
+public class MapUtils {
 
-    private static final String TAG = Utils.class.getSimpleName();
+    private static final String TAG = MapUtils.class.getSimpleName();
 
     private static final String PREFERENCES_LAT = "lat";
     private static final String PREFERENCES_LNG = "lng";
