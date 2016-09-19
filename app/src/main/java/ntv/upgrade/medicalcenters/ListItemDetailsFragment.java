@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
+import ntv.upgrade.medicalcenters.utils.MapUtils;
 
 /**
  *

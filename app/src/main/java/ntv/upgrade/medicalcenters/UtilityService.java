@@ -18,6 +18,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.concurrent.TimeUnit;
 
+import ntv.upgrade.medicalcenters.utils.MapUtils;
+
 import static com.google.android.gms.location.LocationServices.FusedLocationApi;
 
 /**

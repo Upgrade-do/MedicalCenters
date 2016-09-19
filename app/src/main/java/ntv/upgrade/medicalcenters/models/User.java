@@ -7,6 +7,7 @@ public class User {
 
     private String
             UID,
+            SSN,
             userName,
             userBirthDate,
             userBloodType,
@@ -16,15 +17,14 @@ public class User {
             ARSPlan;
 
     private double
-            SSN,
             ARSID;
 
     public User() {
     }
 
-    public User(String UID, String userName, String userBirthDate, String userBloodType,
-                String ASRName, String ARSAssociateID, String ARSClient, String ARSPlan,
-                double SSN, double ARSID) {
+    public User(String UID, String SSN, String userName, String userBirthDate,
+                String userBloodType, String ASRName, String ARSAssociateID,
+                String ARSClient, String ARSPlan, double ARSID) {
         this.UID = UID;
         this.userName = userName;
         this.userBirthDate = userBirthDate;
@@ -101,11 +101,11 @@ public class User {
         this.ARSPlan = ARSPlan;
     }
 
-    public double getSSN() {
+    public String getSSN() {
         return SSN;
     }
 
-    public void setSSN(double SSN) {
+    public void setSSN(String SSN) {
         this.SSN = SSN;
     }
 

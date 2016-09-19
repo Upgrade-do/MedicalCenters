@@ -1,4 +1,4 @@
-package ntv.upgrade.medicalcenters;
+package ntv.upgrade.medicalcenters.utils;
 
 import android.Manifest;
 import android.content.Context;

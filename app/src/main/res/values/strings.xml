@@ -32,17 +32,14 @@
     <string name="signed_out">Signed out</string>
 
     <!-- MAIN ACTIVITY -->
-    <string name="title_activity_main">MainActivity</string>
 
     <!-- PROFILE ACTIVITY -->
-    <string name="title_activity_profile">ProfileActivity</string>
     <string name="button_sign_out">Sign Out</string>
     <string name="error_required_field">Required field</string>
     <string name="title_SSN">SSN: </string>
     <string name="title_birth_date">Birth date: </string>
 
     <!-- LIST MAP ACTIVITY -->
-    <string name="title_activity_list_map">ListMapActivity</string>
 
     <!-- SETTINGS ACTIVITY -->
     <string name="title_activity_settings">Settings</string>

@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import java.util.List;
 
 import ntv.upgrade.medicalcenters.models.Place;
+import ntv.upgrade.medicalcenters.utils.MapUtils;
 
 /**
  *

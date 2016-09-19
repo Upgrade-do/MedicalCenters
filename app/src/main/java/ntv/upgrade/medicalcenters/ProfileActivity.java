@@ -265,6 +265,7 @@ public class ProfileActivity extends AppCompatActivity
         Log.i(TAG, "Saving new client");
 
             User user = new User(mFirebaseUser.getUid(),
+                    mUserSSN.getText().toString(),
                     mFirebaseUser.getDisplayName(),
                     mUserBirthDate.getText().toString(),
                     mUserBloodType.getText().toString(),
@@ -272,7 +273,6 @@ public class ProfileActivity extends AppCompatActivity
                     associateID,
                     clientName,
                     plan,
-                    Double.valueOf(mUserSSN.getText().toString()),
                     1001);
 
             mUsersRef.child(mFirebaseUser.getUid()).setValue(user);
@@ -281,6 +281,7 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public void onUserSave(String mBloodType, String mBirthDate, String mSSN) {
         User user = new User(mFirebaseUser.getUid(),
+                mSSN,
                 mFirebaseUser.getDisplayName(),
                 mBirthDate,
                 mBloodType,
@@ -288,7 +289,6 @@ public class ProfileActivity extends AppCompatActivity
                 mARSMemberID.getText().toString(),
                 mARSClient.getText().toString(),
                 mARSAccountType.getText().toString(),
-                Double.valueOf(mSSN),
                 1001);
 
         mUsersRef.child(mFirebaseUser.getUid()).setValue(user);
