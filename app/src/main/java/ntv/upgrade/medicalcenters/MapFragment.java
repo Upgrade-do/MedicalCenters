@@ -318,6 +318,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                     .title(place.getNAME())
                     .icon(icon)
                     .draggable(false));
+
+
         }
     }
 
