@@ -7,11 +7,15 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -32,16 +36,19 @@ import ntv.upgrade.medicalcenters.utils.MapUtils;
  *
  * Created by Paulino Gomez on 1/10/2016.
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     // Google map object.
     private MapView mMapView;
     private GoogleMap mMap;
     private Bundle mBundle;
-    private CameraPosition mCameraPosition;
+    private Location mLastLocation;
     private OnMapFragmentInteractionListener mListener;
     private List<Place> mPlaces;
     private SharedPreferences mPreferences;
+    // Client used to interact with Google APIs.
+    private GoogleApiClient mGoogleApiClient;
 
     public MapFragment() {
     }
@@ -68,6 +75,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         mBundle = savedInstanceState;
 
+        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
         // Binding preferences
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
@@ -88,6 +101,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -100,6 +114,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -116,19 +131,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    @Override
+    public void onConnected(Bundle connectionHint) {
+
+        if (MapUtils.checkFineLocationPermission(getContext())) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+            if (mLastLocation != null) {
+                centerMapOnLocation(mLastLocation);
+            }
+        }
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
     private void setUpMap() {
 
-        int mapStyle =  Integer.parseInt(mPreferences.getString(
+        int mapStyle = Integer.parseInt(mPreferences.getString(
                 getContext().getString(R.string.pref_key_map_style),
                 getContext().getString(R.string.pref_default_map_style)));
 
         mMap.setMapType(mapStyle);
 
-        //  mMap.setMyLocationEnabled(true);
+        if (MapUtils.checkFineLocationPermission(getContext())) {
+            mMap.setMyLocationEnabled(true);
+        }
         mMap.getUiSettings().setZoomControlsEnabled(true);
-
-        LatLng aki = MapUtils.getLocation(getActivity());
-       // centerMapOnLocation(aki);
 
         setInfoWindows();
         drawArea();
@@ -138,9 +170,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     /**
      * Center map on a given LatLng @param geo
      */
-    private void centerMapOnLocation(LatLng geo) {
+    private void centerMapOnLocation(CameraPosition cameraPosition) {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(geo.latitude, geo.longitude), 12));
+                new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude), 13));
     }
 
     /**
@@ -255,6 +287,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
     public interface OnMapFragmentInteractionListener {

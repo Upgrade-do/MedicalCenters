@@ -1,9 +1,11 @@
 package ntv.upgrade.medicalcenters;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.fastaccess.permission.base.PermissionHelper;
+import com.fastaccess.permission.base.callback.OnPermissionCallback;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -22,10 +26,13 @@ import java.util.List;
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
 
 public class ListMapActivity extends AppCompatActivity implements
-        ListFragment.OnFragmentInteractionListener, MapFragment.OnMapFragmentInteractionListener {
+        ListFragment.OnFragmentInteractionListener, MapFragment.OnMapFragmentInteractionListener,
+        OnPermissionCallback {
 
     // for log purposes
-    private final String TAG = ListMapActivity.class.getSimpleName();
+    private static final String TAG = ListMapActivity.class.getSimpleName();
+
+    private static final String PERMISSION_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
 
     public static List<MedicalCenter> mMedicalCenters;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -34,10 +41,17 @@ public class ListMapActivity extends AppCompatActivity implements
     private ViewPager mViewPager;
     private AdView mAdView;
 
+    private PermissionHelper permissionHelper;
+
     @Override
     protected void onResume() {
         super.onResume();
         UtilityService.requestLocation(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -49,6 +63,8 @@ public class ListMapActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        permissionHelper = PermissionHelper.getInstance(this);
 
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -62,6 +78,8 @@ public class ListMapActivity extends AppCompatActivity implements
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        permissionHelper.setForceAccepting(false).request(PERMISSION_FINE_LOCATION);
 
     }
 
@@ -107,12 +125,6 @@ public class ListMapActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onDestroy() {
-
-        super.onDestroy();
-    }
-
-    @Override
     public void onFragmentInteraction(String id) {
 
     }
@@ -122,8 +134,42 @@ public class ListMapActivity extends AppCompatActivity implements
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    @Override
+    public void onPermissionGranted(@NonNull String[] permissionName) {
+
+    }
+
+    @Override
+    public void onPermissionDeclined(@NonNull String[] permissionName) {
+
+    }
+
+    @Override
+    public void onPermissionPreGranted(@NonNull String permissionsName) {
+
+    }
+
+    @Override
+    public void onPermissionNeedExplanation(@NonNull String permissionName) {
+
+    }
+
+    @Override
+    public void onPermissionReallyDeclined(@NonNull String permissionName) {
+
+    }
+
+    @Override
+    public void onNoPermissionNeeded() {
+
+    }
+
     /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * A {@link SectionsPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
