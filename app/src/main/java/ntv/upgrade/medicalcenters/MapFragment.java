@@ -309,7 +309,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     public void drawPlace(Place place) {
 
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_md);
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_location);
 
         if (mMap != null) {
 
