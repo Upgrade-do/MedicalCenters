@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +20,23 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import ntv.upgrade.medicalcenters.models.MedicalCenter;
 import ntv.upgrade.medicalcenters.models.Place;
 import ntv.upgrade.medicalcenters.utils.MapUtils;
 
@@ -39,13 +48,16 @@ import ntv.upgrade.medicalcenters.utils.MapUtils;
 public class MapFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+
     // Google map object.
+    public static DatabaseReference mDatabaseRef;
+    private final String TAG = MapFragment.class.getSimpleName();
     private MapView mMapView;
     private GoogleMap mMap;
     private Bundle mBundle;
     private Location mLastLocation;
     private OnMapFragmentInteractionListener mListener;
-    private List<Place> mPlaces;
+    private List<MedicalCenter> mMedicalCenters;
     private SharedPreferences mPreferences;
     // Client used to interact with Google APIs.
     private GoogleApiClient mGoogleApiClient;
@@ -64,6 +76,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
         mMapView = (MapView) view.findViewById(R.id.map);
         mMapView.onCreate(mBundle);
+
+        // Write a message to the database
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("MedicalCenters").getRef();
+
+
+
 
         mMapView.getMapAsync(this);
 
@@ -164,7 +182,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
         setInfoWindows();
         drawArea();
-        //drawPlaces();
+        mDatabaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                if (mMedicalCenters == null) {
+                    mMedicalCenters = new ArrayList<>();
+                }
+                // whenever data at this location is updated.
+                mMedicalCenters.add(dataSnapshot.getValue(MedicalCenter.class));
+                drawPlace(new Place(1001, dataSnapshot.getValue(MedicalCenter.class).getName(),
+                        dataSnapshot.getValue(MedicalCenter.class).getEmail(),
+                        dataSnapshot.getValue(MedicalCenter.class).getLatitude(),
+                        dataSnapshot.getValue(MedicalCenter.class).getLongitude(),
+                        dataSnapshot.getValue(MedicalCenter.class).getPhone()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
     }
 
     /**
@@ -268,24 +307,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 .fillColor(Color.argb(50, 255, 138, 101)));
     }
 
-    public void drawPlaces() {
-        for (Place place : mPlaces) {
-            drawPlace(place);
-        }
-    }
-
     public void drawPlace(Place place) {
 
-        mMap.addMarker(new MarkerOptions()
-                .position(place.getGEO())
-                .title(place.getNAME())
-                .snippet(place.getADDRESS())
-                .draggable(false));
-    }
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_md);
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        if (mMap != null) {
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(place.getGEO())
+                    .title(place.getNAME())
+                    .icon(icon)
+                    .draggable(false));
         }
     }
 
@@ -295,7 +327,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public interface OnMapFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+        List<Place> onGetPlaces();
     }
 
 }

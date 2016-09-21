@@ -21,12 +21,14 @@ import com.fastaccess.permission.base.callback.OnPermissionCallback;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
+import ntv.upgrade.medicalcenters.models.Place;
 
 public class ListMapActivity extends AppCompatActivity implements
-        ListFragment.OnFragmentInteractionListener, MapFragment.OnMapFragmentInteractionListener,
+        ListFragment.OnListFragmentInteractionListener, MapFragment.OnMapFragmentInteractionListener,
         OnPermissionCallback {
 
     // for log purposes
@@ -36,6 +38,8 @@ public class ListMapActivity extends AppCompatActivity implements
 
     public static List<MedicalCenter> mMedicalCenters;
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    private List<Place> mPlaces;
 
     // The {@link ViewPager} that will host the section contents.
     private ViewPager mViewPager;
@@ -125,14 +129,22 @@ public class ListMapActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentInteraction(String id) {
+    public void onPlaceAdded(Place place) {
 
+        if (mPlaces == null) {
+            mPlaces = new ArrayList<>();
+        }
+        mPlaces.add(place);
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public List<Place> onGetPlaces() {
+        if (mPlaces == null) {
+            mPlaces = new ArrayList<>();
+        }
+        return mPlaces;
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

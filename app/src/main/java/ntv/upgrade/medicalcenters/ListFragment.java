@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
+import ntv.upgrade.medicalcenters.models.Place;
 
 /**
  * This fragment holds a list of the basic details of medical centers around
@@ -33,14 +34,14 @@ import ntv.upgrade.medicalcenters.models.MedicalCenter;
  */
 public class ListFragment extends Fragment {
 
+    // Used to size the images in the mobile app so they can animate cleanly from list to detail
+    public static final int IMAGE_ANIM_MULTIPLIER = 2;
     public static DatabaseReference mDatabaseRef;
     public static StorageReference mStorageRef;
     // For log purposes
     private final String TAG = ListFragment.class.getSimpleName();
     // to communicate with the base activity
-    private OnFragmentInteractionListener mListener;
-    // Used to size the images in the mobile app so they can animate cleanly from list to detail
-    public static final int IMAGE_ANIM_MULTIPLIER = 2;
+    private OnListFragmentInteractionListener mListener;
     private FirebaseRecyclerAdapter mAdapter;
 
     /**
@@ -83,6 +84,12 @@ public class ListFragment extends Fragment {
                 MedicalCenter.class, R.layout.list_item, ViewHolder.class, mDatabaseRef.child("MedicalCenters").getRef()) {
             @Override
             public void populateViewHolder(ViewHolder viewHolder, MedicalCenter medicalCenter, int position) {
+                Place place = new Place(1001, medicalCenter.getName(),
+                        medicalCenter.getEmail(),
+                        medicalCenter.getLatitude(),
+                        medicalCenter.getLongitude(),
+                        medicalCenter.getPhone());
+                mListener.onPlaceAdded(place);
                 viewHolder.setImageURL(getContext(), medicalCenter.getImageURL());
                 viewHolder.setName(medicalCenter.getName());
                 viewHolder.setPhone(medicalCenter.getPhone());
@@ -97,7 +104,7 @@ public class ListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mListener = (OnFragmentInteractionListener) getActivity();
+            mListener = (OnListFragmentInteractionListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement OnFragmentInteractionListener");
@@ -121,10 +128,9 @@ public class ListFragment extends Fragment {
      * This interface allows an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that activity.
      */
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(String id);
+    public interface OnListFragmentInteractionListener {
+        void onPlaceAdded(Place place);
     }
-
     /**
      * View Holder of each item on the list
      */
