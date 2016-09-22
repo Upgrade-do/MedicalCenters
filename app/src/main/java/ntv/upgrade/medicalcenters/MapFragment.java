@@ -137,7 +137,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 mMedicalCenters.add(md);
 
                 drawPlace(new Place(
-                        1001,
+                        mdSnapshot.getKey(),
                         md.getName(),
                         md.getEmail(),
                         md.getLatitude(),
@@ -330,6 +330,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
 
     }
 

@@ -84,12 +84,6 @@ public class ListFragment extends Fragment {
                 MedicalCenter.class, R.layout.list_item, ViewHolder.class, mDatabaseRef.child("MedicalCenters").getRef()) {
             @Override
             public void populateViewHolder(ViewHolder viewHolder, MedicalCenter medicalCenter, int position) {
-                Place place = new Place(1001, medicalCenter.getName(),
-                        medicalCenter.getEmail(),
-                        medicalCenter.getLatitude(),
-                        medicalCenter.getLongitude(),
-                        medicalCenter.getPhone());
-                mListener.onPlaceAdded(place);
                 viewHolder.setImageURL(getContext(), medicalCenter.getImageURL());
                 viewHolder.setName(medicalCenter.getName());
                 viewHolder.setPhone(medicalCenter.getPhone());
