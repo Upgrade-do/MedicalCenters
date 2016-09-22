@@ -4,40 +4,63 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ntv.upgrade.medicalcenters.models.MedicalCenter;
+import ntv.upgrade.medicalcenters.models.Place;
+import ntv.upgrade.medicalcenters.utils.MapUtils;
+
 /**
- *
- *
  * Created by Paulino Gomez on 1/10/2016.
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        ValueEventListener {
 
-    List<LatLng> hole = null;
     // Google map object.
+    public static DatabaseReference mDatabaseRef;
+    // TAG
+    private final String TAG = MapFragment.class.getSimpleName();
     private MapView mMapView;
     private GoogleMap mMap;
     private Bundle mBundle;
-    private CameraPosition mCameraPosition;
+    private Location mLastLocation;
+    private List<MedicalCenter> mMedicalCenters;
+    private SharedPreferences mPreferences;
+    // Client used to interact with Google APIs.
+    private GoogleApiClient mGoogleApiClient;
+
+
     private OnMapFragmentInteractionListener mListener;
 
     public MapFragment() {
@@ -48,35 +71,87 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
+
+        // MapView
+        mMapView = (MapView) view.findViewById(R.id.map);
+        mMapView.onCreate(mBundle);
+        mMapView.getMapAsync(this);
+
+        return view;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBundle = savedInstanceState;
+
+        // Database reference
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("MedicalCenters").getRef();
+        mDatabaseRef.addValueEventListener(this);
+
+        // Binding preferences
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        mMedicalCenters = new ArrayList<>();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
+    public void onConnected(Bundle connectionHint) {
 
-        MapsInitializer.initialize(getActivity());
-        mMapView = (MapView) view.findViewById(R.id.map);
-        mMapView.onCreate(mBundle);
-        setUpMapIfNeeded(view);
+        if (MapUtils.checkFineLocationPermission(getContext())) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+            if (mLastLocation != null) {
+                centerMapOnLocation(mLastLocation);
+            }
+        }
 
-        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    @Override
+    public void onConnectionSuspended(int i) {
+        // Failed to read value
+        Log.w(TAG, "Connection Suspended" + String.valueOf(i));
+    }
+
+    /********************************************************************************************
+     * FIREBASE DATABASE REFERENCE*
+     ********************************************************************************************/
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+
+        if (mMap != null) {
+
+            // whenever data at this location is updated.
+            for (DataSnapshot mdSnapshot : dataSnapshot.getChildren()) {
+
+                MedicalCenter md = mdSnapshot.getValue(MedicalCenter.class);
+                mMedicalCenters.add(md);
+
+                drawPlace(new Place(
+                        1001,
+                        md.getName(),
+                        md.getEmail(),
+                        md.getLatitude(),
+                        md.getLongitude(),
+                        md.getPhone()));
+            }
+
         }
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        // Failed to read value
+        Log.w(TAG, "Failed to read value.", databaseError.toException());
     }
 
     @Override
@@ -85,31 +160,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         try {
             mListener = (OnMapFragmentInteractionListener) getActivity();
         } catch (ClassCastException e) {
-
             throw new ClassCastException(getActivity().toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * Sets up the map if it not already instantiated.
-     * If it isn't installed will show a prompt for the user to
-     * install/update the Google Play services APK on their device.
-     */
-    private void setUpMapIfNeeded(View inflatedView) {
-
-        if (mMap == null) {
-            mMapView.getMapAsync(MapFragment.this);
-            if (mMap != null) {
-                setUpMap();
-            }
-        }
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -119,86 +179,49 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+        mGoogleApiClient.disconnect();
+    }
+
+    @Override
     public void onDestroy() {
         mMapView.onDestroy();
         super.onDestroy();
     }
 
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        if (mMap == null) {
+            mMap = googleMap;
+            setUpMap();
+        }
+    }
+
     private void setUpMap() {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        int mapStyle =  Integer.parseInt(prefs.getString(
+        int mapStyle = Integer.parseInt(mPreferences.getString(
                 getContext().getString(R.string.pref_key_map_style),
                 getContext().getString(R.string.pref_default_map_style)));
 
         mMap.setMapType(mapStyle);
 
-        //  mMap.setMyLocationEnabled(true);
+        if (MapUtils.checkFineLocationPermission(getContext())) {
+            mMap.setMyLocationEnabled(true);
+        }
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        final List<LatLng> home = new ArrayList<>();
-        home.add(new LatLng(18.438510740901954, -69.96936678973725));
-        home.add(new LatLng(18.44188982248279, -69.96106267062714));
-        home.add(new LatLng(18.43409340755349, -69.96095538226655));
-        home.add(new LatLng(18.433360567078857, -69.96241450397065));
-        home.add(new LatLng(18.43220022993798, -69.96638417331269));
-        home.add(new LatLng(18.43472446212536, -69.96653437701752));
-        home.add(new LatLng(18.434704105562403, -69.96724248019746));
-        home.add(new LatLng(18.437045094496142, -69.96741414157441));
-        home.add(new LatLng(18.436597255601296, -69.96840119449189));
-        home.add(new LatLng(18.4371426350097, -69.96964216406923));
-
-        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                mCameraPosition = cameraPosition;
-
-                // mMap.clear();
-                /*
-                hole = new ArrayList<>();
-                float p = 360/360;
-                float d =0;
-                for(int i=0; i < 360; ++i, d+=p){
-                    hole.add(SphericalUtil.computeOffset(aki, 50, d));
-                }
-
-                mMap.addPolygon(new PolygonOptions()
-                        .addAll(home)
-                        .addHole(hole)
-                        .strokeWidth(0)
-                        .fillColor(Color.argb(50, 255, 138, 101)));*/
-            }
-        });
-        LatLng aki = Utils.getLocation(getActivity());
-        centerMapOnLocation(aki);
-
-        mMap.addPolygon(new PolygonOptions()
-                .addAll(home)
-                .strokeWidth(0)
-                .strokeColor(Color.rgb(255, 87, 34)));
-
         setInfoWindows();
-        setOnMapClickListener();
-        // drawAreasList();
-        // drawAttractionsList();
-        drawLaZonaPolygon();
-
-        MapsInitializer.initialize(getContext());
-
+        drawArea();
     }
 
     /**
      * Center map on a given LatLng @param geo
      */
-    private void centerMapOnLocation(LatLng geo) {
-      /*  mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(geo.latitude, geo.longitude), 12));*/
+    private void centerMapOnLocation(CameraPosition cameraPosition) {
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude), 13));
     }
 
     /**
@@ -273,32 +296,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    private void setOnMapClickListener() {
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng geo) {
-            }
-        });
-    }
-
-   /* public void drawArea(Area area) {
-
-
-        mMap.addMarker(new MarkerOptions()
-                .position(area.getGeo())
-                .title(area.getName())
-                .snippet(String.valueOf(area.getType()))
-                .draggable(false)
-
-        );
-        mMap.addCircle(new CircleOptions()
-                .center(area.getGeo())
-                .radius(ActivityMain.TRIGGER_RADIUS)
-                .strokeColor(R.color.colorAccentLight)
-                .fillColor(R.color.colorAccent));
-    }*/
-
-    public void drawLaZonaPolygon() {
+    public void drawArea() {
         mMap.addPolygon(new PolygonOptions()
                 .add(
                         new LatLng(18.4730365696298, -69.89192656117666),
@@ -317,53 +315,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         new LatLng(18.47524583985043, -69.8903785434959))
                 .strokeColor(Color.rgb(255, 87, 34))
                 .fillColor(Color.argb(50, 255, 138, 101)));
+    }
 
+    public void drawPlace(Place place) {
 
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_location);
+
+        mMap.addMarker(new MarkerOptions()
+                .position(place.getGEO())
+                .title(place.getNAME())
+                .icon(icon)
+                .draggable(false));
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
-  /*  public void drawAttraction(Attraction attraction) {
-
-
-        mMap.addMarker(new MarkerOptions()
-                .position(attraction.getGeo())
-                .title(attraction.getName())
-                .snippet(String.valueOf(attraction.getType()))
-                .draggable(false)
-
-        );
-    }
-
-    public void drawAreasList() {
-        for (Area area : ActivityMain.mAreasArrayList) {
-            drawArea(area);
-        }
-    }
-
-    public void drawAttractionsList() {
-        for (Attraction attraction : ActivityMain.mAttractionsArrayList) {
-            drawAttraction(attraction);
-        }
-    }*/
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnMapFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        List<Place> onGetPlaces();
     }
 
 }

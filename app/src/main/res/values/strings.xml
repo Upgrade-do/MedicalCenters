@@ -32,15 +32,14 @@
     <string name="signed_out">Signed out</string>
 
     <!-- MAIN ACTIVITY -->
-    <string name="title_activity_main">MainActivity</string>
 
     <!-- PROFILE ACTIVITY -->
-    <string name="title_activity_profile">ProfileActivity</string>
     <string name="button_sign_out">Sign Out</string>
     <string name="error_required_field">Required field</string>
+    <string name="title_SSN">SSN: </string>
+    <string name="title_birth_date">Birth date: </string>
 
     <!-- LIST MAP ACTIVITY -->
-    <string name="title_activity_list_map">ListMapActivity</string>
 
     <!-- SETTINGS ACTIVITY -->
     <string name="title_activity_settings">Settings</string>
@@ -86,16 +85,16 @@
 
     <!-- Dummy Strings -->
     <string name="dummy_user_name">Anonymous</string>
-    <string name="dummy_user_age">Age: 46</string>
-    <string name="dummy_user_blood_type">Blood: A+</string>
-    <string name="dummy_user_address">Address: somewhere Ln. @ Invisible Palace (pálte atrá)</string>
+    <string name="dummy_user_birth_date">12-31-1999</string>
+    <string name="dummy_user_blood_type">A+</string>
+    <string name="dummy_user_SSD">598421536</string>
 
     <string name="dummy_poi_tittle">Medical Center name</string>
     <string name="dummy_poi_distance">185 mts.</string>
     <string name="dummy_poi_description">Address: somewhere</string>
 
-    <string name="dummy_ars_name">ARS Humano</string>
-    <string name="dummy_ars_member_id">548938513251414</string>
-    <string name="dummy_ars_client">Position Logic SRL</string>
-    <string name="dummy_ars_account_type">MAX</string>
+    <string name="dummy_ars_name">Unknown ARS</string>
+    <string name="dummy_ars_member_id">No Member ID</string>
+    <string name="dummy_ars_client">Unknown Company</string>
+    <string name="dummy_ars_account_type">UNKNOWN</string>
 </resources>

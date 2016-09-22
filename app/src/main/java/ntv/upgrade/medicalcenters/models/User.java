@@ -5,103 +5,115 @@ package ntv.upgrade.medicalcenters.models;
  */
 public class User {
 
-    private double googleId;
-    private String name;
-    private String email;
-    private String photoURL;
-    private double cityId;
-    private String birthDate;
-    private double ssn;
-    private String blood;
-    private String address;
-    private String ars;
-    private double arsId;
+    private String
+            UID,
+            SSN,
+            userName,
+            userBirthDate,
+            userBloodType,
+            ASRName,
+            ARSAssociateID,
+            ARSClient,
+            ARSPlan;
 
-    public User(double googleId, String name, String email, String photoURL, double cityId,
-                String birthDate, double ssn, String blood, String address, String ars, double arsId) {
-        this.googleId = googleId;
-        this.name = name;
-        this.email = email;
-        this.photoURL = photoURL;
+    private double
+            ARSID;
 
-        this.cityId = cityId;
-        this.birthDate = birthDate;
-        this.ssn = ssn;
-        this.blood = blood;
-        this.address = address;
-        this.ars = ars;
-        this.arsId = arsId;
+    public User() {
     }
 
-    public String getName() {
-        return name;
+    public User(String UID, String SSN, String userName, String userBirthDate,
+                String userBloodType, String ASRName, String ARSAssociateID,
+                String ARSClient, String ARSPlan, double ARSID) {
+        this.UID = UID;
+        this.userName = userName;
+        this.userBirthDate = userBirthDate;
+        this.userBloodType = userBloodType;
+        this.ASRName = ASRName;
+        this.ARSAssociateID = ARSAssociateID;
+        this.ARSClient = ARSClient;
+        this.ARSPlan = ARSPlan;
+        this.SSN = SSN;
+        this.ARSID = ARSID;
     }
 
-    public double getGoogleId() {
-        return googleId;
+    public String getUID() {
+        return UID;
     }
 
-    public double getCityId() {
-        return cityId;
+    public void setUID(String UID) {
+        this.UID = UID;
     }
 
-    public void setCityId(double cityId) {
-        this.cityId = cityId;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public String getUserBirthDate() {
+        return userBirthDate;
     }
 
-    public double getSSN() {
-        return ssn;
+    public void setUserBirthDate(String userBirthDate) {
+        this.userBirthDate = userBirthDate;
     }
 
-    public void setSSN(double ssn) {
-        this.ssn = ssn;
+    public String getUserBloodType() {
+        return userBloodType;
     }
 
-    public String getBlood() {
-        return blood;
+    public void setUserBloodType(String userBloodType) {
+        this.userBloodType = userBloodType;
     }
 
-    public void setBlood(String blood) {
-        this.blood = blood;
+    public String getASRName() {
+        return ASRName;
     }
 
-    public String getAddress() {
-        return address;
+    public void setASRName(String ASRName) {
+        this.ASRName = ASRName;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public String getARSAssociateID() {
+        return ARSAssociateID;
     }
 
-    public String getArs() {
-        return ars;
+    public void setARSAssociateID(String ARSAssociateID) {
+        this.ARSAssociateID = ARSAssociateID;
     }
 
-    public void setArs(String ars) {
-        this.ars = ars;
+    public String getARSClient() {
+        return ARSClient;
     }
 
-    public double getArsId() {
-        return arsId;
+    public void setARSClient(String ARSClient) {
+        this.ARSClient = ARSClient;
     }
 
-    public void setArsId(double arsId) {
-        this.arsId = arsId;
+    public String getARSPlan() {
+        return ARSPlan;
     }
 
-    public String getEmail() {
-        return email;
+    public void setARSPlan(String ARSPlan) {
+        this.ARSPlan = ARSPlan;
     }
 
-    public String getPhoto() {
-        return photoURL;
+    public String getSSN() {
+        return SSN;
+    }
+
+    public void setSSN(String SSN) {
+        this.SSN = SSN;
+    }
+
+    public double getARSID() {
+        return ARSID;
+    }
+
+    public void setARSID(double ARSID) {
+        this.ARSID = ARSID;
     }
 }

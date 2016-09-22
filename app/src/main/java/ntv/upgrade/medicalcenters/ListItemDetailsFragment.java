@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
+import ntv.upgrade.medicalcenters.utils.MapUtils;
 
 /**
  *
@@ -33,6 +34,10 @@ import ntv.upgrade.medicalcenters.models.MedicalCenter;
  */
 public class ListItemDetailsFragment extends Fragment{
 
+    // Maps values
+    public static final String MAPS_INTENT_URI = "geo:0,0?q=";
+    // Used to size the images in the mobile app so they can animate cleanly from list to detail
+    public static final int IMAGE_ANIM_MULTIPLIER = 2;
     private static final String EXTRA_MEDICAL_CENTER = "medical_center";
     private MedicalCenter mMedicalCenter;
 
@@ -64,8 +69,8 @@ public class ListItemDetailsFragment extends Fragment{
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
         FloatingActionButton mapFab = (FloatingActionButton) view.findViewById(R.id.mapFab);
 
-        LatLng location = Utils.getLocation(getActivity());
-        String distance = Utils.formatDistanceBetween(location, new LatLng(Double.valueOf(mMedicalCenter.getLatitude()),Double.valueOf(mMedicalCenter.getLongitude())));
+        LatLng location = MapUtils.getLocation(getActivity());
+        String distance = MapUtils.formatDistanceBetween(location, new LatLng(Double.valueOf(mMedicalCenter.getLatitude()),Double.valueOf(mMedicalCenter.getLongitude())));
         if (TextUtils.isEmpty(distance)) {
             distanceTextView.setVisibility(View.GONE);
         }
@@ -74,7 +79,7 @@ public class ListItemDetailsFragment extends Fragment{
         distanceTextView.setText(distance);
         //descTextView.setText(mMedicalCenter.getImageURL());
 
-        int imageSize = getResources().getDimensionPixelSize(R.dimen.image_size) * Constants.IMAGE_ANIM_MULTIPLIER;
+        int imageSize = getResources().getDimensionPixelSize(R.dimen.image_size) * IMAGE_ANIM_MULTIPLIER;
         Glide.with(getActivity())
                 .load(mMedicalCenter.getImageURL())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -86,7 +91,7 @@ public class ListItemDetailsFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(Constants.MAPS_INTENT_URI +
+                intent.setData(Uri.parse(MAPS_INTENT_URI +
                         Uri.encode(mMedicalCenter.getName() + ", " + mMedicalCenter.getMCID())));
                 startActivity(intent);
             }

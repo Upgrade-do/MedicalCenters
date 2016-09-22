@@ -15,9 +15,10 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay"
-        tools:layout_editor_absoluteY="0dp"
+        ads:layout_constraintHorizontal_bias="1.0"
+        ads:layout_constraintLeft_toLeftOf="@+id/listmapcontainer"
         ads:layout_constraintRight_toRightOf="@+id/listmapcontainer"
-        ads:layout_constraintLeft_toLeftOf="@+id/listmapcontainer">
+        ads:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -38,13 +39,13 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/listmapcontainer"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        ads:layout_constraintBottom_toTopOf="@+id/adView"
-        ads:layout_constraintTop_toBottomOf="@+id/appbar"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        ads:layout_constraintRight_toRightOf="parent"
+        ads:layout_constraintBottom_toTopOf="@+id/adView"
         ads:layout_constraintLeft_toLeftOf="parent"
-        android:layout_width="0dp" />
+        ads:layout_constraintRight_toRightOf="parent"
+        ads:layout_constraintTop_toBottomOf="@+id/appbar"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"

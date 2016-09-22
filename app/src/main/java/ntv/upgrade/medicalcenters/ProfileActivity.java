@@ -18,27 +18,44 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import ntv.upgrade.medicalcenters.dialogs.EditARSDialogFragment;
+import ntv.upgrade.medicalcenters.dialogs.EditUserDialogFragment;
+import ntv.upgrade.medicalcenters.models.User;
 
 public class ProfileActivity extends AppCompatActivity
         implements View.OnClickListener,
-        EditARSDialogFragment.OnEditARSDialogListener {
+        EditARSDialogFragment.OnEditARSDialogListener,
+        EditUserDialogFragment.OnEditUserDialogListener{
 
     // TAG
     private static final String TAG = ProfileActivity.class.getSimpleName();
 
     private static final String FRAGMENT_EDIT_ARS = "fragment_edit_ars";
+    private static final String FRAGMENT_EDIT_USER = "fragment_edit_user";
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference mUsersRef;
 
-    private TextView mARSName;
-    private TextView mARSMemberID;
-    private TextView mARSClient;
-    private TextView mARSAccountType;
+    private TextView
+            mUserBirthDate,
+            mUserBloodType,
+            mUserSSN;
+
+    private TextView
+            mARSName,
+            mARSMemberID,
+            mARSClient,
+            mARSAccountType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,27 +64,36 @@ public class ProfileActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mARSName = (TextView) findViewById(R.id.ars_name);
-        mARSMemberID = (TextView) findViewById(R.id.ars_associate_id);
-        mARSClient = (TextView) findViewById(R.id.ars_client_name);
-        mARSAccountType = (TextView) findViewById(R.id.ars_plan);
 
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
+
         if (mFirebaseUser == null) {
             // Not signed in, launch the Sign In activity
             startActivity(new Intent(this, SignInActivity.class));
             finish();
             return;
         } else {
-            updateUI();
-        }
+            if (mFirebaseUser.isAnonymous()) {
+                getSupportActionBar().setTitle(getResources().getString(R.string.dummy_user_name));
+            } else {
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                mUsersRef = database.getReference("Users");
 
-        Button signOut = (Button) findViewById(R.id.sign_out_button);
+                CircleImageView profileImage = (CircleImageView) findViewById(R.id.profile_image);
+                getSupportActionBar().setTitle(mFirebaseUser.getDisplayName());
+
+                Glide.with(this)
+                        .load(mFirebaseUser.getPhotoUrl().toString())
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .into(profileImage);
+
+                onBindUI();
+
+            }
+        }
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -77,12 +103,13 @@ public class ProfileActivity extends AppCompatActivity
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+                    finish();
                 }
             }
         };
 
+        Button signOut = (Button) findViewById(R.id.sign_out_button);
         assert signOut != null;
         signOut.setOnClickListener(this);
 
@@ -102,22 +129,55 @@ public class ProfileActivity extends AppCompatActivity
         }
     }
 
-    private void updateUI() throws NullPointerException {
+    private void onBindUI() {
+        findViewById(R.id.edit_ars).setVisibility(!mFirebaseUser.isAnonymous()? View.VISIBLE : View.GONE);
 
-        CircleImageView profileImage = (CircleImageView) findViewById(R.id.profile_image);
-        getSupportActionBar().setTitle(mFirebaseUser.getDisplayName());
+        mUserBirthDate = (TextView) findViewById(R.id.user_birth_date);
+        mUserBloodType = (TextView) findViewById(R.id.user_blood_type);
+        mUserSSN = (TextView) findViewById(R.id.user_SSN);
 
-        if (!mFirebaseUser.isAnonymous()) {
-            Glide.with(this)
-                    .load(mFirebaseUser.getPhotoUrl().toString())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(profileImage);
-        }
+        mARSName = (TextView) findViewById(R.id.ars_name);
+        mARSMemberID = (TextView) findViewById(R.id.ars_associate_id);
+        mARSClient = (TextView) findViewById(R.id.ars_client_name);
+        mARSAccountType = (TextView) findViewById(R.id.ars_plan);
+
+        mUsersRef.child(mFirebaseUser.getUid()).addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get user value
+                        User user = dataSnapshot.getValue(User.class);
+                        if (user != null) {
+                            onUpdateUserInfo(user);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                    }
+                });
     }
+
+    private void onUpdateUserInfo(User user) {
+
+        mUserBirthDate.setText(user.getUserBirthDate());
+        mUserBloodType.setText(user.getUserBloodType());
+        mUserSSN.setText(String.valueOf(user.getSSN()));
+
+        mARSName.setText(user.getASRName());
+        mARSMemberID.setText(user.getARSAssociateID());
+        mARSClient.setText(user.getARSClient());
+        mARSAccountType.setText(user.getARSPlan());
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        if (!mFirebaseUser.isAnonymous()) {
+            getMenuInflater().inflate(R.menu.menu_profile, menu);
+        }
         return true;
     }
 
@@ -127,23 +187,40 @@ public class ProfileActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        Intent intent;
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_edit) {
-            intent = new Intent(this, SettingsActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivity(intent);
+            onShowEditUserDialog(
+                    mUserBloodType.getText().toString(),
+                    mUserBirthDate.getText().toString(),
+                    mUserSSN.getText().toString());
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Displays the Create Client Dialog Fragment
-     */
-    private void onShowEditARSDialog(){
+    private void onShowEditUserDialog(String mBloodType, String mBirthDate, String mSSN) {
+        Log.i(TAG, "Calling Create Client Dialog Fragment");
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        DialogFragment prev = (DialogFragment) getFragmentManager().findFragmentByTag(FRAGMENT_EDIT_USER);
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = new EditUserDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("blood_type", mBloodType);
+        args.putString("birth_date", mBirthDate);
+        args.putString("social_security", mSSN);
+        newFragment.setArguments(args);
+        newFragment.show(ft, FRAGMENT_EDIT_USER);
+    }
+
+    private void onShowEditARSDialog(String mARSName, String mARSMemberID, String mARSClient, String mARSAccountType) {
         Log.i(TAG, "Calling Create Client Dialog Fragment");
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -155,6 +232,12 @@ public class ProfileActivity extends AppCompatActivity
 
         // Create and show the dialog.
         DialogFragment newFragment = new EditARSDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("name", mARSName);
+        args.putString("member_id", mARSMemberID);
+        args.putString("client", mARSClient);
+        args.putString("acc_type", mARSAccountType);
+        newFragment.setArguments(args);
         newFragment.show(ft, FRAGMENT_EDIT_ARS);
     }
 
@@ -164,12 +247,15 @@ public class ProfileActivity extends AppCompatActivity
         switch (v.getId()) {
             case R.id.sign_out_button:
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(ProfileActivity.this, SignInActivity.class));
-                finish();
                 break;
 
             case R.id.edit_ars:
-                onShowEditARSDialog();
+                if (!mFirebaseUser.isAnonymous()) {
+                onShowEditARSDialog(
+                        mARSName.getText().toString(),
+                        mARSMemberID.getText().toString(),
+                        mARSClient.getText().toString(),
+                        mARSAccountType.getText().toString());}
                 break;
         }
     }
@@ -178,9 +264,33 @@ public class ProfileActivity extends AppCompatActivity
     public void onARSSave(String arsName, String associateID, String clientName, String plan) {
         Log.i(TAG, "Saving new client");
 
-        mARSName.setText(arsName);
-        mARSMemberID.setText(associateID);
-        mARSClient.setText(clientName);
-        mARSAccountType.setText(plan);
+            User user = new User(mFirebaseUser.getUid(),
+                    mUserSSN.getText().toString(),
+                    mFirebaseUser.getDisplayName(),
+                    mUserBirthDate.getText().toString(),
+                    mUserBloodType.getText().toString(),
+                    arsName,
+                    associateID,
+                    clientName,
+                    plan,
+                    1001);
+
+            mUsersRef.child(mFirebaseUser.getUid()).setValue(user);
+    }
+
+    @Override
+    public void onUserSave(String mBloodType, String mBirthDate, String mSSN) {
+        User user = new User(mFirebaseUser.getUid(),
+                mSSN,
+                mFirebaseUser.getDisplayName(),
+                mBirthDate,
+                mBloodType,
+                mARSName.getText().toString(),
+                mARSMemberID.getText().toString(),
+                mARSClient.getText().toString(),
+                mARSAccountType.getText().toString(),
+                1001);
+
+        mUsersRef.child(mFirebaseUser.getUid()).setValue(user);
     }
 }
