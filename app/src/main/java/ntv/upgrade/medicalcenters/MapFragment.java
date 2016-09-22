@@ -331,6 +331,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+
     }
 
     public interface OnMapFragmentInteractionListener {
