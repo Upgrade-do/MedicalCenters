@@ -8,10 +8,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Place {
 
-    private int
-            PLACE_ID;
-
     private String
+            PLACE_ID,
             NAME,
             ADDRESS;
 
@@ -25,7 +23,7 @@ public class Place {
     public Place() {
     }
 
-    public Place(int PLACE_ID, String NAME, String ADDRESS, double LATITUDE, double LONGITUDE, String PHONE) {
+    public Place(String PLACE_ID, String NAME, String ADDRESS, double LATITUDE, double LONGITUDE, String PHONE) {
         this.PLACE_ID = PLACE_ID;
         this.NAME = NAME;
         this.ADDRESS = ADDRESS;
@@ -34,11 +32,11 @@ public class Place {
         this.PHONE = PHONE;
     }
 
-    public int getPLACE_ID() {
+    public String getPLACE_ID() {
         return PLACE_ID;
     }
 
-    public void setPLACE_ID(int PLACE_ID) {
+    public void setPLACE_ID(String PLACE_ID) {
         this.PLACE_ID = PLACE_ID;
     }
 
