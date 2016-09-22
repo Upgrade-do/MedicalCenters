@@ -41,26 +41,27 @@ import ntv.upgrade.medicalcenters.models.Place;
 import ntv.upgrade.medicalcenters.utils.MapUtils;
 
 /**
- *
- *
  * Created by Paulino Gomez on 1/10/2016.
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        ValueEventListener {
 
     // Google map object.
     public static DatabaseReference mDatabaseRef;
+    // TAG
     private final String TAG = MapFragment.class.getSimpleName();
     private MapView mMapView;
     private GoogleMap mMap;
     private Bundle mBundle;
     private Location mLastLocation;
-    private OnMapFragmentInteractionListener mListener;
     private List<MedicalCenter> mMedicalCenters;
     private SharedPreferences mPreferences;
     // Client used to interact with Google APIs.
     private GoogleApiClient mGoogleApiClient;
+
+
+    private OnMapFragmentInteractionListener mListener;
 
     public MapFragment() {
     }
@@ -74,15 +75,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
+        // MapView
         mMapView = (MapView) view.findViewById(R.id.map);
         mMapView.onCreate(mBundle);
-
-        // Write a message to the database
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("MedicalCenters").getRef();
-
-
-
-
         mMapView.getMapAsync(this);
 
         return view;
@@ -93,14 +88,70 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         mBundle = savedInstanceState;
 
+        // Database reference
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("MedicalCenters").getRef();
+        mDatabaseRef.addValueEventListener(this);
+
+        // Binding preferences
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        mMedicalCenters = new ArrayList<>();
+
         mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+    }
 
-        // Binding preferences
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+    @Override
+    public void onConnected(Bundle connectionHint) {
+
+        if (MapUtils.checkFineLocationPermission(getContext())) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+            if (mLastLocation != null) {
+                centerMapOnLocation(mLastLocation);
+            }
+        }
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        // Failed to read value
+        Log.w(TAG, "Connection Suspended" + String.valueOf(i));
+    }
+
+    /********************************************************************************************
+     * FIREBASE DATABASE REFERENCE*
+     ********************************************************************************************/
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+
+        if (mMap != null) {
+
+            // whenever data at this location is updated.
+            for (DataSnapshot mdSnapshot : dataSnapshot.getChildren()) {
+
+                MedicalCenter md = mdSnapshot.getValue(MedicalCenter.class);
+                mMedicalCenters.add(md);
+
+                drawPlace(new Place(
+                        1001,
+                        md.getName(),
+                        md.getEmail(),
+                        md.getLatitude(),
+                        md.getLongitude(),
+                        md.getPhone()));
+            }
+
+        }
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        // Failed to read value
+        Log.w(TAG, "Failed to read value.", databaseError.toException());
     }
 
     @Override
@@ -109,7 +160,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         try {
             mListener = (OnMapFragmentInteractionListener) getActivity();
         } catch (ClassCastException e) {
-
             throw new ClassCastException(getActivity().toString()
                     + " must implement OnFragmentInteractionListener");
         }
@@ -149,24 +199,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    @Override
-    public void onConnected(Bundle connectionHint) {
-
-        if (MapUtils.checkFineLocationPermission(getContext())) {
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                    mGoogleApiClient);
-            if (mLastLocation != null) {
-                centerMapOnLocation(mLastLocation);
-            }
-        }
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
     private void setUpMap() {
 
         int mapStyle = Integer.parseInt(mPreferences.getString(
@@ -182,28 +214,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
         setInfoWindows();
         drawArea();
-        mDatabaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                if (mMedicalCenters == null) {
-                    mMedicalCenters = new ArrayList<>();
-                }
-                // whenever data at this location is updated.
-                mMedicalCenters.add(dataSnapshot.getValue(MedicalCenter.class));
-                drawPlace(new Place(1001, dataSnapshot.getValue(MedicalCenter.class).getName(),
-                        dataSnapshot.getValue(MedicalCenter.class).getEmail(),
-                        dataSnapshot.getValue(MedicalCenter.class).getLatitude(),
-                        dataSnapshot.getValue(MedicalCenter.class).getLongitude(),
-                        dataSnapshot.getValue(MedicalCenter.class).getPhone()));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
     }
 
     /**
@@ -309,18 +319,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     public void drawPlace(Place place) {
 
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_location);
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_location);
 
-        if (mMap != null) {
-
-            mMap.addMarker(new MarkerOptions()
-                    .position(place.getGEO())
-                    .title(place.getNAME())
-                    .icon(icon)
-                    .draggable(false));
-
-
-        }
+        mMap.addMarker(new MarkerOptions()
+                .position(place.getGEO())
+                .title(place.getNAME())
+                .icon(icon)
+                .draggable(false));
     }
 
     @Override
