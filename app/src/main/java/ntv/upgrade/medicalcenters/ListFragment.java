@@ -10,18 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.io.File;
-import java.io.IOException;
+import com.squareup.picasso.Picasso;
 
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
 import ntv.upgrade.medicalcenters.models.Place;
@@ -34,8 +28,6 @@ import ntv.upgrade.medicalcenters.models.Place;
  */
 public class ListFragment extends Fragment {
 
-    // Used to size the images in the mobile app so they can animate cleanly from list to detail
-    public static final int IMAGE_ANIM_MULTIPLIER = 2;
     public static DatabaseReference mDatabaseRef;
     public static StorageReference mStorageRef;
     // For log purposes
@@ -125,14 +117,12 @@ public class ListFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         void onPlaceAdded(Place place);
     }
+
     /**
      * View Holder of each item on the list
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         View mView;
-
-        // Load a larger size image to make the activity transition to the detail screen smooth
-        int mImageSize = 120 * IMAGE_ANIM_MULTIPLIER;
 
         // Constructor
         public ViewHolder(View view) {
@@ -142,24 +132,11 @@ public class ListFragment extends Fragment {
 
         public void setImageURL(final Context context, final String imageURL) {
             final ImageView mImageView = (ImageView) mView.findViewById(R.id.item_image);
-            File localFile = null;
-            try {
-                localFile = File.createTempFile("images", "jpg");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            mStorageRef.getFile(localFile)
-                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            Glide.with(context)
-                                    .load(imageURL)
-                                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                    .placeholder(R.color.lighter_gray)
-                                    .override(mImageSize, mImageSize)
-                                    .into(mImageView);
-                        }
-                    });
+
+            Picasso.with(context)
+                    .load(imageURL)
+                    .placeholder(R.drawable.bg_hospital)
+                    .into(mImageView);
         }
 
         public void setName(String name) {
