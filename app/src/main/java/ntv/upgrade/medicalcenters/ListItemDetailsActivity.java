@@ -12,11 +12,11 @@ import android.support.v7.app.AppCompatActivity;
  */
 public class ListItemDetailsActivity extends AppCompatActivity {
 
-    private static final String EXTRA_MEDICAL_CENTER = "medical_center";
+    private static final String EXTRA_MCID = "mcid";
 
     public static Intent getLaunchIntent(Context context, String medicalCenter) {
         Intent intent = new Intent(context, ListItemDetailsActivity.class);
-        intent.putExtra(EXTRA_MEDICAL_CENTER, medicalCenter);
+        intent.putExtra(EXTRA_MCID, medicalCenter);
         return intent;
     }
 
@@ -25,7 +25,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_details);
 
-        String medicalCenter = getIntent().getStringExtra(EXTRA_MEDICAL_CENTER);
+        String medicalCenter = getIntent().getStringExtra(EXTRA_MCID);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container_item_details, ListItemDetailsFragment.createInstance(medicalCenter))

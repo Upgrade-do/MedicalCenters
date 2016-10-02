@@ -16,7 +16,6 @@ import com.google.firebase.storage.StorageReference;
 
 import ntv.upgrade.medicalcenters.adapters.ListAdapter;
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
-import ntv.upgrade.medicalcenters.models.Place;
 
 /**
  * This fragment holds a list of the basic details of medical centers around
@@ -103,6 +102,7 @@ public class ListFragment extends Fragment implements ListAdapter.onItemChange{
 
     @Override
     public void onItemClicked(MedicalCenter medicalCenter) {
+        mListener.onItemClicked(medicalCenter);
         Toast.makeText(getContext(), "ITEM" + medicalCenter.getMCID(), Toast.LENGTH_SHORT).show();
 
     }
@@ -112,6 +112,6 @@ public class ListFragment extends Fragment implements ListAdapter.onItemChange{
      * to the activity and potentially other fragments contained in that activity.
      */
     public interface OnListFragmentInteractionListener {
-        void onPlaceAdded(Place place);
+        void onItemClicked(MedicalCenter medicalCenter);
     }
 }

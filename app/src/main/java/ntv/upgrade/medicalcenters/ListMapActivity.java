@@ -38,10 +38,9 @@ public class ListMapActivity extends AppCompatActivity
     private static final String PERMISSION_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
 
     public static List<MedicalCenter> mMedicalCenters;
+    public static MedicalCenter mMedicalCenter;
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
     private List<Place> mPlaces;
-
     // The {@link ViewPager} that will host the section contents.
     private ViewPager mViewPager;
     private AdView mAdView;
@@ -130,12 +129,12 @@ public class ListMapActivity extends AppCompatActivity
     }
 
     @Override
-    public void onPlaceAdded(Place place) {
+    public void onItemClicked(MedicalCenter medicalCenter) {
 
-        if (mPlaces == null) {
-            mPlaces = new ArrayList<>();
-        }
-        mPlaces.add(place);
+        mMedicalCenter = medicalCenter;
+
+        Intent i = ListItemDetailsActivity.getLaunchIntent(this, medicalCenter.getMCID());
+        startActivity(i);
     }
 
     @Override

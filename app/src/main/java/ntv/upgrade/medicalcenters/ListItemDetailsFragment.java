@@ -20,8 +20,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.List;
-
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
 import ntv.upgrade.medicalcenters.utils.MapUtils;
 
@@ -138,12 +136,7 @@ public class ListItemDetailsFragment extends Fragment{
      */
     private MedicalCenter findMedicalCenterByName(String itemName) {
 
-        List<MedicalCenter> medicalCenters = ListMapActivity.mMedicalCenters;
-            for (MedicalCenter medicalCenter : medicalCenters) {
-                if (itemName.equals(medicalCenter.getName())) {
-                    return medicalCenter;
-                }
-            }
-        return null;
+                    return ListMapActivity.mMedicalCenter;
+
     }
 }
