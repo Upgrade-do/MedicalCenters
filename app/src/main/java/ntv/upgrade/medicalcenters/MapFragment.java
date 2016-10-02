@@ -136,6 +136,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             // whenever data at this location is updated.
             for (DataSnapshot mdSnapshot : dataSnapshot.getChildren()) {
 
+               /*
                 MedicalCenter md = mdSnapshot.getValue(MedicalCenter.class);
                 mMedicalCenters.add(md);
 
@@ -146,6 +147,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                         md.getLatitude(),
                         md.getLongitude(),
                         md.getPhone()));
+
+                 */
             }
 
         }

@@ -27,9 +27,10 @@ import java.util.List;
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
 import ntv.upgrade.medicalcenters.models.Place;
 
-public class ListMapActivity extends AppCompatActivity implements
-        ListFragment.OnListFragmentInteractionListener, MapFragment.OnMapFragmentInteractionListener,
-        OnPermissionCallback {
+public class ListMapActivity extends AppCompatActivity
+        implements OnPermissionCallback,
+        ListFragment.OnListFragmentInteractionListener,
+        MapFragment.OnMapFragmentInteractionListener{
 
     // for log purposes
     private static final String TAG = ListMapActivity.class.getSimpleName();
