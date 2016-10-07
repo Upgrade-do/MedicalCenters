@@ -103,8 +103,6 @@ public class ListFragment extends Fragment implements ListAdapter.onItemChange{
     @Override
     public void onItemClicked(MedicalCenter medicalCenter) {
         mListener.onItemClicked(medicalCenter);
-        Toast.makeText(getContext(), "ITEM" + medicalCenter.getMCID(), Toast.LENGTH_SHORT).show();
-
     }
 
     /**

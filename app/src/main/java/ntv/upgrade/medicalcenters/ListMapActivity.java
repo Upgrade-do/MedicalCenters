@@ -1,6 +1,8 @@
 package ntv.upgrade.medicalcenters;
 
 import android.Manifest;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,18 +26,22 @@ import com.google.android.gms.ads.AdView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ntv.upgrade.medicalcenters.dialogs.DetailsDialogFragment;
 import ntv.upgrade.medicalcenters.models.MedicalCenter;
 import ntv.upgrade.medicalcenters.models.Place;
 
 public class ListMapActivity extends AppCompatActivity
         implements OnPermissionCallback,
         ListFragment.OnListFragmentInteractionListener,
-        MapFragment.OnMapFragmentInteractionListener{
+        MapFragment.OnMapFragmentInteractionListener,
+DetailsDialogFragment.OnCommentsInteractionListener{
 
     // for log purposes
     private static final String TAG = ListMapActivity.class.getSimpleName();
 
     private static final String PERMISSION_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+
+    private static final String DETAILS_DIALOG = "details_dialog";
 
     public static List<MedicalCenter> mMedicalCenters;
     public static MedicalCenter mMedicalCenter;
@@ -133,8 +139,20 @@ public class ListMapActivity extends AppCompatActivity
 
         mMedicalCenter = medicalCenter;
 
-        Intent i = ListItemDetailsActivity.getLaunchIntent(this, medicalCenter.getMCID());
-        startActivity(i);
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        DialogFragment prev = (DialogFragment) getFragmentManager().findFragmentByTag(DETAILS_DIALOG);
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = DetailsDialogFragment.newInstance(mMedicalCenter.getName());
+
+        newFragment.show(ft, DETAILS_DIALOG);
     }
 
     @Override
@@ -144,7 +162,6 @@ public class ListMapActivity extends AppCompatActivity
         }
         return mPlaces;
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -178,6 +195,11 @@ public class ListMapActivity extends AppCompatActivity
     @Override
     public void onNoPermissionNeeded() {
 
+    }
+
+    @Override
+    public void commentSaved(int section) {
+        
     }
 
     /**

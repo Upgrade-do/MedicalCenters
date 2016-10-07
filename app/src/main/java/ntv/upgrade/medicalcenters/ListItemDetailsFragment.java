@@ -68,7 +68,11 @@ public class ListItemDetailsFragment extends Fragment{
         FloatingActionButton mapFab = (FloatingActionButton) view.findViewById(R.id.mapFab);
 
         LatLng location = MapUtils.getLocation(getActivity());
-        String distance = MapUtils.formatDistanceBetween(location, new LatLng(Double.valueOf(mMedicalCenter.getLatitude()),Double.valueOf(mMedicalCenter.getLongitude())));
+
+        String distance = MapUtils.formatDistanceBetween(location, new LatLng(
+                        Double.valueOf(mMedicalCenter.getLatitude()),
+                        Double.valueOf(mMedicalCenter.getLongitude())));
+
         if (TextUtils.isEmpty(distance)) {
             distanceTextView.setVisibility(View.GONE);
         }
