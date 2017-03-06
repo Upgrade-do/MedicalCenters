@@ -2,7 +2,6 @@ package ntv.upgrade.medicalcenters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -26,7 +25,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,12 +45,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         ValueEventListener {
 
-    // Google map object.
-    public static DatabaseReference mDatabaseRef;
     // TAG
     private final String TAG = MapFragment.class.getSimpleName();
+
+    // Database reference.
+    private DatabaseReference mDatabaseRef;
+
+    // Map Stuff
     private MapView mMapView;
     private GoogleMap mMap;
+
+
     private Bundle mBundle;
     private Location mLastLocation;
     private List<MedicalCenter> mMedicalCenters;
@@ -143,6 +146,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                         md.getLatitude(),
                         md.getLongitude(),
                         md.getPhone()));
+
             }
 
         }
@@ -213,7 +217,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         setInfoWindows();
-        drawArea();
     }
 
     /**
@@ -296,25 +299,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         });
     }
 
-    public void drawArea() {
-        mMap.addPolygon(new PolygonOptions()
-                .add(
-                        new LatLng(18.4730365696298, -69.89192656117666),
-                        new LatLng(18.46722705984141, -69.88965971147991),
-                        new LatLng(18.46885902440289, -69.8851668834618),
-                        new LatLng(18.470503814422717, -69.88219244139827),
-                        new LatLng(18.471836886544178, -69.88099081169821),
-                        new LatLng(18.473302235970095, -69.88118393074728),
-                        new LatLng(18.47429948065845, -69.88155943992751),
-                        new LatLng(18.477901723826147, -69.88202077987808),
-                        new LatLng(18.480425283974153, -69.8829434597792),
-                        new LatLng(18.480313352651173, -69.88415581825393),
-                        new LatLng(18.480516864093133, -69.8847995484175),
-                        new LatLng(18.480404932829963, -69.88520724418777),
-                        new LatLng(18.479550182592206, -69.88540036323684),
-                        new LatLng(18.47524583985043, -69.8903785434959))
-                .strokeColor(Color.rgb(255, 87, 34))
-                .fillColor(Color.argb(50, 255, 138, 101)));
+    private void drawPlaces(List<Place> places){
+        for (Place place : places) {
+            drawPlace(place);
+        }
     }
 
     public void drawPlace(Place place) {

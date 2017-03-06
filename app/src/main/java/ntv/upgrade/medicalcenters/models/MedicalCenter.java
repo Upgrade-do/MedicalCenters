@@ -8,7 +8,7 @@ package ntv.upgrade.medicalcenters.models;
 public class MedicalCenter {
 
     // Basic Medical Center Info
-    private double MCID;
+    private String MCID;
     private String name;
     private String email;
     private String phone;
@@ -19,9 +19,8 @@ public class MedicalCenter {
     public MedicalCenter() {
     }
 
-    public MedicalCenter(double MCID, String name, String email, String phone,
+    public MedicalCenter(String name, String email, String phone,
                          double latitude, double longitude, String imageURL) {
-        this.MCID = MCID;
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -30,11 +29,11 @@ public class MedicalCenter {
         this.imageURL = imageURL;
     }
 
-    public double getMCID() {
+    public String getMCID() {
         return MCID;
     }
 
-    public void setMCID(double MCID) {
+    public void setMCID(String MCID) {
         this.MCID = MCID;
     }
 
